@@ -25,6 +25,7 @@ import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
+import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
 
 /**

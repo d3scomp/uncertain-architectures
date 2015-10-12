@@ -15,8 +15,7 @@ public interface TrajectoryPlanner {
 	/**
 	 *	Update or create a route plan with the knowledge of the current plan.
 	 * 
-	 * @param currentPlan The Current route plan.
-	 * @param newPlan The new or updated route plan.
+	 * @param plan The Current route plan to be updated.
 	 */
-	void updateTrajectory(List<Position> currentPlan, List<Position> newPlan);
+	void updateTrajectory(List<Position> plan);
 }

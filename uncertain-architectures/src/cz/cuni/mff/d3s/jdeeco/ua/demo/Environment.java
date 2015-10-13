@@ -19,40 +19,6 @@ import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
  */
 public class Environment {
 
-	/** Firefighter leading the group. */
-	static public final String FF_LEADER_ID = "FF1";
-
-	/** Firefighter following in the group. */
-	static public final String FF_FOLLOWER_ID = "FF2";
-
-	/** Firefighter with this id goes left at start. */
-	static public final String LONELY_FF_ID = "FF3";
-
-	/** Default Location for firefighters not contained in INITIAL_LOCATIONS. */
-	static private final Position DEFAULT_LOCATION = new Position(0, 0);
-
-	/** Firefighters' initial location. */
-	static private final Map<String, Position> INITIAL_LOCATIONS = ((Supplier<Map<String, Position>>) () -> {
-		final Map<String, Position> result = new HashMap<>();
-		result.put(FF_LEADER_ID, new Position(11, 0));
-		result.put(FF_FOLLOWER_ID, new Position(38, 2));
-		result.put(LONELY_FF_ID, new Position(11, 0));
-		return Collections.unmodifiableMap(result);
-	}).get();
-
-	/** Inaccuracy of fully operational gps sensor. */
-	static private final double GPS_INACCURACY = 0.0;
-
-	/** Default Position for firefighters not contained in INITIAL_LOCATIONS. */
-	static private final PositionKnowledge DEFAULT_POSITION =
-			new PositionKnowledge(DEFAULT_LOCATION, GPS_INACCURACY);
-
-	/** Firefighters' initial position. */
-	static private final Map<String, PositionKnowledge> INITIAL_POSITIONS =
-			INITIAL_LOCATIONS.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> {
-				return new PositionKnowledge(e.getValue(), GPS_INACCURACY);
-			}));
-
 	/** Checking position drains this much energy from battery. */
 	static private final int GPS_ENERGY_COST = 4;
 
@@ -107,37 +73,5 @@ public class Environment {
 
 	/** RNG. */
 	static private final Random RANDOM = new Random(246811);
-	
-	/** Filter for position. */
-	static private Map<String, PositionNoise> positionNoise;
-
-	/** Filter for position if GPS is broken. */
-	static private Map<String, PositionNoise> brokenGPSInaccuracy;
-
-	/** Filter for battery level. */
-	static private Map<String, DoubleNoise> batteryNoise;
-
-	static {
-		PositionNoise pn1 = new PositionNoise("leader pos", 0.0, 0.1);
-		PositionNoise pn2 = new PositionNoise("follow pos", 0.0, 0.1);
-		PositionNoise pn3 = new PositionNoise("lonely pos", 0.0, 0.1);
-		
-		
-		positionNoise = new HashMap<>();
-		positionNoise.put(FF_LEADER_ID, pn1);
-		positionNoise.put(FF_FOLLOWER_ID, pn2);
-		positionNoise.put(LONELY_FF_ID, pn3);
-		
-		brokenGPSInaccuracy = new HashMap<>();
-		brokenGPSInaccuracy.put(FF_LEADER_ID, new PositionNoise("leader iac", 0, 0.5, pn1));
-		brokenGPSInaccuracy.put(FF_FOLLOWER_ID, new PositionNoise("follow iac", 0, 0.5, pn2));
-		brokenGPSInaccuracy.put(LONELY_FF_ID, new PositionNoise("lonely iac", 0, 0.5, pn3));
-		
-		batteryNoise = new HashMap<>();
-		batteryNoise.put(FF_LEADER_ID, new DoubleNoise("leader bat", 0.0, 1.0));
-		batteryNoise.put(FF_FOLLOWER_ID, new DoubleNoise("follow bat", 0.0, 1.0));
-		batteryNoise.put(LONELY_FF_ID, new DoubleNoise("lonely bat", 0.0, 1.0));
-	
-	}
 	
 }

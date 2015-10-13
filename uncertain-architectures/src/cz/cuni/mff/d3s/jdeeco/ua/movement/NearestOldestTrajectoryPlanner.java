@@ -8,6 +8,7 @@ import java.util.Set;
 
 import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
+import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.Tile;
 
@@ -39,38 +40,43 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	private final int maxPlanLength;
 	
 	/**
-	 * Create a new instance of {@link NearestOldestTrajectoryPlanner} and associate
-	 * the given {@link DirtinessMap} with it. Each robot is supposed to have its own
-	 * {@link TrajectoryPlanner} because the planner holds information private to each
-	 * robot.
-	 *  
-	 * @param map The {@link DirtinessMap} to operate on.
-	 * @throws IllegalArgumentException Thrown if the map argument is null.
+	 * Associate the given {@link Robot} with this {@link TrajectoryExecutor}.
+	 * 
+	 * @param robot The robot associated with this {@link TrajectoryExecutor}.
+	 *
+	 * @throws IllegalArgumentException Thrown if the robot argument is null.
 	 */
-	public NearestOldestTrajectoryPlanner(DirtinessMap map) {
-		if(map == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "map"));
-		this.map = map;
-		maxPlanLength = MAX_PLAN_LENGTH;
-	}
+	@Override
+	public void setRobot(Robot robot) {
+		if (robot == null)
+			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "robot"));
+		if (robot.map == null)
+			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
+		this.map = robot.map;
+	}	
 
 	/**
-	 * Create a new instance of {@link NearestOldestTrajectoryPlanner} and associate
-	 * the given {@link DirtinessMap} with it. Each robot is supposed to have its own
-	 * {@link TrajectoryPlanner} because the planner holds information private to each
-	 * robot.
-	 *  
-	 * @param map The {@link DirtinessMap} to operate on.
-	 * @throws IllegalArgumentException Thrown if the map argument is null or
-	 * 			if the maxPlanLength argument is less than {@value #MIN_PLAN_LENGTH}.
+	 * Create a new instance of {@link NearestOldestTrajectoryPlanner}.
+	 * Each robot is supposed to have its own {@link TrajectoryPlanner} because
+	 * the planner holds information private to each robot.
 	 */
-	public NearestOldestTrajectoryPlanner(DirtinessMap map, int maxPlanLength) {
-		if(map == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "map"));
+	public NearestOldestTrajectoryPlanner() {
+		maxPlanLength = MAX_PLAN_LENGTH;
+	}
+	
+	/**
+	 * Create a new instance of {@link NearestOldestTrajectoryPlanner}.
+	 * Each robot is supposed to have its own {@link TrajectoryPlanner} because
+	 * the planner holds information private to each robot.
+	 *  
+	 * @param maxPlanLength The maximum plan length.
+	 * @throws IllegalArgumentException Thrown if the maxPlanLength argument
+	 * 			is less than {@value #MIN_PLAN_LENGTH}.
+	 */
+	public NearestOldestTrajectoryPlanner(int maxPlanLength) {
 		if(maxPlanLength < MIN_PLAN_LENGTH) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument needs to be greater or equal than %d",
 				"maxPlanLength", MIN_PLAN_LENGTH));
-		this.map = map;
 		this.maxPlanLength = maxPlanLength;
 	}
 	

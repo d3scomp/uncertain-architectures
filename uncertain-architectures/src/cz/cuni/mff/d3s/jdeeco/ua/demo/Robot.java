@@ -2,8 +2,6 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.currentTime;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.resetBatteryStateIfNeeded;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +17,10 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.position.Position;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestOldestTrajectoryPlanner;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.ShortestTrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
  
@@ -53,10 +51,16 @@ public class Robot {
 	public final List<Position> trajectory;
 	
 	@Local
-	public final TrajectoryPlanner planner;
+	public TrajectoryPlanner planner;
 	
 	@Local
-	public final TrajectoryExecutor mover;
+	public TrajectoryExecutor mover;
+	
+	@Local
+	public PositionNoise positionInaccuracy;
+	
+	@Local
+	public DoubleNoise batteryInaccuracy;
 	
 
 	///////////////////////////////////////////////////////////////////////////
@@ -69,14 +73,7 @@ public class Robot {
 	public Robot(final String id) {
 		this.id = id;
 		map = new DirtinessMap();
-		batteryLevel = new MetadataWrapper<>(1.0); // TODO: constant to Configuration
-		believedPosition = new MetadataWrapper<>(new PositionKnowledge(0, 0, 0)); // TODO: constant to Configuration 
-		position = new Position(0,0); // TODO: initialize from outside
 		trajectory = new ArrayList<>();
-		
-		//TODO: provide constructor in which there can be set specific planner and executor
-		planner = new NearestOldestTrajectoryPlanner(map);
-		mover = new ShortestTrajectoryExecutor(map);
 	}
 
 	@Process

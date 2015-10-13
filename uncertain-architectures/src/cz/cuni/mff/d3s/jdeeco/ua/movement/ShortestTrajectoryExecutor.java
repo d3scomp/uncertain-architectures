@@ -7,6 +7,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_SPEED;
 import java.util.List;
 
 import cz.cuni.mff.d3s.jdeeco.position.Position;
+import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;;
 
 /**
@@ -24,16 +25,19 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 	private DirtinessMap map;
 
 	/**
-	 * Create a new instance of {@link ShortestTrajectoryExecutor} and associate
-	 * it with the given {@link DirtinessMap}.
-	 *  
-	 * @param map The {@link DirtinessMap} limiting the area to move in.
-	 * @throws IllegalArgumentException Thrown if the map argument is null.
+	 * Associate the given {@link Robot} with this {@link TrajectoryExecutor}.
+	 * 
+	 * @param robot The robot associated with this {@link TrajectoryExecutor}.
+	 *
+	 * @throws IllegalArgumentException Thrown if the robot argument is null.
 	 */
-	public ShortestTrajectoryExecutor(DirtinessMap map) {
-		if (map == null)
-			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "map"));
-		this.map = map;
+	@Override
+	public void setRobot(Robot robot) {
+		if (robot == null)
+			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "robot"));
+		if (robot.map == null)
+			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
+		this.map = robot.map;
 	}
 
 	/**

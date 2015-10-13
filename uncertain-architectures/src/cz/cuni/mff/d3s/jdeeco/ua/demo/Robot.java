@@ -2,20 +2,17 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.POSION_STATE_HISTORY;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.computeCurrentInaccuracy;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.currentTime;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.getInaccuracyHistory;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.RobotHelper.resetBatteryStateIfNeeded;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
+import cz.cuni.mff.d3s.deeco.annotations.Out;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
@@ -44,10 +41,13 @@ public class Robot {
 	public MetadataWrapper<Double> batteryLevel;
 
 	/** Position in corridor coordinate system. */
-	public MetadataWrapper<PositionKnowledge> position;
-
+	public MetadataWrapper<PositionKnowledge> believedPosition;
+	
 	@Local
 	public final DirtinessMap map;
+	
+	@Local
+	public Position position;
 
 	@Local
 	public final List<Position> trajectory;
@@ -70,7 +70,8 @@ public class Robot {
 		this.id = id;
 		map = new DirtinessMap();
 		batteryLevel = new MetadataWrapper<>(Environment.getInitialBattery(id));
-		position = new MetadataWrapper<>(Environment.getInitialPosition(id));
+		believedPosition = new MetadataWrapper<>(Environment.getInitialPosition(id));
+		position = new Position(0,0); // TODO: initialize from outside
 		trajectory = new ArrayList<>();
 		
 		//TODO: provide constructor in which there can be set specific planner and executor
@@ -94,24 +95,19 @@ public class Robot {
 	@Process
 	@PeriodicScheduling(period = Environment.INITIAL_POSITION_PERIOD)
 	public static void determinePosition(
-		@In("id") String id,
-		@InOut("position") ParamHolder<MetadataWrapper<PositionKnowledge>> position
+		@In("position") Position position,
+		@Out("believedPosition") ParamHolder<MetadataWrapper<PositionKnowledge>> believedPosition
 	) {
-		final double inacc = computeCurrentInaccuracy(position.value);
-		final Deque<Double> history = getInaccuracyHistory();
-		if (history.size() >= POSION_STATE_HISTORY) {
-			history.removeFirst();
-		}
-		history.add(inacc);
-		if (position.value.isOperational()) {
-			position.value.setValue(Environment.getPosition(id), currentTime());
-		}
+		// TODO: apply inaccuracy
+		believedPosition.value = new MetadataWrapper<>(new PositionKnowledge(position, 0));
 	}
 
 	@Process
 	@PeriodicScheduling(period=MOVE_PROCESS_PERIOD)
-	public static void move(@In("id") String id) {
-		
+	public static void move(@In("mover") TrajectoryExecutor mover,
+			@In("trajectory") List<Position> trajectory,
+			@InOut("position") ParamHolder<Position> position) {
+		position.value = mover.move(trajectory, position.value);
 	}
 	
 	@Process
@@ -125,12 +121,14 @@ public class Robot {
 	@PeriodicScheduling(period=1000) // TODO: get rid of these constants
 	public static void printStatus(@In("id") String id,
 			@In("batteryLevel") MetadataWrapper<Double> batteryLevel,
-			@In("position") MetadataWrapper<PositionKnowledge> position) {
+			@In("position") Position position,
+			@In("believedPosition") MetadataWrapper<PositionKnowledge> believedPosition) {
 		System.out.println("#########################################");
 		System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("ID: " + id);
-		System.out.println("batteryLevel = " + batteryLevel);
+		System.out.println("batteryLevel = " + batteryLevel.getValue());
 		System.out.println("position = " + position);
+		System.out.println("believedPosition = " + believedPosition.getValue());
 		System.out.println("#########################################");
 	}
 }

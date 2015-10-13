@@ -38,4 +38,9 @@ public class PositionKnowledge extends Position {
 	public PositionKnowledge clone() {
 		return (PositionKnowledge) super.clone();
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s inaccuracy = %fm", super.toString(), inaccuracy);
+	}
 }

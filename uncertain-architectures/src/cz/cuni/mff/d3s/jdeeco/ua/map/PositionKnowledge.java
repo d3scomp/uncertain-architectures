@@ -1,5 +1,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
+import cz.cuni.mff.d3s.jdeeco.position.Position;
+
 /**
  * Extension of Position containing also information about sensor inaccuracy.
  */

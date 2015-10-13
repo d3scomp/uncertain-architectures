@@ -17,6 +17,12 @@ public class Configuration {
 	public static final long MOVE_PROCESS_PERIOD = 100; // ms
 	
 	/**
+	 * The period of a process that plant the robots trajectory.
+	 * Expressed in milliseconds.
+	 */
+	public static final long PLAN_PROCESS_PERIOD = 1000; // ms
+	
+	/**
 	 * The Speed of the robot.
 	 * Expressed in meters per second.
 	 */

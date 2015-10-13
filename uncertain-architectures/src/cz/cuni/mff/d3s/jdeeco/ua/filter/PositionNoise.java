@@ -1,6 +1,6 @@
 package cz.cuni.mff.d3s.jdeeco.ua.filter;
 
-import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
+import cz.cuni.mff.d3s.jdeeco.position.Position;
 
 public class PositionNoise extends Filter<Position> {
 

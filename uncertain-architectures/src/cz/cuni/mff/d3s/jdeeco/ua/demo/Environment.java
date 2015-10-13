@@ -12,16 +12,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
-import cz.cuni.mff.d3s.deeco.annotations.In;
-import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
-import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
+import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
-import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
-import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
 
 /**
  * This whole component is a kind of hack.
@@ -262,30 +258,6 @@ public class Environment {
 		return FF_MOVEMENT * SIMULATION_PERIOD;
 	}
 
-	@Process
-	@PeriodicScheduling(period=SIMULATION_PERIOD, order = 1)
-	static public void simulation(
-			@In("id") String id) {
-		final Map<String, FireFighterState> firefighters = getFirefighters();
-		for (final String ffId : firefighters.keySet()) {
-			final FireFighterState ff = getFirefighter(ffId);
-
-			// TODO: implement movement
-
-			System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
-			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
-			System.out.println(ffId + " position = " + ff.location);
-			// TODO: print dirtiness System.out.println(ffId + " temperature = " + DirtinessMap.temperature(ff.Position));
-		}
-		final FireFighterState leader = getFirefighter(FF_LEADER_ID);
-		final FireFighterState follower = getFirefighter(FF_FOLLOWER_ID);
-		if (leader != null && follower != null) {
-			System.out.println("#########################################");
-			System.out.println("LEADER POS: " + leader.location + "(" + leader.location.x + ", " + leader.location.y + ")");
-			System.out.println("FOLLOW POS: " + follower.location  + "(" + follower.location.x + ", " + follower.location.y + ")");
-			System.out.println("DISTANCE  : " + PositionMetric.distance(leader.location, follower.location));
-		}
-	}
 
 	/**
 	 * Simple holder of data related to firefighter's state.

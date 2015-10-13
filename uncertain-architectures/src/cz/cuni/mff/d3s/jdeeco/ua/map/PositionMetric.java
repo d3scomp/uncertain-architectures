@@ -1,6 +1,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
+import cz.cuni.mff.d3s.jdeeco.position.Position;
 
 public class PositionMetric implements Metric {
 

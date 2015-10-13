@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
-import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.map.Tile;
 
 /**

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.jdeeco.position.Position;
+
 
 /**
  * Environment heat map holder.
@@ -32,10 +34,7 @@ public class DirtinessMap {
 	 */
 	private Map<Tile, Long> visitedTiles;
 
-	/**
-	 * Utility classes need no constructor.
-	 */
-	private DirtinessMap() {
+	public DirtinessMap() {
 		tiles = new ArraySet<>(MAP_WIDTH*MAP_HEIGHT);
 		for(int x = 0; x < MAP_WIDTH; x++){
 			for(int y = 0; y < MAP_HEIGHT; y++){

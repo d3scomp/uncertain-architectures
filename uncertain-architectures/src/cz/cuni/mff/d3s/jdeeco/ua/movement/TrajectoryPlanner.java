@@ -2,7 +2,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
+import cz.cuni.mff.d3s.jdeeco.position.Position;
 
 /**
  * The interface for classes that provide planning of the robot trajectory.

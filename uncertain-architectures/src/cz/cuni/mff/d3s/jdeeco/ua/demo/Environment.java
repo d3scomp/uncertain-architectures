@@ -129,9 +129,6 @@ public class Environment {
 	/** Filter for battery level. */
 	static private Map<String, DoubleNoise> batteryNoise;
 
-	/** Filter for temperature. */
-	static private Map<String, DoubleNoise> temperatureNoise;
-
 	static {
 		PositionNoise pn1 = new PositionNoise("leader pos", 0.0, 0.1);
 		PositionNoise pn2 = new PositionNoise("follow pos", 0.0, 0.1);
@@ -152,11 +149,7 @@ public class Environment {
 		batteryNoise.put(FF_LEADER_ID, new DoubleNoise("leader bat", 0.0, 1.0));
 		batteryNoise.put(FF_FOLLOWER_ID, new DoubleNoise("follow bat", 0.0, 1.0));
 		batteryNoise.put(LONELY_FF_ID, new DoubleNoise("lonely bat", 0.0, 1.0));
-		
-		temperatureNoise = new HashMap<>();
-		temperatureNoise.put(FF_LEADER_ID, new DoubleNoise("leader tmp", 0.0, 2));
-		temperatureNoise.put(FF_FOLLOWER_ID, new DoubleNoise("follow tmp", 0.0, 2));
-		temperatureNoise.put(LONELY_FF_ID, new DoubleNoise("lonely tmp", 0.0, 2));
+	
 	}
 	
 	/////////////////////

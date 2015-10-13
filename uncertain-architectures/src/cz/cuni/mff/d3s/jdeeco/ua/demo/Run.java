@@ -113,22 +113,18 @@ public class Run {
 	 */
 	private static void registerMetadataForFields() {
 		final String positionLabel = "position";
-		final String temperatureLabel = "temperature";
 		final String batteryLabel = "batteryLevel";
 
 		final int positionBoundary = Environment.MAX_GROUP_DISTANCE;
-		final int temperatureBoundary = 20;
 		final int batteryBoundary = 20;
 
 		final Metric simpleMetric = new DifferenceMetric();
 		final Metric positionMetric = new PositionMetric();
 
 		final double positionConfidence = 0.9;
-		final double temperatureConfidence = 0.8;
 		final double batteryConfidence = 0.9;
 
 		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, positionMetric, positionConfidence);
-		KnowledgeMetadataHolder.setBoundAndMetric(temperatureLabel, temperatureBoundary, simpleMetric, temperatureConfidence);
 		KnowledgeMetadataHolder.setBoundAndMetric(batteryLabel, batteryBoundary, simpleMetric, batteryConfidence);
 	}
 }

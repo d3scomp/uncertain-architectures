@@ -29,9 +29,6 @@ public class Robot {
 	/** Position in corridor coordinate system. */
 	public MetadataWrapper<PositionKnowledge> position;
 
-	/** Environment temperature. */
-	public MetadataWrapper<Double> temperature;
-
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +40,6 @@ public class Robot {
 		this.id = id;
 		batteryLevel = new MetadataWrapper<>(Environment.getInitialBattery(id));
 		position = new MetadataWrapper<>(Environment.getInitialPosition(id));
-		temperature = new MetadataWrapper<>(0.0);
 	}
 
 	@Process
@@ -57,31 +53,6 @@ public class Robot {
 			batteryLevel.value.setValue(Environment.getBatteryLevel(id), currentTime());
 		}
 		resetBatteryStateIfNeeded(batteryLevel.value.getValue());
-	}
-
-	public static boolean determineBatteryLevelSatisfaction(
-			@In("batteryLevel") MetadataWrapper<Double> batteryLevel) {
-		return currentTime() - batteryLevel.getTimestamp() < TOO_OLD;
-	}
-
-	public static double determineBatteryLevelFitness(
-			@In("batteryLevel") MetadataWrapper<Double> batteryLevel) {
-		final boolean satisfied = determineBatteryLevelSatisfaction(batteryLevel);
-		return satisfied ? 1.0 : 0.0;
-	}
-
-	public static boolean batteryDrainageSatisfaction(
-			@In("batteryLevel") MetadataWrapper<Double> batteryLevel) {
-		final double bl = batteryLevel.getValue();
-		final double fitness = batteryDrainageSatisfactionInternal(bl);
-		return fitness > SATISFACTION_BOUND;
-	}
-
-	public static double batteryDrainageFitness(
-			@In("batteryLevel") MetadataWrapper<Double> batteryLevel) {
-		final double bl = batteryLevel.getValue();
-		final double fitness = batteryDrainageSatisfactionInternal(bl);
-		return fitness;
 	}
 
 	@Process
@@ -101,89 +72,4 @@ public class Robot {
 		}
 	}
 
-	public static boolean determinePositionSatisfaction(
-			@In("position") MetadataWrapper<PositionKnowledge> position) {
-		return currentTime() - position.getTimestamp() < TOO_OLD;
-	}
-
-	public static double determinePositionFitness(
-			@In("position") MetadataWrapper<PositionKnowledge> position) {
-		final long time = currentTime();
-		final boolean recent = time - position.getTimestamp() < TOO_OLD;
-		return recent ? 1.0 : 0.0;
-	}
-
-	public static boolean positionAccuracySatisfaction(
-			/*@AssumptionParameter(name = "bound", defaultValue = Environment.FF_POS_INAC_BOUND,
-			maxValue = Environment.FF_POS_INAC_BOUND_MAX, minValue = Environment.FF_POS_INAC_BOUND_MIN, scope = Scope.COMPONENT,
-			initialDirection = Direction.UP)*/
-			double bound) {
-		resetPositionStateIfNeeded(bound);
-		int bad = 0;
-		for (Double i : getInaccuracyHistory()) {
-			if (i > bound) {
-				++bad;
-			}
-		}
-		return bad == 0;
-	}
-
-	public static double positionAccuracyFitness(
-			/*@AssumptionParameter(name = "bound", defaultValue = Environment.FF_POS_INAC_BOUND,
-			maxValue = Environment.FF_POS_INAC_BOUND_MAX, minValue = Environment.FF_POS_INAC_BOUND_MIN, scope = Scope.COMPONENT,
-			initialDirection = Direction.UP)*/
-			double bound) {
-		int posBad = 0;
-		int posOk = 0;
-		int inacc = 0;
-		for (Double i : getInaccuracyHistory()) {
-			inacc += i;
-			if (i > bound) {
-				++posBad;
-			} else {
-				++posOk;
-			}
-		}
-		double result;
-		if (posBad > 0) {
-			final double ratio = (1.0 * posOk) / (posOk + posBad);
-			result = SATISFACTION_BOUND * ratio;
-		} else if (posOk + posBad == 0) {
-			result = 1.0;
-		} else {
-			final double ratio = 1.0 * inacc / ((posOk + posBad) * bound);
-			result = (1.0 - SATISFACTION_BOUND) * ratio + SATISFACTION_BOUND;
-		}
-		return result;
-	}
-
-	@Process
-	@PeriodicScheduling(period=1250, order = 2)
-	public static void determineTemperature(
-		@In("id") String id,
-		@InOut("temperature") ParamHolder<MetadataWrapper<Double>> temperature
-	) {
-		if (temperature.value.isOperational()) {
-			temperature.value.setValue(0.0, currentTime());
-		} else {
-			System.out.println("Temperature sensor not operational!");
-		}
-	}
-
-	public static boolean determineTemperatureSatisfaction(
-			@In("temperature") MetadataWrapper<Double> temperature) {
-		return currentTime() - temperature.getTimestamp() < TOO_OLD;
-	}
-
-	public static double determineTemperatureFitness(
-			@In("id") String id,
-			@In("temperature") MetadataWrapper<Double> temperature) {
-		long heldTemperatureTime = temperature.getTimestamp();
-		long currentTime = currentTime();
-		long delta = currentTime - heldTemperatureTime;
-		double oldnessTreshold = 15000.0;
-
-		double fitness = 1 - Math.min(1, (delta / oldnessTreshold));
-		return fitness;
-	}
 }

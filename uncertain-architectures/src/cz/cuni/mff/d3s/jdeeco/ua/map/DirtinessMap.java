@@ -1,40 +1,31 @@
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TILE_WIDTH;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * Environment heat map holder.
  */
 public class DirtinessMap {
 
-	/** 
-	 * Width of the map.
-	 * The dimensions are expressed as number of tiles.
-	 * So far the map is represented only as a rectangle.
-	 */
-	public static final int MAP_WIDTH = 20;
-	
 	/**
-	 * Heigt of the map.
-	 * The dimensions are expressed as number of tiles.
-	 * So far the map is represented only as a rectangle.
+	 * This field stores the position of each robot for the purposes of
+	 * easy collision avoidance implementation.
 	 */
-	public static final int MAP_HEIGHT = 20;
+	private static final Map<String, Position> ROBOT_LOCATIONS = new HashMap<>();
 	
 	/**
 	 * A set of {@link Tile}s in the map.
 	 */
 	private final ArraySet<Tile> tiles;
-	
-	/**
-	 * The number of tiles in the map.
-	 */
-	public final int size = MAP_WIDTH * MAP_HEIGHT;
 
 	/**
 	 * A set of timestamps of the last visit of individual tiles.
@@ -106,5 +97,49 @@ public class DirtinessMap {
 	public Position getPosition(Tile tile){
 		return new Position(tile.x * TILE_WIDTH + 0.5 * TILE_WIDTH,
 							tile.y * TILE_WIDTH + 0.5 * TILE_WIDTH);
+	}
+
+	/**
+	 * The size of the map as number of tiles it contains.
+	 * @return The number of tiles in the map.
+	 */
+	public int size() {
+		return tiles.size();
+	}
+	
+	/**
+	 * Update the position of the specified robot in the centralized field.
+	 * 
+	 * @param robotId The ID of a robot whose position will be updated.
+	 * @param position The updated position of the robot.
+	 * 
+	 * @throws IllegalArgumentException Thrown if either the robotId or the
+	 * 			position argument is null. 
+	 */
+	public void updateRobotsPosition(String robotId, Position position){
+		if(robotId == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument cannot be null.", "robotId"));
+		if(position == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument cannot be null.", "position"));
+		
+		ROBOT_LOCATIONS.put(robotId, position);
+	}
+	
+	/**
+	 * Get the positions of robots other than the specified one. If the robotId
+	 * argument is null no position is excluded from the result.
+	 * 
+	 * @param robotId The robot to exclude its position in the obtained collection.
+	 * 			Can be null if no position is required to be excluded.
+	 * @return The collection of positions of robots whose ID has not been specified.
+	 */
+	public Collection<Position> getOthersPosition(String robotId){
+		Collection<Position> positions = ROBOT_LOCATIONS.values();
+		if(robotId != null && ROBOT_LOCATIONS.containsKey(robotId)){
+			Position excludedPosition = ROBOT_LOCATIONS.get(robotId);
+			positions.remove(excludedPosition);
+		}
+		
+		return positions;
 	}
 }

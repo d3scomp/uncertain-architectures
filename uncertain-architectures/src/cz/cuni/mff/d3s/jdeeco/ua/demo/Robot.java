@@ -90,10 +90,6 @@ public class Robot {
 		@In("id") String id,
 		@InOut("position") ParamHolder<MetadataWrapper<PositionKnowledge>> position
 	) {
-		if(id.equals(Environment.FF_LEADER_ID)){
-			Environment.positionWriter.println(currentTime());
-		}
-		
 		final double inacc = computeCurrentInaccuracy(position.value);
 		final Deque<Double> history = getInaccuracyHistory();
 		if (history.size() >= POSION_STATE_HISTORY) {

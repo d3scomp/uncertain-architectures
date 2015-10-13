@@ -1,7 +1,5 @@
 package cz.cuni.mff.d3s.jdeeco.ua.filter;
 
-import java.io.PrintWriter;
-
 /**
  * A filter for applying noise and inaccuracy to a data.
  * Filter is bound to a certain data type is it meant to
@@ -14,8 +12,6 @@ import java.io.PrintWriter;
  */
 public abstract class Filter<T> {
 
-	public static PrintWriter filterWriter;
-	
 	/**
 	 * Inner filter is dedicated for filter chaining.
 	 */

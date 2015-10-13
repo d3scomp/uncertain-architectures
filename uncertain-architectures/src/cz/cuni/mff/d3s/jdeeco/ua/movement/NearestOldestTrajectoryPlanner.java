@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.map.Tile;
@@ -96,8 +97,8 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 				Tile tileToVisit;
 				if(lastTile == null){
 					// return random tile if none was visited yet
-					tileToVisit = map.getTile(rand.nextInt(DirtinessMap.MAP_WIDTH),
-									   rand.nextInt(DirtinessMap.MAP_HEIGHT));
+					tileToVisit = map.getTile(rand.nextInt(Configuration.MAP_WIDTH),
+									   rand.nextInt(Configuration.MAP_HEIGHT));
 				} else {
 					tileToVisit = getClosestTile(lastTile, rand);
 				}
@@ -114,7 +115,7 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 */
 	private Set<Tile> unvisitedTiles(){
 		// Performance optimization - Check the number of visited tiles first
-		if(map.size <= map.getVisitedTiles().size()){
+		if(map.size() <= map.getVisitedTiles().size()){
 			return Collections.emptySet();
 		}
 		Set<Tile> tiles = new HashSet<>(map.getTiles());
@@ -183,7 +184,7 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 		Tile nextTile = null;
 		switch(rand.nextInt(4)){
 		case 0:
-			if(tile.x+1 >= DirtinessMap.MAP_WIDTH){
+			if(tile.x+1 >= Configuration.MAP_WIDTH){
 				nextTile = map.getTile(tile.x-1, tile.y);
 			} else {
 				nextTile = map.getTile(tile.x+1, tile.y);
@@ -197,7 +198,7 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 			}
 			break;
 		case 2:
-			if(tile.y+1 >= DirtinessMap.MAP_HEIGHT){
+			if(tile.y+1 >= Configuration.MAP_HEIGHT){
 				nextTile = map.getTile(tile.x, tile.y-1);
 			} else {
 				nextTile = map.getTile(tile.x, tile.y+1);

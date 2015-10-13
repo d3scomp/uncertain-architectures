@@ -1,14 +1,11 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
-import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -16,12 +13,10 @@ import java.util.stream.Collectors;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
-import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.map.Position;
@@ -35,10 +30,6 @@ import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
 @Component
 @SystemComponent
 public class Environment {
-
-	@Local
-	public static PrintWriter positionWriter;
-
 
 	/** Firefighter leading the group. */
 	static public final String FF_LEADER_ID = "FF1";

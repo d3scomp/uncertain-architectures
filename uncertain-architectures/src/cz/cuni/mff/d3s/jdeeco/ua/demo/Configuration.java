@@ -33,4 +33,18 @@ public class Configuration {
 	 * Tiles are squares. The dimension is expresses in meters.
 	 */
 	public static final double TILE_WIDTH = 1; // m
+
+	/** 
+	 * Width of the map.
+	 * The dimensions are expressed as number of tiles.
+	 * So far the map is represented only as a rectangle.
+	 */
+	public static final int MAP_WIDTH = 20;
+
+	/**
+	 * Heigt of the map.
+	 * The dimensions are expressed as number of tiles.
+	 * So far the map is represented only as a rectangle.
+	 */
+	public static final int MAP_HEIGHT = 20;
 }

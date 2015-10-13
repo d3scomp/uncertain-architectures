@@ -16,14 +16,11 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
-import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
@@ -66,10 +63,6 @@ public class Run {
 			IOException {
 		Log.i("Preparing simulation");
 
-		final String suffix = enableMetaAdaptation ? "Adapt" : "NoAdapt";
-
-		cz.cuni.mff.d3s.jdeeco.ua.filter.Filter.filterWriter = new PrintWriter(String.format("filters%s.txt", suffix));
-		
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 
@@ -110,13 +103,8 @@ public class Run {
 
 		// Assign the FF1 to the evaluation component
 
-		Environment.positionWriter = new PrintWriter(String.format("PositionSampled%s.csv", suffix), "UTF-8");
-		
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
-		// Close the file writer
-		Environment.positionWriter.close();
-		cz.cuni.mff.d3s.jdeeco.ua.filter.Filter.filterWriter.close();
 		Log.i("Simulation Finished");
 	}
 

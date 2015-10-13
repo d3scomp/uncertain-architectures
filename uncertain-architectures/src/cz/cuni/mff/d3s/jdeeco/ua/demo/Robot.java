@@ -69,8 +69,8 @@ public class Robot {
 	public Robot(final String id) {
 		this.id = id;
 		map = new DirtinessMap();
-		batteryLevel = new MetadataWrapper<>(Environment.getInitialBattery(id));
-		believedPosition = new MetadataWrapper<>(Environment.getInitialPosition(id));
+		batteryLevel = new MetadataWrapper<>(1.0); // TODO: constant to Configuration
+		believedPosition = new MetadataWrapper<>(new PositionKnowledge(0, 0, 0)); // TODO: constant to Configuration 
 		position = new Position(0,0); // TODO: initialize from outside
 		trajectory = new ArrayList<>();
 		
@@ -82,14 +82,9 @@ public class Robot {
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void determineBatteryLevel(
-			@In("id") String id,
 			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
 	) {
-
-		if (batteryLevel.value.isOperational()) {
-			batteryLevel.value.setValue(Environment.getBatteryLevel(id), currentTime());
-		}
-		resetBatteryStateIfNeeded(batteryLevel.value.getValue());
+		// TODO: decrease battery level
 	}
 
 	@Process
@@ -98,7 +93,7 @@ public class Robot {
 		@In("position") Position position,
 		@Out("believedPosition") ParamHolder<MetadataWrapper<PositionKnowledge>> believedPosition
 	) {
-		// TODO: apply inaccuracy
+		// TODO: apply inaccuracy (The inaccuracy is the deviation used in noise filter)
 		believedPosition.value = new MetadataWrapper<>(new PositionKnowledge(position, 0));
 	}
 

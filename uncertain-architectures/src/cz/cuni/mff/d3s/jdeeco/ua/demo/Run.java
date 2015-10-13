@@ -98,7 +98,6 @@ public class Run {
 		}
 		// deploy components
 		deeco3.deployComponent(new Robot(Environment.FF_LEADER_ID));
-		deeco3.deployComponent(new Environment());
 		deeco3.deployEnsemble(RobotDataAggregation.class);
 
 		// Assign the FF1 to the evaluation component

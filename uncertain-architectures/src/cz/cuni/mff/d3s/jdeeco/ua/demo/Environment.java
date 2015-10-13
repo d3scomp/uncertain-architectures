@@ -1,19 +1,13 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
-import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import cz.cuni.mff.d3s.deeco.annotations.Component;
-import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
-import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
@@ -23,8 +17,6 @@ import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
  * This whole component is a kind of hack.
  * It serves as sensors to FightFighter components.
  */
-@Component
-@SystemComponent
 public class Environment {
 
 	/** Firefighter leading the group. */
@@ -148,141 +140,4 @@ public class Environment {
 	
 	}
 	
-	/////////////////////
-	//ENVIRONMENT STATE//
-	/////////////////////
-
-	/** Firefighters state. */
-	static private Map<String, FireFighterState> firefighters =
-			INITIAL_LOCATIONS.keySet().stream().collect(Collectors.toMap(Function.identity(), id -> {
-				return new FireFighterState(id);
-			}));
-
-	/**
-	 * Returns Firefighter's states.
-	 * Creates new map if needed.
-	 * @return map with firefighters map
-	 */
-	static protected Map<String, FireFighterState> getFirefighters() {
-		return firefighters;
-	}
-
-	/**
-	 * Returns FireFighterState for given firefighter.
-	 * Creates new state if needed.
-	 * @param ffId firefighter id
-	 * @return FireFighterState for given firefighter
-	 */
-	static protected FireFighterState getFirefighter(final String ffId) {
-		final Map<String, FireFighterState> firefighters = getFirefighters();
-		FireFighterState ff = firefighters.get(ffId);
-		if (ff == null) { //should not happen, but just to be sure
-			ff = new FireFighterState(ffId);
-			firefighters.put(ffId, ff);
-		}
-		return ff;
-	}
-
-	static public Double getInitialBattery(final String id) {
-		return batteryNoise.get(id).apply(INITIAL_BATTERY_LEVEL);
-	}
-
-	static public PositionKnowledge getInitialPosition(final String id) {
-		final PositionKnowledge pos = INITIAL_POSITIONS.get(id);
-		final Position noised = positionNoise.get(id).apply(pos != null ? pos : DEFAULT_POSITION);
-		return new PositionKnowledge(noised, GPS_INACCURACY);
-	}
-
-	/**
-	 * Returns location of the firefighter with the given id.
-	 * @param ffId firefighter id
-	 * @return firefighter's location
-	 */
-	static Position getLocation(final String ffId) {
-		return getFirefighter(ffId).location;
-	}
-
-	/**
-	 * Returns position of given firefighter or NaN with insufficient energy.
-	 * Drains energy from the battery! If not enough energy left,
-	 * Integer.MIN_VALUE returned.
-	 * @param ffId firefighter id
-	 * @return position of given firefighter or NaN with insufficient energy
-	 */
-	static public PositionKnowledge getPosition(final String ffId) {
-		final FireFighterState ff = getFirefighter(ffId);
-		ff.batteryLevel -= GPS_ENERGY_COST;
-		if (ff.batteryLevel <= 0.0) {
-			ff.batteryLevel = 0;
-			return BAD_POSITION;
-		} else {
-			if (ffId.equals(FF_LEADER_ID)
-					&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= GPS_BREAK_TIME) {
-				final Position position = brokenGPSInaccuracy.get(ffId).apply(ff.location);
-				return new PositionKnowledge(position, BROKEN_GSP_INACURRACY);
-			} else {
-				final Position position = positionNoise.get(ffId).apply(ff.location);
-				return new PositionKnowledge(position, GPS_INACCURACY);
-			}
-		}
-	}
-
-	/**
-	 * Returns battery level of given firefighter.
-	 * @param ffId firefighter id
-	 * @return battery level of given firefighter
-	 */
-	static public double getRealBatteryLevel(final String ffId) {
-		return getFirefighter(ffId).batteryLevel;
-	}
-
-	/**
-	 * Returns battery level of given firefighter.
-	 * @param ffId firefighter id
-	 * @return battery level of given firefighter
-	 */
-	static public double getBatteryLevel(final String ffId) {
-		return batteryNoise.get(ffId).apply(getFirefighter(ffId).batteryLevel);
-	}
-
-	/** Environment component id. Not used, but mandatory. */
-	public String id;
-
-	/**
-	 * Computes movement for given firefighter in one simulation tick.
-	 * @param ffId firefighter id
-	 * @param ff firefighter state
-	 * @return movement for given firefighter
-	 */
-	static private double computeMovement(final String ffId, final FireFighterState ff) {
-		return FF_MOVEMENT * SIMULATION_PERIOD;
-	}
-
-
-	/**
-	 * Simple holder of data related to firefighter's state.
-	 */
-	protected static class FireFighterState {
-
-		/** Firefighter's location. */
-		protected Position location;
-
-		/** Firefighter's battery level. */
-		protected double batteryLevel = INITIAL_BATTERY_LEVEL;
-
-		/** Target where the firefighter moves. */
-		protected Position target = new Position(0, 0);
-
-		/** Plan how to reach the target. It contains list of corridor indices. */
-		protected Deque<Integer> plan = new ArrayDeque<>();
-
-		/**
-		 * Only constructor.
-		 * @param ffId firefighter id
-		 */
-		public FireFighterState(final String ffId) {
-			location = INITIAL_LOCATIONS.get(ffId).clone();
-			// TODO: preparePlan(this);
-		}
-	}
 }

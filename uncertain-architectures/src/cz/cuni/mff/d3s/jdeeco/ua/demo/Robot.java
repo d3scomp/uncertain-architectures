@@ -2,6 +2,9 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DETERMINE_POSITION_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,25 +80,28 @@ public class Robot {
 	}
 
 	@Process
-	@PeriodicScheduling(period=1000)
+	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
 	public static void determineBatteryLevel(
 			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
 	) {
-		// TODO: decrease battery level
+		// TODO: decrease battery level - introduce state variable that determines whether the robot moves, cleans or is idle
+		// TODO: use battery noise
 	}
 
 	@Process
-	@PeriodicScheduling(period = Environment.INITIAL_POSITION_PERIOD)
+	@PeriodicScheduling(period = DETERMINE_POSITION_PERIOD)
 	public static void determinePosition(
 		@In("position") Position position,
+		@In("positionInaccuracy") PositionNoise positionInaccuracy,
 		@Out("believedPosition") ParamHolder<MetadataWrapper<PositionKnowledge>> believedPosition
 	) {
-		// TODO: apply inaccuracy (The inaccuracy is the deviation used in noise filter)
-		believedPosition.value = new MetadataWrapper<>(new PositionKnowledge(position, 0));
+		believedPosition.value = new MetadataWrapper<>(
+				new PositionKnowledge(positionInaccuracy.apply(position),
+						positionInaccuracy.getDeviation()));
 	}
 
 	@Process
-	@PeriodicScheduling(period=MOVE_PROCESS_PERIOD)
+	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("mover") TrajectoryExecutor mover,
 			@In("trajectory") List<Position> trajectory,
 			@InOut("position") ParamHolder<Position> position) {
@@ -103,14 +109,14 @@ public class Robot {
 	}
 	
 	@Process
-	@PeriodicScheduling(period=PLAN_PROCESS_PERIOD)
+	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
 	public static void plan(@In("planner") TrajectoryPlanner planner,
 			@InOut("trajectory") ParamHolder<List<Position>> trajectory) {
 		planner.updateTrajectory(trajectory.value);
 	}
 
 	@Process
-	@PeriodicScheduling(period=1000) // TODO: get rid of these constants
+	@PeriodicScheduling(period = STATUS_PROCESS_PERIOD)
 	public static void printStatus(@In("id") String id,
 			@In("batteryLevel") MetadataWrapper<Double> batteryLevel,
 			@In("position") Position position,

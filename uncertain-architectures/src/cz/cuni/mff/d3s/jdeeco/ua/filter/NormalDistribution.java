@@ -78,6 +78,14 @@ public class NormalDistribution {
 	}
 	
 	/**
+	 * Get the deviation of this normal distribution.
+	 * @return The deviation of this normal distribution.
+	 */
+	public double getDeviation(){
+		return deviation;
+	}
+	
+	/**
 	 * Get next random number with normal distribution with predefined
 	 * mean and standard deviation.
 	 * @return Next random number with normal distribution with predefined

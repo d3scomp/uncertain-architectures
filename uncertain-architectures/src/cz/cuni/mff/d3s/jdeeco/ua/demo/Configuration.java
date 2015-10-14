@@ -1,5 +1,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+import java.util.Random;
+
 import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
@@ -15,6 +17,9 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.ShortestTrajectoryExecutor;
  */
 public class Configuration {
 
+	/** Random number generator for the simulation */
+	public static final Random RANDOM = new Random(246811);
+	
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////
@@ -48,12 +53,30 @@ public class Configuration {
 	 * Expressed in milliseconds.
 	 */
 	public static final long MOVE_PROCESS_PERIOD = 100; // ms
+
+	/**
+	 * The period of a process that determines the robots position.
+	 * Expressed in milliseconds.
+	 */
+	public static final long DETERMINE_POSITION_PERIOD = 1000; // ms
 	
 	/**
-	 * The period of a process that plant the robots trajectory.
+	 * The period of a process that plans the robots trajectory.
 	 * Expressed in milliseconds.
 	 */
 	public static final long PLAN_PROCESS_PERIOD = 1000; // ms
+
+	/**
+	 * The period of a process that measures the robots battery.
+	 * Expressed in milliseconds.
+	 */
+	public static final long BATTERY_PROCESS_PERIOD = 1000; // ms
+	
+	/**
+	 * The period of a process that prints the robots status.
+	 * Expressed in milliseconds.
+	 */
+	public static final long STATUS_PROCESS_PERIOD = 1000; // ms
 	
 	/**
 	 * The Speed of the robot.
@@ -66,6 +89,24 @@ public class Configuration {
 	 * Expressed in meters.
 	 */
 	public static final double POSITION_ACCURACY = 0.01; // m
+	
+	/**
+	 * The energy consumption during robot movement.
+	 * Expressed in percents per second.
+	 */
+	public static final double MOVEMENT_ENERGY_COST = 0.001; // %/s
+
+	/**
+	 * The energy consumption during robot cleaning.
+	 * Expressed in percents per second.
+	 */
+	public static final double CLEANING_ENERGY_COST = 0.002; // %/s
+
+	/**
+	 * The energy consumption when robot is idle.
+	 * Expressed in percents per second.
+	 */
+	public static final double IDLE_ENERGY_COST = 0.0001; // %/s
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	

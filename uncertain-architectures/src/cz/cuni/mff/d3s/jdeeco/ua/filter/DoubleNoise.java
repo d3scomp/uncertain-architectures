@@ -42,6 +42,14 @@ public class DoubleNoise extends Filter<Double> {
 	}
 
 	/**
+	 * Get the deviation of this noise filter.
+	 * @return The deviation of this noise filter.
+	 */
+	public double getDeviation(){
+		return noise.getDeviation();
+	}
+
+	/**
 	 * Apply noise defined by this instance to the given data.
 	 * 
 	 * @param data The data to apply the filter at.

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,10 +112,11 @@ public class Run {
 	 * Prepare and register metadata for fields.
 	 */
 	private static void registerMetadataForFields() {
+		// TODO: revise this
 		final String positionLabel = "position";
 		final String batteryLabel = "batteryLevel";
 
-		final int positionBoundary = Environment.MAX_GROUP_DISTANCE;
+		final int positionBoundary = 4;
 		final int batteryBoundary = 20;
 
 		final Metric simpleMetric = new DifferenceMetric();

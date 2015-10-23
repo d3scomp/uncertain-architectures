@@ -20,8 +20,8 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.position.Position;
-import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
-import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
@@ -60,10 +60,10 @@ public class Robot {
 	public TrajectoryExecutor mover;
 	
 	@Local
-	public PositionNoise positionInaccuracy;
+	public PositionFilter positionInaccuracy;
 	
 	@Local
-	public DoubleNoise batteryInaccuracy;
+	public DoubleFilter batteryInaccuracy;
 	
 
 	///////////////////////////////////////////////////////////////////////////
@@ -92,11 +92,11 @@ public class Robot {
 	@PeriodicScheduling(period = DETERMINE_POSITION_PERIOD)
 	public static void determinePosition(
 		@In("position") Position position,
-		@In("positionInaccuracy") PositionNoise positionInaccuracy,
+		@In("positionInaccuracy") PositionFilter positionInaccuracy,
 		@Out("believedPosition") ParamHolder<MetadataWrapper<PositionKnowledge>> believedPosition
 	) {
 		believedPosition.value = new MetadataWrapper<>(
-				new PositionKnowledge(positionInaccuracy.apply(position),
+				new PositionKnowledge(positionInaccuracy.applyNoise(position),
 						positionInaccuracy.getDeviation()));
 	}
 

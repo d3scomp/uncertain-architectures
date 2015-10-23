@@ -3,8 +3,8 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 import java.util.Random;
 
 import cz.cuni.mff.d3s.jdeeco.position.Position;
-import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
-import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestOldestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.ShortestTrajectoryExecutor;
@@ -112,9 +112,9 @@ public class Configuration {
 	
 	public static final Robot ROBOT1 = RobotFactory.newRobot("TB1")
 			.atPosition(new Position(0, 0))
-			.withPositionNoise(new PositionNoise("TB1_position_noise", 0.0, 0.1))
+			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
-			.withBatteryNoise(new DoubleNoise("TB1_battery_noise", 0.0, 0.01))
+			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
@@ -123,9 +123,9 @@ public class Configuration {
 
 	public static final Robot ROBOT2 = RobotFactory.newRobot("TB2")
 			.atPosition(new Position(0, 0))
-			.withPositionNoise(new PositionNoise("TB2_position_noise", 0.0, 0.1))
+			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
-			.withBatteryNoise(new DoubleNoise("TB3_battery_noise", 0.0, 0.01))
+			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
@@ -134,9 +134,9 @@ public class Configuration {
 
 	public static final Robot ROBOT3 = RobotFactory.newRobot("TB3")
 			.atPosition(new Position(0, 0))
-			.withPositionNoise(new PositionNoise("TB3_position_noise", 0.0, 0.1))
+			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
-			.withBatteryNoise(new DoubleNoise("TB3_battery_noise", 0.0, 0.01))
+			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();

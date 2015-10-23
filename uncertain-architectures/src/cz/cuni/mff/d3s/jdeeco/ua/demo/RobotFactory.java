@@ -2,8 +2,8 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.position.Position;
-import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleNoise;
-import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionNoise;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
+import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
@@ -34,7 +34,7 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory withBatteryNoise(DoubleNoise batteryNoise){
+	public RobotFactory withBatteryNoise(DoubleFilter batteryNoise){
 		robot.batteryInaccuracy = batteryNoise;
 		batteryNoiseSet = true;
 		return this;
@@ -50,7 +50,7 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory withPositionNoise(PositionNoise positionNoise){
+	public RobotFactory withPositionNoise(PositionFilter positionNoise){
 		robot.positionInaccuracy = positionNoise;
 		positionNoiseSet = true;
 		return this;

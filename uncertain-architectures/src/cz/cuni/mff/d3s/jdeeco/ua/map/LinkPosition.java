@@ -1,7 +1,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
-import cz.filipekt.jdcv.graph.Link;
-import cz.filipekt.jdcv.graph.Node;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 public class LinkPosition {
 

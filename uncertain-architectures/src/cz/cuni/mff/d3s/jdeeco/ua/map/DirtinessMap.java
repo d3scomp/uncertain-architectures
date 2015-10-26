@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.filipekt.jdcv.graph.Graph;
-import cz.filipekt.jdcv.graph.Link;
-import cz.filipekt.jdcv.graph.Node;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Network;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 
 /**
@@ -28,7 +28,7 @@ public class DirtinessMap {
 	/**
 	 * The network representation of the map.
 	 */
-	private static final Graph network;
+	private static final Network network;
 
 	/**
 	 * A set of timestamps of the last visit of individual tiles.
@@ -36,7 +36,7 @@ public class DirtinessMap {
 	private Map<Node, Long> visitedNodes;
 
 	static{
-		network = new Graph();
+		network = new Network();
 		ArraySet<Node> nodes = new ArraySet<>(); // Hold the nodes in an array for a while
 		// Create nodes
 		for(int x = 0; x < MAP_WIDTH; x++){
@@ -87,7 +87,7 @@ public class DirtinessMap {
 		}
 	}
 	
-	public Graph getNetwork(){
+	public Network getNetwork(){
 		return network;
 	}
 	

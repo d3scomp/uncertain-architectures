@@ -4,7 +4,7 @@ import java.util.List;
 
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
-import cz.filipekt.jdcv.graph.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 /**
  * The interface for moving a robot on a planned trajectory.

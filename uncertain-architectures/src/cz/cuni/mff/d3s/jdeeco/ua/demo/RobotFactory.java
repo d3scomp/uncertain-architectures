@@ -8,7 +8,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
-import cz.filipekt.jdcv.graph.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 public class RobotFactory {
 

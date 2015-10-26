@@ -1,7 +1,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,9 +13,9 @@ import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
-import cz.filipekt.jdcv.graph.Dijkstra;
-import cz.filipekt.jdcv.graph.Link;
-import cz.filipekt.jdcv.graph.Node;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Dijkstra;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
  * Creates the trajectory plan to visit the nearest tile that has the oldest time when visited lastly.

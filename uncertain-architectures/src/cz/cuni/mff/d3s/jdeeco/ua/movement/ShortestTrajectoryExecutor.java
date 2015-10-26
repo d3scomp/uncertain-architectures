@@ -1,14 +1,14 @@
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_SPEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_SPEED;
 
 import java.util.List;
 
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
-import cz.filipekt.jdcv.graph.Link;;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;;
 
 /**
  * Moves the robot on the shortest path to the next planned trajectory

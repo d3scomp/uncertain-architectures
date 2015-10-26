@@ -3,7 +3,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 import java.util.List;
 
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
-import cz.filipekt.jdcv.graph.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 /**
  * The interface for classes that provide planning of the robot trajectory.

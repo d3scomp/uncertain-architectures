@@ -3,6 +3,9 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -160,5 +163,11 @@ public class DirtinessMap {
 			return ROBOT_LOCATIONS.get(robotId);
 		}
 		return null;
+	}
+	
+	public static void outputToFile(File file) throws FileNotFoundException {
+		PrintWriter writer = new PrintWriter(file);
+		writer.write(network.toString());
+		writer.close();
 	}
 }

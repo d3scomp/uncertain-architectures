@@ -2,8 +2,8 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
+import cz.filipekt.jdcv.graph.Link;
 
 /**
  * The interface for classes that provide planning of the robot trajectory.
@@ -18,7 +18,7 @@ public interface TrajectoryPlanner {
 	 * 
 	 * @param plan The Current route plan to be updated.
 	 */
-	void updateTrajectory(List<Position> plan);
+	void updateTrajectory(List<Link> plan);
 	
 	/**
 	 * Associate the given {@link Robot} with this {@link TrajectoryPlanner}.

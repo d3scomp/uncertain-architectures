@@ -1,14 +1,14 @@
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.POSITION_ACCURACY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_SPEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
-import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.filipekt.jdcv.graph.Link;;
 
 /**
  * Moves the robot on the shortest path to the next planned trajectory
@@ -52,40 +52,29 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 	 * @throws IllegalStateException Thrown if the {@link #map} field is not initialized.
 	 */
 	@Override
-	public Position move(List<Position> plan, Position position) {
+	public void move(List<Link> plan, LinkPosition position) {
 		// NOTE: This strategy works only for rectangular maps, for more complex maps this needs to be revised.
 		if(map == null) throw new IllegalStateException(String.format(
 				"The \"%s\" field is not initialized.", "map"));
 		
 		if(plan.isEmpty()){
 			// If there is no plan don't move
-			return position;
-		} else {
-			// Extract the destination of the robot
-			final Position destination = plan.get(0);
-			// Compute the distance between origin and destination
-			final double destinationDistance = position.euclidDistanceTo(destination);
-			// Compute the maximum distance the robot can travel in a single step
-			final double maxStepDistance = (double) ROBOT_SPEED / (double) MOVE_PROCESS_PERIOD;
-			// Compute the distance the robot will travel in this step
-			final double stepDistance = Math.min(destinationDistance, maxStepDistance);
-			// Compute the fraction of a distance to the destination that will be overcame in this step
-			final double distanceFractionToDestination = destinationDistance / stepDistance;
-			// Compute the distance that will be traveled on the X coordinate
-			final double stepX = (destination.x - position.x) * distanceFractionToDestination;
-			// Compute the distance that will be traveled on the Y coordinate
-			final double stepY = (destination.y - position.y) * distanceFractionToDestination;
-			
-			// Compute the new position of the robot
-			Position newPosition = new Position(
-					position.x + stepX, position.y + stepY);
-			
-			// If the checkpoint is reached remove it from the plan
-			if(newPosition.euclidDistanceTo(destination) < POSITION_ACCURACY){
-				plan.remove(0);
+			return;
+		}
+		// Compute the distance between origin and destination
+		final double destinationDistance = position.getRemainingDistance();
+		// Compute the maximum distance the robot can travel in a single step
+		final double maxStepDistance = (double) ROBOT_SPEED / (double) MOVE_PROCESS_PERIOD;
+		// Compute the distance the robot will travel in this step
+		final double stepDistance = Math.min(destinationDistance, maxStepDistance);
+		// Move towards the next node
+		position.move(stepDistance);
+		// Check whether the robot already overcame the link
+		if(position.isEndReached()){
+			plan.remove(0);
+			if(!plan.isEmpty()){
+				position.startFrom(plan.get(0));
 			}
-			
-			return newPosition;
 		}
 	}
 

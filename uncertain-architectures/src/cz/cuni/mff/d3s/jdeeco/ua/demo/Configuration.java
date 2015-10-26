@@ -2,7 +2,6 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Random;
 
-import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -111,7 +110,7 @@ public class Configuration {
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
 	public static final Robot ROBOT1 = RobotFactory.newRobot("TB1")
-			.atPosition(new Position(0, 0))
+			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
@@ -122,7 +121,7 @@ public class Configuration {
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
 	public static final Robot ROBOT2 = RobotFactory.newRobot("TB2")
-			.atPosition(new Position(0, 0))
+			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
@@ -133,7 +132,7 @@ public class Configuration {
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
 	public static final Robot ROBOT3 = RobotFactory.newRobot("TB3")
-			.atPosition(new Position(0, 0))
+			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))

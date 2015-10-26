@@ -2,8 +2,9 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.filipekt.jdcv.graph.Link;
 
 /**
  * The interface for moving a robot on a planned trajectory.
@@ -23,7 +24,7 @@ public interface TrajectoryExecutor {
 	 * 
 	 * @return The new position of the robot as it moved.
 	 */
-	Position move(List<Position> plan, Position position);
+	void move(List<Link> plan, LinkPosition position);
 
 	/**
 	 * Associate the given {@link Robot} with this {@link TrajectoryExecutor}.

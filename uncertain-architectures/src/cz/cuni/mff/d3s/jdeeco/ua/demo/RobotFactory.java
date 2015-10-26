@@ -1,12 +1,14 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+import java.util.Set;
+
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
-import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
-import cz.cuni.mff.d3s.jdeeco.ua.map.PositionKnowledge;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
+import cz.filipekt.jdcv.graph.Link;
 
 public class RobotFactory {
 
@@ -40,12 +42,20 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory atPosition(Position initialPosition){
-		if(initialPosition == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "initialPosition"));
-		robot.position = initialPosition;
-		robot.believedPosition = new MetadataWrapper<>(
-				new PositionKnowledge(initialPosition, 0));
+	public RobotFactory atPosition(int linkNumber){
+		Set<Link> links = robot.map.getNetwork().getLinks();
+		if(linkNumber < 0 || linkNumber >= links.size())
+			throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument is out of bounds.", "linkNumber"));
+		int index = 0;
+		for(Link link : links)
+		{
+			if(index == linkNumber){
+				robot.position = new LinkPosition(link);
+				break;
+			}
+			index++;
+		}
 		positionSet = true;
 		return this;
 	}

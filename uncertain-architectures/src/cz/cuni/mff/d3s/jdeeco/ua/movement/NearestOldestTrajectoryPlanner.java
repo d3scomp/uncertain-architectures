@@ -1,16 +1,21 @@
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.jdeeco.position.Position;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
-import cz.cuni.mff.d3s.jdeeco.ua.map.Tile;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.filipekt.jdcv.graph.Dijkstra;
+import cz.filipekt.jdcv.graph.Link;
+import cz.filipekt.jdcv.graph.Node;
 
 /**
  * Creates the trajectory plan to visit the nearest tile that has the oldest time when visited lastly.
@@ -21,23 +26,11 @@ import cz.cuni.mff.d3s.jdeeco.ua.map.Tile;
 public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 
 	/**
-	 * The minimum length of a plan.
-	 */
-	private final static int MIN_PLAN_LENGTH = 1;
-	/**
-	 * The default maximum length of a plan.
-	 */
-	private final static int MAX_PLAN_LENGTH = 5;
-
-	/**
 	 * The {@link DirtinessMap} to operate on.
 	 */
 	private DirtinessMap map;
 	
-	/**
-	 * The maximum length of a plan.
-	 */
-	private final int maxPlanLength;
+	private String robotId;
 	
 	/**
 	 * Associate the given {@link Robot} with this {@link TrajectoryExecutor}.
@@ -52,6 +45,7 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "robot"));
 		if (robot.map == null)
 			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
+		robotId = robot.id;
 		this.map = robot.map;
 	}	
 
@@ -61,23 +55,6 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * the planner holds information private to each robot.
 	 */
 	public NearestOldestTrajectoryPlanner() {
-		maxPlanLength = MAX_PLAN_LENGTH;
-	}
-	
-	/**
-	 * Create a new instance of {@link NearestOldestTrajectoryPlanner}.
-	 * Each robot is supposed to have its own {@link TrajectoryPlanner} because
-	 * the planner holds information private to each robot.
-	 *  
-	 * @param maxPlanLength The maximum plan length.
-	 * @throws IllegalArgumentException Thrown if the maxPlanLength argument
-	 * 			is less than {@value #MIN_PLAN_LENGTH}.
-	 */
-	public NearestOldestTrajectoryPlanner(int maxPlanLength) {
-		if(maxPlanLength < MIN_PLAN_LENGTH) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument needs to be greater or equal than %d",
-				"maxPlanLength", MIN_PLAN_LENGTH));
-		this.maxPlanLength = maxPlanLength;
 	}
 	
 	/**
@@ -88,30 +65,48 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * @throws IllegalArgumentException Thrown if the plan argument is null.
 	 */
 	@Override
-	public void updateTrajectory(List<Position> plan) {
+	public void updateTrajectory(List<Link> plan) {
 		if(plan == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "plan"));
-
-		Random rand = new Random();
 		
 		// Fill the plan
-		while(plan.size() < maxPlanLength){
-			Set<Tile> unvisitedTiles = unvisitedTiles();
-			if(!unvisitedTiles.isEmpty()){
+		if(plan.isEmpty()){
+			Set<Node> unvisitedNodes = unvisitedNodes();
+			if(!unvisitedNodes.isEmpty()){
 				// Visit the nearest unvisited tile
-				Tile lastTile = lastTileInPlan(plan);
-				Tile tileToVisit;
-				if(lastTile == null){
+				Node lastNode = lastNodeInPlan(plan);
+				Node nodeToVisit;
+				if(lastNode == null){
 					// return random tile if none was visited yet
-					tileToVisit = map.getTile(rand.nextInt(Configuration.MAP_WIDTH),
-									   rand.nextInt(Configuration.MAP_HEIGHT));
+					nodeToVisit = getRandomNode();
 				} else {
-					tileToVisit = getClosestTile(lastTile, rand);
+					nodeToVisit = getClosestNode(lastNode);
 				}
-				plan.add(map.getPosition(tileToVisit));
+				assert(nodeToVisit != null);
+				LinkPosition robotPosition = map.getPosition(robotId);
+				List<Link> newPlan = Dijkstra.getShortestPath(map.getNetwork(),
+						robotPosition.getLink().getTo() , nodeToVisit);
+				assert(newPlan != null);
+				assert(!newPlan.isEmpty());
+				plan.addAll(newPlan);
 			}
 		}
 
+	}
+	
+	private Node getRandomNode(){
+		Random rand = Configuration.RANDOM;
+		int end = rand.nextInt(MAP_WIDTH*MAP_HEIGHT);
+		int index = 0;
+		for(Node n : map.getNetwork().getNodes()){
+			if(index == end){
+				return n;
+			}
+			index++;
+		}
+		// Should never reach this code
+		assert(false);
+		return null;
 	}
 	
 	/**
@@ -119,14 +114,14 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * 
 	 * @return The set of unvisited {@link Tile}s.
 	 */
-	private Set<Tile> unvisitedTiles(){
+	private Set<Node> unvisitedNodes(){
 		// Performance optimization - Check the number of visited tiles first
-		if(map.size() <= map.getVisitedTiles().size()){
+		if(map.size() <= map.getVisitedNodes().size()){
 			return Collections.emptySet();
 		}
-		Set<Tile> tiles = new HashSet<>(map.getTiles());
-		tiles.removeAll(map.getVisitedTiles().keySet());
-		return tiles;
+		Set<Node> nodes = new HashSet<>(map.getNetwork().getNodes());
+		nodes.removeAll(map.getVisitedNodes().keySet());
+		return nodes;
 	}
 	
 	/**
@@ -138,12 +133,12 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * @return The last {@link Tile} in plan or the most recently visited
 	 * {@link Tile} if the plan is empty.
 	 */
-	private Tile lastTileInPlan(List<Position> plan){
+	private Node lastNodeInPlan(List<Link> plan){
 		if(!plan.isEmpty()){
-			return map.getTile(plan.get(plan.size()-1));
+			return plan.get(plan.size()-1).getTo();
 		}
-		Tile tile = lastVisitedTile();
-		return tile;
+		Node node = lastVisitedNode();
+		return node;
 	}
 	
 	/**
@@ -151,26 +146,26 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * 
 	 * @return The most recently visited {@link Tile}.
 	 */
-	private Tile lastVisitedTile(){
-		if(map.getVisitedTiles().size() == 0){
+	private Node lastVisitedNode(){
+		if(map.getVisitedNodes().size() == 0){
 			return null;
 		}
 		
-		Tile lastTile = null;
+		Node lastNode = null;
 		long timestamp = 0;
-		for(Tile t : map.getVisitedTiles().keySet()){
-			if(lastTile == null){
-				lastTile = t;
-				timestamp = map.getVisitedTiles().get(t);
+		for(Node n : map.getVisitedNodes().keySet()){
+			if(lastNode == null){
+				lastNode = n;
+				timestamp = map.getVisitedNodes().get(n);
 			} else {
-				long newTimestamp = map.getVisitedTiles().get(t); 
+				long newTimestamp = map.getVisitedNodes().get(n); 
 				if(timestamp < newTimestamp){
-					lastTile = t;
+					lastNode = n;
 					timestamp = newTimestamp;
 				}
 			}
 		}
-		return lastTile;
+		return lastNode;
 	}
 	
 	/**
@@ -181,45 +176,23 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * @throws IllegalArgumentException Thrown if either tile of rand argument
 	 * 			is null.
 	 */
-	private Tile getClosestTile(Tile tile, Random rand){
-		if(tile == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "tile"));
-		if(rand == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "rand"));
-		
-		Tile nextTile = null;
-		switch(rand.nextInt(4)){
-		case 0:
-			if(tile.x+1 >= Configuration.MAP_WIDTH){
-				nextTile = map.getTile(tile.x-1, tile.y);
-			} else {
-				nextTile = map.getTile(tile.x+1, tile.y);
+	private Node getClosestNode(Node node){
+		if(node == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument cannot be null.", "node"));
+
+		Random rand = Configuration.RANDOM;
+		Set<Link> sucessors = map.getNetwork().getLinksFrom(node);
+		int end = rand.nextInt(sucessors.size());
+		int index = 0;
+		for(Link sucessor : sucessors){
+			if(index == end){
+				return sucessor.getTo();
 			}
-			break;
-		case 1:
-			if(tile.x-1 < 0){
-				nextTile = map.getTile(tile.x+1, tile.y);
-			} else {
-				nextTile = map.getTile(tile.x-1, tile.y);
-			}
-			break;
-		case 2:
-			if(tile.y+1 >= Configuration.MAP_HEIGHT){
-				nextTile = map.getTile(tile.x, tile.y-1);
-			} else {
-				nextTile = map.getTile(tile.x, tile.y+1);
-			}
-			break;
-		case 3:
-			if(tile.y-1 < 0){
-				nextTile = map.getTile(tile.x, tile.y+1);
-			} else {
-				nextTile = map.getTile(tile.x, tile.y-1);
-			}
-			break;
+			index++;
 		}
-		
-		return nextTile;
+		// Should never reach this code
+		assert(false);
+		return null;
 	}
 
 }

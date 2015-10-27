@@ -5,7 +5,6 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_SPEED;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
@@ -26,8 +25,6 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 	private DirtinessMap map;
 	
 	private String robotId;
-	
-	private RuntimeLogger runtimeLogger;
 
 	/**
 	 * Associate the given {@link Robot} with this {@link TrajectoryExecutor}.
@@ -44,12 +41,6 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
 		this.map = robot.map;
 		robotId = robot.id;
-	}
-	
-	
-	@Override
-	public void setRuntimeLogger(RuntimeLogger runtimeLogger) {
-		this.runtimeLogger = runtimeLogger;
 	}
 
 	/**

@@ -2,7 +2,6 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
@@ -33,6 +32,4 @@ public interface TrajectoryExecutor {
 	 * @param robot The robot associated with this {@link TrajectoryExecutor}.
 	 */
 	void setRobot(Robot robot);
-	
-	void setRuntimeLogger(RuntimeLogger runtimeLogger);
 }

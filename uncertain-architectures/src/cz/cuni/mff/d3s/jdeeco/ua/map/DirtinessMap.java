@@ -58,6 +58,8 @@ public class DirtinessMap {
 				for(int h = -1; h <= 1; h++){
 					// vertical shift
 					for(int v = -1; v <= 1; v++){
+						// Skip the node n (reflexive link not desired)
+						if(h == 0 && v == 0) continue;
 						// Check neighbor is not out of bounds
 						Node neighbor = getElement(nodes, x+h, y+v);
 						if(neighbor != null){

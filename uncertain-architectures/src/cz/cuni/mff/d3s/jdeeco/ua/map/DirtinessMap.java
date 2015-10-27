@@ -168,6 +168,7 @@ public class DirtinessMap {
 	}
 	
 	public static void outputToFile(File file) throws FileNotFoundException {
+		file.getParentFile().mkdirs();
 		PrintWriter writer = new PrintWriter(file);
 		writer.write(network.toString());
 		writer.close();

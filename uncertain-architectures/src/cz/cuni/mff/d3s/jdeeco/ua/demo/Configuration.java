@@ -43,6 +43,11 @@ public class Configuration {
 	 */
 	public static final int MAP_HEIGHT = 20;
 	
+	/**
+	 * The location where the map definition file is written. 
+	 */
+	public static final String MAP_FILE_DESTINATION = "logs/runtime/network.xml";
+	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////

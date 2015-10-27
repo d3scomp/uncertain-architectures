@@ -66,7 +66,7 @@ public class Run {
 			IOException {
 		Log.i("Preparing simulation");
 
-		DirtinessMap.outputToFile(new File("network.xml"));
+		DirtinessMap.outputToFile(new File(Configuration.MAP_FILE_DESTINATION));
 		
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();

@@ -23,6 +23,8 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 	 * The map used to adjust the robot movement.
 	 */
 	private DirtinessMap map;
+	
+	private String robotId;
 
 	/**
 	 * Associate the given {@link Robot} with this {@link TrajectoryExecutor}.
@@ -38,6 +40,7 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 		if (robot.map == null)
 			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
 		this.map = robot.map;
+		robotId = robot.id;
 	}
 
 	/**
@@ -76,6 +79,8 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 				position.startFrom(plan.get(0));
 			}
 		}
+		// Update robots position in the centralized storage
+		map.updateRobotsPosition(robotId, position);
 	}
 
 }

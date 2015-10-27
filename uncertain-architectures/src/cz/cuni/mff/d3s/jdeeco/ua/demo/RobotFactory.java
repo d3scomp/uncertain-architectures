@@ -52,11 +52,12 @@ public class RobotFactory {
 		{
 			if(index == linkNumber){
 				robot.position = new LinkPosition(link);
+				positionSet = true;
+				robot.map.updateRobotsPosition(robot.id, robot.position);
 				break;
 			}
 			index++;
 		}
-		positionSet = true;
 		return this;
 	}
 	

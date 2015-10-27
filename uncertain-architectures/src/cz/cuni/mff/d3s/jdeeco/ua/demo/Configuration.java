@@ -2,6 +2,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Random;
 
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -114,36 +115,42 @@ public class Configuration {
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
-	public static final Robot ROBOT1 = RobotFactory.newRobot("TB1")
-			.atPosition(5)
+	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
+		return RobotFactory.newRobot("TB1")
+			.atPosition(5, runtimeLogger)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
+	}
 
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
-	public static final Robot ROBOT2 = RobotFactory.newRobot("TB2")
-			.atPosition(10)
+	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
+		return RobotFactory.newRobot("TB2")
+			.atPosition(10, runtimeLogger)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
+	}
 	
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
-	public static final Robot ROBOT3 = RobotFactory.newRobot("TB3")
-			.atPosition(0)
+	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
+		return RobotFactory.newRobot("TB3")
+			.atPosition(0, runtimeLogger)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
+	}
 	
 	///////////////////////////////////////////////////////////////////////////
 }

@@ -2,6 +2,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
@@ -42,7 +43,7 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory atPosition(int linkNumber){
+	public RobotFactory atPosition(int linkNumber, RuntimeLogger runtimeLogger){
 		Set<Link> links = robot.map.getNetwork().getLinks();
 		if(linkNumber < 0 || linkNumber >= links.size())
 			throw new IllegalArgumentException(String.format(
@@ -51,7 +52,7 @@ public class RobotFactory {
 		for(Link link : links)
 		{
 			if(index == linkNumber){
-				robot.position = new LinkPosition(link);
+				robot.position = new LinkPosition(link, robot.id, runtimeLogger);
 				positionSet = true;
 				robot.map.updateRobotsPosition(robot.id, robot.position);
 				break;

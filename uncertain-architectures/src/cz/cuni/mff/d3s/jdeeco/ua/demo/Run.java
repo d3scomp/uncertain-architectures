@@ -82,11 +82,11 @@ public class Run {
 		// create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
-		deeco1.deployComponent(Configuration.ROBOT1);
+		deeco1.deployComponent(Configuration.createRobot1(deeco1.getRuntimeLogger()));
 
 		DEECoNode deeco2 = simulation.createNode(2);
 		nodesInSimulation.add(deeco2);
-		deeco2.deployComponent(Configuration.ROBOT2);
+		deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
 
 		// create correlation plugin
 		registerMetadataForFields();
@@ -102,7 +102,7 @@ public class Run {
 			nodesInSimulation.add(deeco3);
 		}
 		// deploy components
-		deeco3.deployComponent(Configuration.ROBOT3);
+		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
 		deeco3.deployEnsemble(RobotDataAggregation.class);
 
 		// Assign the FF1 to the evaluation component

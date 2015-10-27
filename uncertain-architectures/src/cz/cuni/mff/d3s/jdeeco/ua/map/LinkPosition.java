@@ -1,5 +1,11 @@
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
+import java.io.IOException;
+
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.jdeeco.ua.visualization.EnteredLinkRecord;
+import cz.cuni.mff.d3s.jdeeco.ua.visualization.LeftLinkRecord;
+import cz.cuni.mff.d3s.jdeeco.ua.visualization.LinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
@@ -11,11 +17,39 @@ public class LinkPosition {
 	
 	private double epsilon = 0.001; // 1 mm
 	
-	public LinkPosition(Link link){
+	private final RuntimeLogger runtimeLogger;
+	
+	private final String robotId;
+	
+	public LinkPosition(Link link, String robotId, RuntimeLogger runtimeLogger){
+		this.link = null;
+		this.runtimeLogger = runtimeLogger;
+		this.robotId = robotId;
 		startFrom(link);
 	}
 	
 	public void startFrom(Link link){
+		if(runtimeLogger != null){
+			try {
+				// Log left link event if the previous link is present
+				if(this.link != null){
+					LinkRecord record = new LeftLinkRecord(robotId);
+					record.setLink(link);
+					record.setVehicle(robotId);
+				}
+				
+				// Log the entered link event
+				LinkRecord record = new EnteredLinkRecord(robotId);
+				record.setLink(link);
+				record.setVehicle(robotId);
+				runtimeLogger.log(record);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		this.link = link;
 		distance = 0;
 	}

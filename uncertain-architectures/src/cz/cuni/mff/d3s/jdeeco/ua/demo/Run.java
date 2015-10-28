@@ -68,7 +68,6 @@ public class Run {
 
 		DirtinessMap.outputToFile(new File(Configuration.MAP_FILE_DESTINATION));
 		
-		
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 

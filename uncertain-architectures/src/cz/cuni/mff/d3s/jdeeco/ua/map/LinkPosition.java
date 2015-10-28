@@ -34,8 +34,9 @@ public class LinkPosition {
 				// Log left link event if the previous link is present
 				if(this.link != null){
 					LinkRecord record = new LeftLinkRecord(robotId);
-					record.setLink(link);
+					record.setLink(this.link);
 					record.setVehicle(robotId);
+					runtimeLogger.log(record);
 				}
 				
 				// Log the entered link event

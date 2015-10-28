@@ -3,10 +3,10 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 import java.io.IOException;
 
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
-import cz.cuni.mff.d3s.jdeeco.ua.visualization.EnteredLinkRecord;
-import cz.cuni.mff.d3s.jdeeco.ua.visualization.LeftLinkRecord;
-import cz.cuni.mff.d3s.jdeeco.ua.visualization.LinkRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.EnteredLinkRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.LeftLinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.LinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 public class LinkPosition {
@@ -35,14 +35,14 @@ public class LinkPosition {
 				if(this.link != null){
 					LinkRecord record = new LeftLinkRecord(robotId);
 					record.setLink(this.link);
-					record.setVehicle(robotId);
+					record.setPerson(robotId);
 					runtimeLogger.log(record);
 				}
 				
 				// Log the entered link event
 				LinkRecord record = new EnteredLinkRecord(robotId);
 				record.setLink(link);
-				record.setVehicle(robotId);
+				record.setPerson(robotId);
 				runtimeLogger.log(record);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();

@@ -1,6 +1,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
@@ -14,6 +15,7 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
@@ -24,6 +26,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  
 
 @Component
@@ -68,9 +71,9 @@ public class Robot {
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Robot(final String id) {
+	public Robot(final String id, RuntimeLogger runtimeLogger) {
 		this.id = id;
-		map = new DirtinessMap();
+		map = new DirtinessMap(id, runtimeLogger);
 		trajectory = new ArrayList<>();
 	}
 
@@ -96,6 +99,19 @@ public class Robot {
 	public static void plan(@In("planner") TrajectoryPlanner planner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory) {
 		planner.updateTrajectory(trajectory.value);
+	}
+
+	@Process
+	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
+	public static void clean(@InOut("map") ParamHolder<DirtinessMap> map,
+			@In("position") LinkPosition position) {
+		Node node = position.atNode();
+		if(node != null){
+			double intensity = map.value.checkDirtiness(node);
+			if(intensity > 0){
+				map.value.cleanDirtiness(node, intensity);
+			}
+		}
 	}
 
 	@Process

@@ -1,8 +1,5 @@
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +75,7 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 				Node nodeToVisit;
 				if(lastNode == null){
 					// return random tile if none was visited yet
-					nodeToVisit = getRandomNode();
+					nodeToVisit = map.getRandomNode();
 				} else {
 					nodeToVisit = getClosestNode(lastNode);
 				}
@@ -92,21 +89,6 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 			}
 		}
 
-	}
-	
-	private Node getRandomNode(){
-		Random rand = Configuration.RANDOM;
-		int end = rand.nextInt(MAP_WIDTH*MAP_HEIGHT);
-		int index = 0;
-		for(Node n : map.getNetwork().getNodes()){
-			if(index == end){
-				return n;
-			}
-			index++;
-		}
-		// Should never reach this code
-		assert(false);
-		return null;
 	}
 	
 	/**

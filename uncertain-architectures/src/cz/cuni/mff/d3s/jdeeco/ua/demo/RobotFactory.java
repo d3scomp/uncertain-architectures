@@ -13,7 +13,8 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 public class RobotFactory {
 
-	private Robot robot;
+	private final Robot robot;
+	private final RuntimeLogger runtimeLogger;
 	private boolean batterySet = false;
 	private boolean batteryNoiseSet = false;
 	private boolean positionSet = false;
@@ -21,14 +22,15 @@ public class RobotFactory {
 	private boolean plannerSet = false;
 	private boolean moverSet = false;
 	
-	private RobotFactory(String robotId){
-		robot = new Robot(robotId);
+	private RobotFactory(String robotId, RuntimeLogger runtimeLogger){
+		robot = new Robot(robotId, runtimeLogger);
+		this.runtimeLogger = runtimeLogger;
 	}
 	
-	public static RobotFactory newRobot(String robotId){
+	public static RobotFactory newRobot(String robotId, RuntimeLogger runtimeLogger){
 		if(robotId == null || robotId.length() == 0) throw new IllegalArgumentException(
 				String.format("The \"%s\" argument cannot be null nor empty string.", "robotId"));
-		return new RobotFactory(robotId);
+		return new RobotFactory(robotId, runtimeLogger);
 	}
 	
 	public RobotFactory withBatteryLevel(double initialBatteryLevel){
@@ -43,7 +45,7 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory atPosition(int linkNumber, RuntimeLogger runtimeLogger){
+	public RobotFactory atPosition(int linkNumber){
 		Set<Link> links = robot.map.getNetwork().getLinks();
 		if(linkNumber < 0 || linkNumber >= links.size())
 			throw new IllegalArgumentException(String.format(

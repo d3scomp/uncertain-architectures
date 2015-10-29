@@ -49,6 +49,8 @@ public class Configuration {
 	 */
 	public static final String MAP_FILE_DESTINATION = "logs/runtime/network.xml";
 	
+	public static final double DIRT_GENERATION_RATE = 0.5;
+	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////
@@ -58,6 +60,12 @@ public class Configuration {
 	 * Expressed in milliseconds.
 	 */
 	public static final long MOVE_PROCESS_PERIOD = 100; // ms
+	
+	/**
+	 * The period of a process that moves the robot.
+	 * Expressed in milliseconds.
+	 */
+	public static final long CLEAN_PROCESS_PERIOD = 1000; // ms
 
 	/**
 	 * The period of a process that determines the robots position.
@@ -116,8 +124,8 @@ public class Configuration {
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
 	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB1")
-			.atPosition(5, runtimeLogger)
+		return RobotFactory.newRobot("TB1", runtimeLogger)
+			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
@@ -129,8 +137,8 @@ public class Configuration {
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB2")
-			.atPosition(10, runtimeLogger)
+		return RobotFactory.newRobot("TB2", runtimeLogger)
+			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
@@ -142,8 +150,8 @@ public class Configuration {
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB3")
-			.atPosition(0, runtimeLogger)
+		return RobotFactory.newRobot("TB3", runtimeLogger)
+			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))

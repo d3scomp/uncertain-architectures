@@ -3,10 +3,13 @@ package cz.cuni.mff.d3s.jdeeco.ua.visualization;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class VisualizationSettings {
 
 	private static final File RUNTIME_LOG_DIR = new File("logs/runtime");
+	
+	private static final File RESOURCES_DIR = new File("resources");
 	
 	private static final String CONFIG_FILE_NAME = "config.txt";
 	
@@ -23,13 +26,15 @@ public class VisualizationSettings {
 	
 	public static final File EVENT_FILE = new File(RUNTIME_LOG_DIR, EVENT_FILE_NAME);
 	
-	public static final File[] PLUGIN_DIRS = {}; //{RUNTIME_LOG_DIR};
+	public static final String SCRIPTS_FILE_NAME = "setBackgroundImages.acmescript";
+	
+	public static final File SCRIPT_FILE = new File(RUNTIME_LOG_DIR, SCRIPTS_FILE_NAME);
 	
 	private static final String NETWORK_TOKEN = "network";
 	
 	private static final String EVENTS_TOKEN = "events";
 	
-	private static final String PLUGIN_DIRS_TOKEN = "plugins";
+	private static final String SCRIPTS_TOKEN = "scripts";
 	
 	private static final String SEP = ";";
 	
@@ -39,6 +44,7 @@ public class VisualizationSettings {
 	
 	
 	public static void createConfigFile() throws IOException{
+		createScriptFile();
 		CONFIG_FILE.getParentFile().mkdirs();
 		FileWriter writer = new FileWriter(CONFIG_FILE);
 		StringBuilder builder = new StringBuilder();
@@ -49,16 +55,33 @@ public class VisualizationSettings {
 		builder.append(EVENTS_TOKEN).append(SEP)
 			.append(EVENT_FILE.getAbsolutePath()).append(SEP)
 			.append(ENC).append(ENDL);
-		if(PLUGIN_DIRS.length > 0){
-			builder.append(PLUGIN_DIRS_TOKEN);
-			for(File plugin_dir : PLUGIN_DIRS){
-				builder.append(SEP).append(plugin_dir.getAbsolutePath());
-			}
-			builder.append(ENDL);
-		}
+		builder.append(SCRIPTS_TOKEN).append(SEP)
+		.append(SCRIPT_FILE.getAbsolutePath()).append(SEP)
+		.append(ENDL);
 		
 		writer.write(builder.toString());
 		writer.close();
+	}
+
+
+	private static void createScriptFile() throws IOException {
+		FileWriter writer = new FileWriter(SCRIPT_FILE);
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("general.setAdditionalResourcesPath(\"").append(revertBackSlashes(RESOURCES_DIR.getAbsolutePath())).append("\")")
+				.append(ENDL).append("general.setPersonImage(\"turtlebot.png\")").append(ENDL)
+				.append("general.setNodeImage(\"tile.png\")");
+		writer.write(builder.toString());
+		writer.close();
+	}
+	
+	private static String revertBackSlashes(String str) {
+		StringTokenizer strTok = new StringTokenizer(str, File.separator);
+		StringBuilder builder = new StringBuilder();
+		while (strTok.hasMoreTokens()) {
+			builder.append(strTok.nextToken()).append("/");
+		}
+		return builder.toString();
 	}
 	
 	

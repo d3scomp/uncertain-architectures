@@ -36,6 +36,10 @@ public class VisualizationSettings {
 	
 	private static final String SCRIPTS_TOKEN = "scripts";
 	
+	private static final String SHOW_LINKS_TOKEN = "showLinks";
+
+	private static final String FALSE_VALUE = "false";
+	
 	private static final String SEP = ";";
 	
 	private static final String ENDL = "\n";
@@ -57,6 +61,9 @@ public class VisualizationSettings {
 			.append(ENC).append(ENDL);
 		builder.append(SCRIPTS_TOKEN).append(SEP)
 		.append(SCRIPT_FILE.getAbsolutePath()).append(SEP)
+		.append(ENDL);
+		builder.append(SHOW_LINKS_TOKEN).append(SEP)
+		.append(FALSE_VALUE).append(SEP)
 		.append(ENDL);
 		
 		writer.write(builder.toString());

@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import cz.cuni.mff.d3s.jdeeco.visualizer.robotsExample.CleaningRobotsPlugin;
+
 public class VisualizationSettings {
 
 	private static final File RUNTIME_LOG_DIR = new File("logs/runtime");
@@ -37,6 +39,10 @@ public class VisualizationSettings {
 	private static final String SCRIPTS_TOKEN = "scripts";
 	
 	private static final String SHOW_LINKS_TOKEN = "showLinks";
+	
+	private static final String PLUGINS_TOKEN = "plugins";
+	
+	public static final String PLUGIN_CLASS_NAME = CleaningRobotsPlugin.class.getCanonicalName();
 
 	private static final String FALSE_VALUE = "false";
 	
@@ -45,7 +51,6 @@ public class VisualizationSettings {
 	private static final String ENDL = "\n";
 	
 	private static final String ENC = "UTF-8";
-	
 	
 	public static void createConfigFile() throws IOException{
 		createScriptFile();
@@ -65,11 +70,13 @@ public class VisualizationSettings {
 		builder.append(SHOW_LINKS_TOKEN).append(SEP)
 		.append(FALSE_VALUE).append(SEP)
 		.append(ENDL);
+		builder.append(PLUGINS_TOKEN).append(SEP)
+		.append(PLUGIN_CLASS_NAME).append(SEP)
+		.append(ENDL);
 		
 		writer.write(builder.toString());
 		writer.close();
 	}
-
 
 	private static void createScriptFile() throws IOException {
 		FileWriter writer = new FileWriter(SCRIPT_FILE);
@@ -90,6 +97,5 @@ public class VisualizationSettings {
 		}
 		return builder.toString();
 	}
-	
 	
 }

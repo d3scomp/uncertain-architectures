@@ -31,10 +31,10 @@ import javafx.util.Duration;
 public class DirtinessMapSceneExtension implements MapSceneExtensionPoint {
 	
 	@Override
-	public Collection<KeyFrame> buildFrames(Map<EventType, List<Event>> otherEvents, MapScene mapScene) throws IOException {
+	public Collection<KeyFrame> buildFrames(Map<String, List<Event>> otherEvents, MapScene mapScene) throws IOException {
 		Collection<KeyFrame> res = new ArrayList<>();
 		Collection<Node> localDirtinessShapes = new ArrayList<>();
-		List<Event> dirtinessEvents = otherEvents.get(EventType.DIRTINESS);
+		List<Event> dirtinessEvents = otherEvents.get(DirtinessEvent.DIRTINESS_EVENT_TYPE);
 		for (Event e : dirtinessEvents) {
 			DirtinessEvent de = (DirtinessEvent) e;
 			double timeVal = mapScene.convertToVisualizationTime(de.getTime());

@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.DynamicEventHandler;
 import cz.filipekt.jdcv.events.Event;
-import cz.filipekt.jdcv.events.EventType;
 import cz.filipekt.jdcv.exceptions.InvalidAttributeValueException;
 import cz.filipekt.jdcv.exceptions.TooManyEvents;
 import cz.filipekt.jdcv.xml.Utils;
@@ -96,8 +95,8 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 		return events;
 	}
 	
-	public EventType getEventType() {
-		return EventType.DIRTINESS;
+	public String getEventType() {
+		return DirtinessEvent.DIRTINESS_EVENT_TYPE;
 	}
 
 	/**

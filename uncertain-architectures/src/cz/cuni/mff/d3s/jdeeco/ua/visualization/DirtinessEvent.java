@@ -1,7 +1,6 @@
 package cz.cuni.mff.d3s.jdeeco.ua.visualization;
 
 import cz.filipekt.jdcv.events.Event;
-import cz.filipekt.jdcv.events.EventType;
 
 /**
  * Models an event of type "dirtiness", which appears in the JDEECo
@@ -23,6 +22,8 @@ public class DirtinessEvent implements Event {
 	 * dirty/clean)
 	 */
 	private String node;
+	
+	public static String DIRTINESS_EVENT_TYPE = "dirtiness";
 
 	/**
 	 * The level of dirtiness captured in the event. Max level is 1.0 (very
@@ -35,8 +36,8 @@ public class DirtinessEvent implements Event {
 	}
 
 	@Override
-	public EventType getType() {
-		return EventType.DIRTINESS;
+	public String getType() {
+		return DIRTINESS_EVENT_TYPE;
 	}
 
 	@Override

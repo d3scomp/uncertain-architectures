@@ -16,10 +16,10 @@ import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Network;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
-import cz.cuni.mff.d3s.jdeeco.visualizer.robotsExample.DirtinessRecord;
 
 /**
  * Environment heat map holder.

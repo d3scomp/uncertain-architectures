@@ -5,8 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import cz.cuni.mff.d3s.jdeeco.visualizer.robotsExample.CleaningRobotsPlugin;
-
 public class VisualizationSettings {
 
 	private static final File RUNTIME_LOG_DIR = new File("logs/runtime");

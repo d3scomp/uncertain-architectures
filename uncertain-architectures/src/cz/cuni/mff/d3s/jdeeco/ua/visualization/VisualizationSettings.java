@@ -41,7 +41,11 @@ public class VisualizationSettings {
 	private static final String PLUGINS_TOKEN = "plugins";
 	
 	public static final String PLUGIN_CLASS_NAME = CleaningRobotsPlugin.class.getCanonicalName();
+	
+	private static final String PLUGINS_DIRS_TOKEN = "pluginsDirs";
 
+	private static final File CURRENT_PROJECT_DIR = new File("target/classes/");
+	
 	private static final String FALSE_VALUE = "false";
 	
 	private static final String SEP = ";";
@@ -67,6 +71,9 @@ public class VisualizationSettings {
 		.append(ENDL);
 		builder.append(SHOW_LINKS_TOKEN).append(SEP)
 		.append(FALSE_VALUE).append(SEP)
+		.append(ENDL);
+		builder.append(PLUGINS_DIRS_TOKEN).append(SEP)
+		.append(CURRENT_PROJECT_DIR.getAbsolutePath()).append(SEP)
 		.append(ENDL);
 		builder.append(PLUGINS_TOKEN).append(SEP)
 		.append(PLUGIN_CLASS_NAME).append(SEP)

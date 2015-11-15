@@ -74,7 +74,9 @@ public class ShortestTrajectoryExecutor implements TrajectoryExecutor {
 		position.move(stepDistance);
 		// Check whether the robot already overcame the link
 		if(position.isEndReached()){
-			plan.remove(0);
+			if(position.atNode() == plan.get(0).getTo()){
+				plan.remove(0);
+			}
 			if(!plan.isEmpty()){
 				position.startFrom(plan.get(0));
 			}

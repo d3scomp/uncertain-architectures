@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -68,6 +69,7 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 		
 		// Fill the plan
 		if(plan.isEmpty()){
+			LinkPosition robotPosition = map.getPosition(robotId);
 			Set<Node> unvisitedNodes = unvisitedNodes();
 			if(!unvisitedNodes.isEmpty()){
 				// Visit the nearest unvisited tile
@@ -80,12 +82,15 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 					nodeToVisit = getClosestNode(lastNode);
 				}
 				assert(nodeToVisit != null);
-				LinkPosition robotPosition = map.getPosition(robotId);
 				List<Link> newPlan = Dijkstra.getShortestPath(map.getNetwork(),
 						robotPosition.getLink().getTo() , nodeToVisit);
 				assert(newPlan != null);
 				assert(!newPlan.isEmpty());
 				plan.addAll(newPlan);
+			}
+			if(plan.isEmpty()){
+				Log.e("Empty plan has been generated.");
+				return;
 			}
 		}
 

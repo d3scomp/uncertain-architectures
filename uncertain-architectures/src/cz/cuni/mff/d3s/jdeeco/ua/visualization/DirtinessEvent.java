@@ -49,16 +49,16 @@ public class DirtinessEvent implements Event {
 		return node;
 	}
 
+	public void setNode(String node) {
+		this.node = node;
+	}
+	
 	public double getIntensity() {
 		return intensity;
 	}
 	
 	public void setIntensity(double intensity) {
 		this.intensity = intensity;
-	}
-
-	public void setNode(String node) {
-		this.node = node;
 	}
 	
 	@Override

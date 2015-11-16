@@ -1,7 +1,10 @@
 package cz.cuni.mff.d3s.jdeeco.ua.visualization;
 
-import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.DynamicEventHandler;
+import java.util.Arrays;
+import java.util.Collection;
+
 import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.MapSceneExtensionPoint;
+import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.OtherEventHandler;
 import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.VisualizerPlugin;
 
 /**
@@ -13,13 +16,19 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.VisualizerPlugin;
 public class CleaningRobotsPlugin implements VisualizerPlugin {
 
 	@Override
-	public DynamicEventHandler getDynamicEventHandler(Double startAt, Double endAt) {
-		return new DirtinessEventHandler(startAt, endAt);
+	public Collection<OtherEventHandler> getDynamicEventHandlers(Double startAt, Double endAt) {
+		return Arrays.asList(
+				new DirtinessEventHandler(startAt, endAt),
+				new DockingStationEventHandler()
+			);
 	}
 
 	@Override
-	public MapSceneExtensionPoint getMapSceneExtensionPoint() {
-		return new DirtinessMapSceneExtension();
+	public Collection<MapSceneExtensionPoint> getMapSceneExtensionPoints() {
+		return Arrays.asList(
+				new DirtinessMapSceneExtension(),
+				new DockingStationMapSceneExtension()				
+			);
 	}
 
 }

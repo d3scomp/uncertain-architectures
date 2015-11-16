@@ -16,14 +16,15 @@ import cz.filipekt.jdcv.exceptions.TooManyEvents;
 import cz.filipekt.jdcv.xml.Utils;
 
 /**
- * SAX handler used to parse the XML file containing the dirtiness events.
+ * SAX handler used to parse the XML file containing the docking station events.
  * 
  * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
  */
-public class DirtinessEventHandler extends DynamicEventHandler {
+public class DockingStationEventHandler extends DynamicEventHandler {
 
-	public DirtinessEventHandler(Double startAt, Double endAt) {
-		super(startAt, endAt);
+	public DockingStationEventHandler() {
+		// no specific starting or ending time for these events
+		super(null, null);
 	}
 
 	/**
@@ -40,17 +41,12 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 	 * Expected value of the type attribute of the event element. Events of
 	 * different types should be ignored by this handler.
 	 */
-	private final String expectedTypeValue = DirtinessRecord.class.getCanonicalName();
+	private final String expectedTypeValue = DockingStationRecord.class.getCanonicalName();
 
 	/**
 	 * Name of the time attribute of the event element
 	 */
 	private final String timeName = "time";
-
-	/**
-	 * Name of the intensity sub-element of the event element
-	 */
-	private final String intensityName = "intensity";
 
 	/**
 	 * Name of the node sub-element of the event element
@@ -60,12 +56,7 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 	/**
 	 * Flag to denote parsing a node element that is of the expected type
 	 */
-	private boolean visitingDirtinessNode = false;
-
-	/**
-	 * Flag to denote parsing an intensity sub-element
-	 */
-	private boolean visitingIntensityNode = false;
+	private boolean visitingDockingStationNode = false;
 
 	/**
 	 * Flag to denote parsing a node sub-element
@@ -80,18 +71,18 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 	/**
 	 * Stack to keep reference to the parent event element
 	 */
-	private Stack<DirtinessEvent> dirtinessEventsStack = new Stack<>();
+	private Stack<DockingStationEvent> dockingStationEventsStack = new Stack<>();
 
 	/**
 	 * @return The parsed event elements
-	 * @see {@link DirtinessEventHandler#events}
+	 * @see {@link DockingStationEventHandler#events}
 	 */
 	public List<Event> getEvents() {
 		return events;
 	}
 	
 	public String getEventType() {
-		return DirtinessEvent.DIRTINESS_EVENT_TYPE;
+		return DockingStationEvent.DOCKING_STATION_EVENT_TYPE;
 	}
 
 	/**
@@ -105,7 +96,7 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 	private final long countLimit = 600_000L;
 
 	/**
-	 * When a dirtiness event element is encountered, it creates a corresponding
+	 * When a docking station event element is encountered, it creates a corresponding
 	 * object and pushes it to the stack. Also sets the flags according to the
 	 * element that is encountered.
 	 */
@@ -124,9 +115,9 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 
 			String typeVal = attributes.getValue(typeName);
 			if (typeVal.equals(expectedTypeValue)) {
-				visitingDirtinessNode = true;
+				visitingDockingStationNode = true;
 			} else {
-				visitingDirtinessNode = false;
+				visitingDockingStationNode = false;
 				return;
 			}
 
@@ -137,7 +128,7 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 				time = Double.parseDouble(timeVal);
 			} catch (NumberFormatException ex) {
 				throw new SAXException(new InvalidAttributeValueException(
-						"Time attribute of the dirtiness event must be in the \"double precision\" format."));
+						"Time attribute of the docking station event must be in the \"double precision\" format."));
 			}
 			if (startAtConstraint && (startAtLimit > time)) {
 				return;
@@ -146,24 +137,20 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 				return;
 			}
 
-			DirtinessEvent eev = new DirtinessEvent(time);
-			dirtinessEventsStack.push(eev);
+			DockingStationEvent eev = new DockingStationEvent(time);
+			dockingStationEventsStack.push(eev);
 		} else {
 
-			if (visitingDirtinessNode) {
+			if (visitingDockingStationNode) {
 
 				switch (qName) {
-
-				case intensityName:
-					visitingIntensityNode = true;
-					break;
 
 				case nodeName:
 					visitingNodeNode = true;
 					break;
 
 				default:
-					Log.i("Encountered unexpected sub-element of dirtiness event with qName: " + qName);
+					Log.i("Encountered unexpected sub-element of docking station event with qName: " + qName);
 				}
 			}
 		}
@@ -172,14 +159,14 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 	/**
 	 * When a closing event element (of the expected type) is encountered, the
 	 * corresponding event element is popped from the stack and stored in the
-	 * parsed form in the {@link DirtinessEventHandler#events} storage.
+	 * parsed form in the {@link DockingStationEventHandler#events} storage.
 	 */
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 
-		if (visitingDirtinessNode && qName.equals(eventName)) {
-			events.add(dirtinessEventsStack.pop());
-			visitingDirtinessNode = false;
+		if (visitingDockingStationNode && qName.equals(eventName)) {
+			events.add(dockingStationEventsStack.pop());
+			visitingDockingStationNode = false;
 		}
 	}
 
@@ -191,24 +178,10 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 	@Override
 	public void characters(char ch[], int start, int length) throws SAXException {
 
-		if (visitingDirtinessNode) {
+		if (visitingDockingStationNode) {
 
-			DirtinessEvent parent = dirtinessEventsStack.peek();
+			DockingStationEvent parent = dockingStationEventsStack.peek();
 			String val = new String(ch, start, length);
-
-			if (visitingIntensityNode) {
-				Utils.ensureNonNullAndNonEmptyAttr(eventName, intensityName, val);
-				double intensity;
-				try {
-					intensity = Double.parseDouble(val);
-				} catch (NumberFormatException ex) {
-					throw new SAXException(new InvalidAttributeValueException(
-							"Time attribute of the ensemble event must be in the \"double precision\" format."));
-				}
-				parent.setIntensity(intensity);
-				visitingIntensityNode = false;
-				return;
-			}
 
 			if (visitingNodeNode) {
 				Utils.ensureNonNullAndNonEmptyAttr(eventName, nodeName, val);
@@ -216,7 +189,6 @@ public class DirtinessEventHandler extends DynamicEventHandler {
 				visitingNodeNode = false;
 				return;
 			}
-
 		}
 	}
 

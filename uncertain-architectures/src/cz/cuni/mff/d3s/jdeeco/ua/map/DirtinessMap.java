@@ -9,14 +9,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord;
+import cz.cuni.mff.d3s.jdeeco.ua.visualization.DockingStationRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Network;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -38,6 +41,8 @@ public class DirtinessMap {
 	private static final Map<String, LinkPosition> ROBOT_LOCATIONS = new HashMap<>();
 
 	private static final Map<Node, Double> DIRTINESS = new HashMap<>();
+	
+	private static final List<Node> DOCKING_STATIONS = new ArrayList<>();
 
 	private final Map<Node, Double> dirtiness;
 
@@ -267,6 +272,29 @@ public class DirtinessMap {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void placeDockingStation(Node node){
+		if (node == null)
+			throw new IllegalArgumentException(String.format(
+					"The \"%s\" argument cannot be null.", "node"));
+		
+		if(!DOCKING_STATIONS.contains(node)){
+			DOCKING_STATIONS.add(node);
+			try {
+				DockingStationRecord record = new DockingStationRecord("system");
+				record.setNode(node);
+				runtimeLogger.log(record);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<Node> getDockingStations(){
+		return Collections.unmodifiableList(DOCKING_STATIONS);
 	}
 
 	private boolean isCleaningRelevant(double intensity) {

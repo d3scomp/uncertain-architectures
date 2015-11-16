@@ -83,7 +83,13 @@ public class Run {
 		// create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
-		deeco1.deployComponent(Configuration.createRobot1(deeco1.getRuntimeLogger()));
+		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
+		deeco1.deployComponent(r1);
+
+		// Place docking stations
+		r1.map.placeDockingStation(r1.map.getRandomNode());
+		r1.map.placeDockingStation(r1.map.getRandomNode());
+		r1.map.placeDockingStation(r1.map.getRandomNode());
 
 		DEECoNode deeco2 = simulation.createNode(2);
 		nodesInSimulation.add(deeco2);

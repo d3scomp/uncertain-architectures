@@ -55,9 +55,13 @@ public class ModeSwitchingManager {
 			DEECoMode processMode = p.getMode();
 			if (processMode != null) {
 				if (processMode.getClass().equals(currentMode)) {
-					p.setActive(true);
+					if (!p.isActive()) {
+						p.setActive(true);
+					}
 				} else {
-					p.setActive(false);
+					if (p.isActive()) {
+						p.setActive(false);
+					}
 				}
 			}
 		}

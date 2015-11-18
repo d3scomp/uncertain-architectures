@@ -49,8 +49,10 @@ public class Robot {
 	/** Battery level. */
 	public MetadataWrapper<Double> batteryLevel;
 	
+	@Local
 	public Boolean isOnDirt;
 	
+	@Local
 	public Boolean isOnDock;
 	
 	@Local

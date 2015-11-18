@@ -40,7 +40,7 @@ public class ModeSwitchingManager {
 		RuntimeMetadata runtime = (RuntimeMetadata) component.eContainer();
 
 		for (ComponentInstance c : runtime.getComponentInstances()) {
-			ModeChart modeChart = c.getModechart();
+			ModeChart modeChart = c.getModeChart();
 			if (modeChart != null) {
 				Class<? extends DEECoMode> currentMode = modeChart.findSetAndReturnCurrentMode();
 

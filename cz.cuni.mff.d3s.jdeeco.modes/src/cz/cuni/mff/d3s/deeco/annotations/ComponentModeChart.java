@@ -20,6 +20,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
+
 /**
  * Used to mark a class to be a DEECo component.
  * 
@@ -29,5 +31,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ComponentModeChart {
-	Class<? extends ModeChart> value();
+	Class<? extends ModeChartHolder> value();
 }

@@ -6,6 +6,7 @@ import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.DockTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestOldestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.ShortestTrajectoryExecutor;
 
@@ -125,6 +126,7 @@ public class Configuration {
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
+			.withDockingPlanner(new DockTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
 	}
@@ -138,6 +140,7 @@ public class Configuration {
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
+			.withDockingPlanner(new DockTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
 	}
@@ -151,6 +154,7 @@ public class Configuration {
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
+			.withDockingPlanner(new DockTrajectoryPlanner())
 			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
 			.create();
 	}

@@ -24,6 +24,8 @@ public class RobotFactory {
 	
 	private RobotFactory(String robotId, RuntimeLogger runtimeLogger){
 		robot = new Robot(robotId, runtimeLogger);
+		robot.isOnDirt = false;
+		robot.isOnDock = false;
 		this.runtimeLogger = runtimeLogger;
 	}
 	
@@ -74,7 +76,16 @@ public class RobotFactory {
 		if(planner == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "planner"));
 		planner.setRobot(robot);
-		robot.planner = planner;
+		robot.searchPlanner = planner;
+		plannerSet = true;
+		return this;
+	}
+	
+	public RobotFactory withDockingPlanner(TrajectoryPlanner planner){
+		if(planner == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument cannot be null.", "planner"));
+		planner.setRobot(robot);
+		robot.dockPlanner = planner;
 		plannerSet = true;
 		return this;
 	}

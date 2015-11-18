@@ -9,12 +9,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
@@ -42,7 +42,7 @@ public class DirtinessMap {
 
 	private static final Map<Node, Double> DIRTINESS = new HashMap<>();
 	
-	private static final List<Node> DOCKING_STATIONS = new ArrayList<>();
+	private static final Set<Node> DOCKING_STATIONS = new HashSet<>();
 
 	private final Map<Node, Double> dirtiness;
 
@@ -293,8 +293,8 @@ public class DirtinessMap {
 		}
 	}
 	
-	public List<Node> getDockingStations(){
-		return Collections.unmodifiableList(DOCKING_STATIONS);
+	public Set<Node> getDockingStations(){
+		return Collections.unmodifiableSet(DOCKING_STATIONS);
 	}
 
 	private boolean isCleaningRelevant(double intensity) {

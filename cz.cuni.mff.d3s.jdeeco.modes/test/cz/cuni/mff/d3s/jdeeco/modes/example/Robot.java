@@ -14,10 +14,10 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.modes.example.modechart.Cleaning;
-import cz.cuni.mff.d3s.jdeeco.modes.example.modechart.RobotModeChart;
+import cz.cuni.mff.d3s.jdeeco.modes.example.modechart.RobotModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.modes.example.modechart.Searching;
 
-@ComponentModeChart(RobotModeChart.class)
+@ComponentModeChart(RobotModeChartHolder.class)
 @Component
 public class Robot {
 

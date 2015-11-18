@@ -22,6 +22,7 @@ import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
@@ -46,7 +47,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 public class Run {
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 300_000;
+	static private final long SIMULATION_END = 1_000_000;
 
 	static final boolean enableMetaAdaptation = true;
 
@@ -79,6 +80,7 @@ public class Run {
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new PositionPlugin(0, 0));
+		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 
 		// create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);

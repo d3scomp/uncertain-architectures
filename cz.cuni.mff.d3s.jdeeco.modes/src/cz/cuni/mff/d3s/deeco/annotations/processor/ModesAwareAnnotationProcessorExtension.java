@@ -23,6 +23,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Mode;
 import cz.cuni.mff.d3s.deeco.annotations.ModeChart;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
+import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 
 /**
  * Processes the annotations related to DEECo processes' modes.
@@ -35,16 +36,16 @@ public class ModesAwareAnnotationProcessorExtension extends AnnotationProcessorE
 	@Override
 	public void onComponentInstanceCreation(ComponentInstance componentInstance, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof ComponentModeChart) {
-			Class<? extends ModeChart> modeChartClass = ((ComponentModeChart) unknownAnnotation).value();
+			Class<? extends ModeChartHolder> modeChartHolder = ((ComponentModeChart) unknownAnnotation).value();
 			try { 
-				ModeChart modeChart = modeChartClass.newInstance();
+				ModeChart modeChart = (modeChartHolder.newInstance()).getModeChart();
 				modeChart.setComponent(componentInstance);
 				
-				componentInstance.setModechart(modeChart);
+				componentInstance.setModeChart(modeChart);
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Found mode chart: " + modeChartClass.getName());
+			System.out.println("Found mode chart: " + modeChartHolder.getName());
 		}
 	}
 	

@@ -19,44 +19,45 @@ import javafx.scene.Node;
 import javafx.util.Duration;
 
 /**
- * Provides the capability to add key frames corresponding to dirtiness events
+ * Provides the capability to add key frames corresponding to docking station events
  * to the simulation.
  * 
  * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
  */
-public class DirtinessMapSceneExtension implements MapSceneExtensionPoint {
+public class DockingStationMapSceneExtension implements MapSceneExtensionPoint {
 	
 	@Override
 	public Collection<KeyFrame> buildFrames(Map<String, List<Event>> otherEvents, MapScene mapScene) throws IOException {
 		Collection<KeyFrame> res = new ArrayList<>();
-		Map<String,Node> localDirtinessShapes = new HashMap<>();
-		List<Event> dirtinessEvents = otherEvents.get(DirtinessEvent.DIRTINESS_EVENT_TYPE);
-		for (Event e : dirtinessEvents) {
-			DirtinessEvent de = (DirtinessEvent) e;
+		Map<String,Node> localDockingStationShapes = new HashMap<>();
+		List<Event> dockingStationEvents = otherEvents.get(DockingStationEvent.DOCKING_STATION_EVENT_TYPE);
+		for (Event e : dockingStationEvents) {
+			DockingStationEvent de = (DockingStationEvent) e;
 			double timeVal = mapScene.convertToVisualizationTime(de.getTime());
 			Duration time = new Duration(timeVal);
 			MyNode node = mapScene.getNodes().get(de.getNode()); 
 			if (mapScene.getAdditionalResourcesPath() == null) {
-				// additionalResourcesPath is not yet set, this is done by the acmescripts 
-				return res; 
+				// additionalResourcesPath is not yet set, this is done by the
+				// acmescripts
+				return res;
 			}
-			double intensity = de.getIntensity();
-			ShapeProvider provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "dirt.png",
-					mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, intensity);
-			Node dirtinessShape = MapSceneExtensionHelper.generateNodeWithBackgroundImage(mapScene, provider, node);
-			KeyValue kv = new KeyValue(dirtinessShape.visibleProperty(), Boolean.TRUE);
+			ShapeProvider provider = new ImageProvider(false,
+					mapScene.getAdditionalResourcesPath() + "dockingStation.png", mapScene.NODE_IMAGE_WIDTH,
+					mapScene.NODE_IMAGE_HEIGHT, 1);
+			Node dockingStationShape = MapSceneExtensionHelper.generateNodeWithBackgroundImage(mapScene, provider,node);
+			KeyValue kv = new KeyValue(dockingStationShape.visibleProperty(), Boolean.TRUE);
 			KeyFrame kf = new KeyFrame(time, kv);
-			String id = DirtinessEvent.DIRTINESS_EVENT_TYPE + de.getNode();
-			localDirtinessShapes.put(id, dirtinessShape);
+			String id = DockingStationEvent.DOCKING_STATION_EVENT_TYPE + de.getNode();
+			localDockingStationShapes.put(id ,dockingStationShape);
 			res.add(kf);
 		}
 		Map<String,Node> otherShapes = mapScene.getOtherShapes();
-
-		otherShapes.entrySet().removeIf(e-> e.getKey().startsWith(DirtinessEvent.DIRTINESS_EVENT_TYPE));
-		otherShapes.putAll(localDirtinessShapes);
 		
-		for (Node dirtinessShape : otherShapes.values()){
-			KeyValue kv = new KeyValue(dirtinessShape.visibleProperty(), Boolean.FALSE);
+		otherShapes.entrySet().removeIf(e-> e.getKey().startsWith(DockingStationEvent.DOCKING_STATION_EVENT_TYPE));
+		otherShapes.putAll(localDockingStationShapes);
+			
+		for (Node dockingStationShape : otherShapes.values()){
+			KeyValue kv = new KeyValue(dockingStationShape.visibleProperty(), Boolean.FALSE);
 			KeyFrame kf = new KeyFrame(Duration.ZERO, kv);
 			res.add(kf);
 		}

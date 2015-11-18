@@ -21,6 +21,7 @@ import cz.cuni.mff.d3s.deeco.annotations.ComponentModeChart;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoMode;
 import cz.cuni.mff.d3s.deeco.annotations.Mode;
 import cz.cuni.mff.d3s.deeco.annotations.ModeChart;
+import cz.cuni.mff.d3s.deeco.annotations.Modes;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
@@ -45,7 +46,6 @@ public class ModesAwareAnnotationProcessorExtension extends AnnotationProcessorE
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Found mode chart: " + modeChartHolder.getName());
 		}
 	}
 	
@@ -53,13 +53,24 @@ public class ModesAwareAnnotationProcessorExtension extends AnnotationProcessorE
 	public void onComponentProcessCreation(ComponentProcess componentProcess, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof Mode) {
 			Class<? extends DEECoMode> modeClass = ((Mode) unknownAnnotation).value();
+			
 			try {
-				componentProcess.setMode(modeClass.newInstance());
+				componentProcess.getModes().add((modeClass.newInstance()));
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Found mode: " + modeClass.getName());
 		}
+		if (unknownAnnotation instanceof Modes) {
+			Class<? extends DEECoMode>[] modeClasses = ((Modes) unknownAnnotation).value();
+			for (Class<? extends DEECoMode> modeClass : modeClasses) {
+				try {
+					componentProcess.getModes().add((modeClass.newInstance()));
+				} catch (InstantiationException | IllegalAccessException e) {
+					e.printStackTrace();
+				}	
+			}
+		}
+		
 	}
 
 }

@@ -46,6 +46,12 @@ public class ModeChartImpl extends ModeChart{
 		return currentMode;
 	}
 
+	@Override
+	public Set<Class<? extends DEECoMode>> getModes() {
+		return modes.keySet();
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Class<? extends DEECoMode> findSetAndReturnCurrentMode(){
 		

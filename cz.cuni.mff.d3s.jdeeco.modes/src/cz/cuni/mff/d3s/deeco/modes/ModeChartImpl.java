@@ -18,7 +18,7 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.KnowledgePath;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.PathNodeField;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 
-// TODO: move to cz.cuni.mff.d3s.jdeeco.modes project and make tests
+// TODO: make tests
 public class ModeChartImpl extends ModeChart{
 	
 	public static final double MODE_NOT_FOUND = -1;
@@ -48,7 +48,16 @@ public class ModeChartImpl extends ModeChart{
 
 	@Override
 	public Set<Class<? extends DEECoMode>> getModes() {
-		return modes.keySet();
+		Set<Class<? extends DEECoMode>> allModes = new HashSet<>();
+		// Put all the modes from keySet
+		allModes.addAll(modes.keySet());
+		// Put the rest of the modes that are not in the key set
+		for(Class<? extends DEECoMode> mode : modes.keySet()){
+			allModes.addAll(getSuccessors(mode));
+		}
+
+		// Prevent modification attempts
+		return Collections.unmodifiableSet(allModes);
 	}
 	
 	@Override
@@ -122,8 +131,10 @@ public class ModeChartImpl extends ModeChart{
 	
 	public Set<Class<? extends DEECoMode>> getSuccessors(Class<? extends DEECoMode> mode){
 		Set<Class<? extends DEECoMode>> successors = new HashSet<>();
-		for(ModeSuccessor succ : modes.get(mode)){
-			successors.add(succ.successor);
+		if(modes.containsKey(mode)){
+			for(ModeSuccessor succ : modes.get(mode)){
+				successors.add(succ.successor);
+			}
 		}
 		
 		return successors;

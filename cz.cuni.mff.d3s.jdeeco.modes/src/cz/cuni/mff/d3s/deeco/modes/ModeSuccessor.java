@@ -1,7 +1,5 @@
 package cz.cuni.mff.d3s.deeco.modes;
 
-import cz.cuni.mff.d3s.deeco.annotations.DEECoMode;
-
 @SuppressWarnings("rawtypes")
 class ModeSuccessor {
 

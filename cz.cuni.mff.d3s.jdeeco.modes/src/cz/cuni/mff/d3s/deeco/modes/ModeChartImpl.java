@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.deeco.annotations.DEECoMode;
-import cz.cuni.mff.d3s.deeco.annotations.ModeChart;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.KnowledgePath;
@@ -62,7 +60,7 @@ public class ModeChartImpl extends ModeChart{
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Class<? extends DEECoMode> findSetAndReturnCurrentMode(){
+	public Class<? extends DEECoMode> switchMode(){
 		
 		// Switch mode only if there is a transition from it
 		if(modes.containsKey(currentMode)){

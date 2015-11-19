@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2014 Charles University in Prague
+ * Copyright 2014, 2015 Charles University in Prague
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 public class Run {
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 1_000_000;
+	static private final long SIMULATION_END = 300_000;
 
 	static final boolean enableMetaAdaptation = true;
 
@@ -79,7 +79,7 @@ public class Run {
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
-		simulation.addPlugin(new PositionPlugin(0, 0));
+		//simulation.addPlugin(new PositionPlugin(0, 0));
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 
 		// create nodes without adaptation

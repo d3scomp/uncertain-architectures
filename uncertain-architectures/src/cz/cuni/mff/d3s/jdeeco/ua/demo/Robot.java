@@ -1,7 +1,25 @@
+/*******************************************************************************
+ * Copyright 2015 Charles University in Prague
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
@@ -15,6 +33,7 @@ import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.Mode;
+import cz.cuni.mff.d3s.deeco.annotations.Modes;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
@@ -25,6 +44,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.ChargingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
@@ -93,14 +113,48 @@ public class Robot {
 		trajectory = new ArrayList<>();
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	// Handle Battery /////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+
 	@Process
+	@Modes({SearchMode.class, DockingMode.class})
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
-	public static void determineBatteryLevel(
+	public static void consumeBatterySearch(
 			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
 	) {
-		// TODO: decrease battery level - introduce state variable that determines whether the robot moves, cleans or is idle
-		// TODO: use battery noise
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		double delta = MOVEMENT_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
+		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
+		// TODO: use battery noise - use actual and believed battery value
 	}
+	
+	@Process
+	@Mode(CleanMode.class)
+	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
+	public static void consumeBatteryClean(
+			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
+	) {
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		double delta = CLEANING_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
+		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
+		// TODO: use battery noise - use actual and believed battery value
+	}
+
+	@Process
+	@Mode(ChargingMode.class)
+	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
+	public static void consumeBatteryCharge(
+			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
+	) {
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
+		batteryLevel.value.setValue(Math.min(1, batteryLevel.value.getValue() + delta), currentTime);
+		// TODO: use battery noise - use actual and believed battery value
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
 	
 	@Process
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
@@ -184,6 +238,7 @@ public class Robot {
 		System.out.println("#########################################");
 		System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("ID: " + id);
+		System.out.println("MODE: " + ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
 		System.out.println("batteryLevel = " + batteryLevel.getValue());
 		System.out.println("position = " + position);
 		System.out.println("#########################################");

@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2015 Charles University in Prague
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Random;
@@ -103,19 +118,25 @@ public class Configuration {
 	 * The energy consumption during robot movement.
 	 * Expressed in percents per second.
 	 */
-	public static final double MOVEMENT_ENERGY_COST = 0.001; // %/s
+	public static final double MOVEMENT_ENERGY_COST = 0.001; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption during robot cleaning.
 	 * Expressed in percents per second.
 	 */
-	public static final double CLEANING_ENERGY_COST = 0.002; // %/s
+	public static final double CLEANING_ENERGY_COST = 0.002; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption when robot is idle.
 	 * Expressed in percents per second.
 	 */
-	public static final double IDLE_ENERGY_COST = 0.0001; // %/s
+	public static final double IDLE_ENERGY_COST = 0.0001; // %/s, 1 is 100%
+	
+	/**
+	 * The charging rate of the robot.
+	 * Expressed in percents per second.
+	 */
+	public static final double CHARGING_RATE = 0.05; // %/s, 1 is 100%
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	

@@ -67,9 +67,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		ModeChartFactory factory = new ModeChartFactory();
 		factory.withTransitionWithGuard(CleanMode.class, SearchMode.class, SearchGuard);
-		factory.withTransition(SearchMode.class, CleanMode.class, CleanGuard, 0.9);
-		factory.withTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 0.9);
-		factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
+		factory.withTransition(SearchMode.class, CleanMode.class, CleanGuard, 1);
+		factory.withTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		//factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
 		factory.withTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
 		factory.withTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
 		factory.withInitialMode(SearchMode.class);

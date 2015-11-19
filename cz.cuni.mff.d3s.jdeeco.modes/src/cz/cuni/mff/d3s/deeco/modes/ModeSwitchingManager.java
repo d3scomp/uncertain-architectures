@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
-import cz.cuni.mff.d3s.deeco.annotations.DEECoMode;
 import cz.cuni.mff.d3s.deeco.annotations.In;
-import cz.cuni.mff.d3s.deeco.annotations.ModeChart;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
@@ -45,7 +43,7 @@ public class ModeSwitchingManager {
 		for (ComponentInstance c : runtime.getComponentInstances()) {
 			ModeChart modeChart = c.getModeChart();
 			if (modeChart != null) {
-				Class<? extends DEECoMode> currentMode = modeChart.findSetAndReturnCurrentMode();
+				Class<? extends DEECoMode> currentMode = modeChart.switchMode();
 
 				reconfigureArchitecture(c, currentMode);
 			}

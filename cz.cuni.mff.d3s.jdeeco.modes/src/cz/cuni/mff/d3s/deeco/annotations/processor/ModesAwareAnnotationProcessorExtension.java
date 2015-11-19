@@ -22,15 +22,15 @@ import java.util.List;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.annotations.ComponentModeChart;
-import cz.cuni.mff.d3s.deeco.annotations.DEECoMode;
 import cz.cuni.mff.d3s.deeco.annotations.ExcludeMode;
 import cz.cuni.mff.d3s.deeco.annotations.ExcludeModes;
 import cz.cuni.mff.d3s.deeco.annotations.Mode;
-import cz.cuni.mff.d3s.deeco.annotations.ModeChart;
 import cz.cuni.mff.d3s.deeco.annotations.Modes;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
+import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
+import cz.cuni.mff.d3s.deeco.modes.ModeChart;
 import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 
 /**

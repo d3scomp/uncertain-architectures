@@ -20,6 +20,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
+
 /**
  * Used to declare the mode to which a DEECo process belongs.
  * 

@@ -18,7 +18,6 @@ package cz.cuni.mff.d3s.deeco.modes;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("rawtypes")
 public class ModeChartFactory {
 
 	private ModeChartImpl modeChart;

@@ -74,7 +74,6 @@ public class ModeChartImpl extends ModeChart{
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class<? extends DEECoMode> switchMode(){
 		
 		// Switch mode only if there is a transition from it
@@ -83,10 +82,14 @@ public class ModeChartImpl extends ModeChart{
 			List<ModeSuccessor> successors = new ArrayList<>(modes.get(currentMode));
 			// Filter out inapplicable transitions
 			for(ModeSuccessor succ : successors.toArray(new ModeSuccessor[]{})){
-				String knowledge = succ.guard.getKnowledgeName();
-				Object value = getValue(knowledge);
+				String[] knowledge = succ.guard.getKnowledgeNames();
+				Object[] values = new Object[knowledge.length];
+				for(int i = 0; i < knowledge.length; i++){
+					values[i] = getValue(knowledge[i]);
+					// TODO: maybe can be done without the cycle if the getValue method can return all knowledge items at once
+				}
 				//System.out.format("Knowledge: %s Value %s%n", knowledge, String.valueOf(value));
-				if(!succ.guard.isSatisfied(value)){
+				if(!succ.guard.isSatisfied(values)){
 					successors.remove(succ);
 				}
 			}

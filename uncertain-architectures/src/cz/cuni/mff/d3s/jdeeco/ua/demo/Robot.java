@@ -208,10 +208,12 @@ public class Robot {
 	@Process
 	@Mode(SearchMode.class)
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
-	public static void checkDirt(@InOut("map") ParamHolder<DirtinessMap> map,
+	public static void checkDirt(@In("id") String id,
+			@InOut("map") ParamHolder<DirtinessMap> map,
 			@In("position") LinkPosition position) {
 		Node node = position.atNode();
 		if(node != null){
+			System.out.println(id + ": Dirt detected.");
 			map.value.checkDirtiness(node);
 		}
 	}

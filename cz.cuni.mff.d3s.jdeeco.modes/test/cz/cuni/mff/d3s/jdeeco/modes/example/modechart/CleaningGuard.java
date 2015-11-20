@@ -21,16 +21,17 @@ import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.modes.example.DirtySpot;
 
-public class CleaningGuard implements ModeGuard<List<DirtySpot>> {
+public class CleaningGuard implements ModeGuard {
 
 	@Override
-	public String getKnowledgeName() {
-		return "dirtySpots";
+	public String[] getKnowledgeNames() {
+		return new String[] {"dirtySpots"};
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean isSatisfied(List<DirtySpot> knowledgeValue) {
-		if (!knowledgeValue.isEmpty()) {
+	public boolean isSatisfied(Object[] knowledgeValues) {
+		if (!((List<DirtySpot>)knowledgeValues[0]).isEmpty()) {
 			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 			System.out.println("##switching to: Cleaning at time " + currentTime);
 			return true;

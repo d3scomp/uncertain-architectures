@@ -15,7 +15,6 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.deeco.modes;
 
-@SuppressWarnings("rawtypes")
 class ModeSuccessor {
 
 	final double probability;

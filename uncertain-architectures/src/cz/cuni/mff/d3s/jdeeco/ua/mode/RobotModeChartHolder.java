@@ -22,61 +22,63 @@ import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 
 public class RobotModeChartHolder extends ModeChartHolder {
-	
+
+	@SuppressWarnings("unchecked")
 	public RobotModeChartHolder(){
-		ModeGuard<MetadataWrapper<Double>> batteryDrainedGuard = new ModeGuard<MetadataWrapper<Double>>() {
+		ModeGuard batteryDrainedGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(MetadataWrapper<Double> knowledgeValue) {
-				return knowledgeValue.getValue() < 0.2;
+			public boolean isSatisfied(Object[] knowledgeValue) {
+				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
 			}
 			
 			@Override
-			public String getKnowledgeName() {
-				return "batteryLevel";
+			public String[] getKnowledgeNames() {
+				return new String[] {"batteryLevel"};
 			}
 		};
-		ModeGuard<Boolean> dockReachedGuard = new ModeGuard<Boolean>() {
+		ModeGuard dockReachedGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(Boolean knowledgeValue) {
-				return knowledgeValue;
+			public boolean isSatisfied(Object[] knowledgeValue) {
+				return (Boolean)knowledgeValue[0];
 			}
 			
 			@Override
-			public String getKnowledgeName() {
-				return "isOnDock";
+			public String[] getKnowledgeNames() {
+				// TODO: replace with position and dock nodes
+				return new String[] {"isOnDock"};
 			}
 		};
-		ModeGuard<MetadataWrapper<Double>> batteryChargedGuard = new ModeGuard<MetadataWrapper<Double>>() {
+		ModeGuard batteryChargedGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(MetadataWrapper<Double> knowledgeValue) {
-				return knowledgeValue.getValue() > 0.95;
+			public boolean isSatisfied(Object[] knowledgeValue) {
+				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() > 0.95;
 			}
 			
 			@Override
-			public String getKnowledgeName() {
-				return "batteryLevel";
+			public String[] getKnowledgeNames() {
+				return new String[] {"batteryLevel"};
 			}
 		};
-		ModeGuard<Boolean> CleanGuard = new ModeGuard<Boolean>() {
+		ModeGuard CleanGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(Boolean knowledgeValue) {
-				return knowledgeValue;
+			public boolean isSatisfied(Object[] knowledgeValue) {
+				return (Boolean)knowledgeValue[0];
 			}
 			
 			@Override
-			public String getKnowledgeName() {
-				return "isOnDirt";
+			public String[] getKnowledgeNames() {
+				return new String[] {"isOnDirt"};
 			}
 		};
-		ModeGuard<Boolean> SearchGuard = new ModeGuard<Boolean>() {
+		ModeGuard SearchGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(Boolean knowledgeValue) {
-				return !knowledgeValue;
+			public boolean isSatisfied(Object[] knowledgeValue) {
+				return !(Boolean)knowledgeValue[0];
 			}
 			
 			@Override
-			public String getKnowledgeName() {
-				return "isOnDirt";
+			public String[] getKnowledgeNames() {
+				return new String[] {"isOnDirt"};
 			}
 		};
 		

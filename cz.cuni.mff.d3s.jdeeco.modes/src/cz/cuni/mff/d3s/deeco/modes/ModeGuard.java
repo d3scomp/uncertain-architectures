@@ -15,10 +15,10 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.deeco.modes;
 
-public interface ModeGuard<T> {
+public interface ModeGuard {
 	
-	String getKnowledgeName();
+	String[] getKnowledgeNames();
 	
-	boolean isSatisfied(T knowledgeValue);
+	boolean isSatisfied(Object [] knowledgeValues);
 
 }

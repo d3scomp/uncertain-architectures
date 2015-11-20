@@ -15,15 +15,15 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.deeco.modes;
 
-public class TrueGuard implements ModeGuard<String> {
+public class TrueGuard implements ModeGuard {
 
 	@Override
-	public String getKnowledgeName() {
-		return "id";
+	public String[] getKnowledgeNames() {
+		return new String[]{"id"};
 	}
 
 	@Override
-	public boolean isSatisfied(String knowledgeValue) {
+	public boolean isSatisfied(Object[] knowledgeValue) {
 		return true;
 	}
 

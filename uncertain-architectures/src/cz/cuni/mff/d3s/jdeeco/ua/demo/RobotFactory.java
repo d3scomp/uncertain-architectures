@@ -39,8 +39,6 @@ public class RobotFactory {
 	
 	private RobotFactory(String robotId, RuntimeLogger runtimeLogger){
 		robot = new Robot(robotId, runtimeLogger);
-		robot.isOnDirt = false;
-		robot.isOnDock = false;
 		this.runtimeLogger = runtimeLogger;
 	}
 	

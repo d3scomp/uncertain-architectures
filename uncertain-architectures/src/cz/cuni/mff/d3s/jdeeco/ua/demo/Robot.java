@@ -68,13 +68,7 @@ public class Robot {
 	
 	/** Battery level. */
 	public MetadataWrapper<Double> batteryLevel;
-	
-	@Local
-	public Boolean isOnDirt;
-	
-	@Local
-	public Boolean isOnDock;
-	
+			
 	@Local
 	public final DirtinessMap map;
 	
@@ -161,23 +155,9 @@ public class Robot {
 	public static void move(@In("mover") TrajectoryExecutor mover,
 			@In("trajectory") List<Link> trajectory,
 			@InOut("position") ParamHolder<LinkPosition> position,
-			@In("map") DirtinessMap map,
-			@InOut("isOnDirt") ParamHolder<Boolean> isOnDirt,
-			@InOut("isOnDock") ParamHolder<Boolean> isOnDock) {
+			@In("map") DirtinessMap map) {
 		mover.move(trajectory, position.value);
-		Node currentNode = position.value.atNode();
-		if(currentNode != null){
-			if(map.getDockingStations().contains(currentNode)){
-				isOnDock.value = true;
-			} else {
-				isOnDock.value = false;
-			}
-			isOnDirt.value = false;
-			if(map.getDirtiness().containsKey(currentNode)
-					&& map.getDirtiness().get(currentNode) > 0){
-				isOnDirt.value = true;
-			}
-		}
+		//Node currentNode = position.value.atNode();
 	}
 	
 	@Process

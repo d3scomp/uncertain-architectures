@@ -15,11 +15,13 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
+import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
-import cz.cuni.mff.d3s.deeco.modes.TrueGuard;
-import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 public class RobotModeChartHolder extends ModeChartHolder {
 
@@ -38,14 +40,17 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		ModeGuard dockReachedGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(Object[] knowledgeValue) {
-				return (Boolean)knowledgeValue[0];
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
+				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				Node positionNode = position.atNode();
+				return (positionNode != null
+						&& map.getDockingStations().contains(positionNode));
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				// TODO: replace with position and dock nodes
-				return new String[] {"isOnDock"};
+				return new String[] {"map", "position"};
 			}
 		};
 		ModeGuard batteryChargedGuard = new ModeGuard() {
@@ -61,24 +66,34 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		ModeGuard CleanGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(Object[] knowledgeValue) {
-				return (Boolean)knowledgeValue[0];
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
+				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				Node positionNode = position.atNode();
+				return (positionNode != null
+						&& map.getDirtiness().keySet().contains(positionNode)
+						&& map.getDirtiness().get(positionNode) > 0);
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"isOnDirt"};
+				return new String[] {"map", "position"};
 			}
 		};
 		ModeGuard SearchGuard = new ModeGuard() {
 			@Override
-			public boolean isSatisfied(Object[] knowledgeValue) {
-				return !(Boolean)knowledgeValue[0];
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
+				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				Node positionNode = position.atNode();
+				return !(positionNode != null
+						&& map.getDirtiness().keySet().contains(positionNode)
+						&& map.getDirtiness().get(positionNode) > 0);
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"isOnDirt"};
+				return new String[] {"map", "position"};
 			}
 		};
 		

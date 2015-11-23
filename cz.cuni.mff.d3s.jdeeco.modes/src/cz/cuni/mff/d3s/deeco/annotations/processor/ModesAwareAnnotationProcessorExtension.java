@@ -103,7 +103,7 @@ public class ModesAwareAnnotationProcessorExtension extends AnnotationProcessorE
 			}
 		}
 		if (unknownAnnotation instanceof ExcludeModes) {
-			List<Class<? extends DEECoMode>> excludeModeClasses = Arrays.asList(((Modes) unknownAnnotation).value());
+			List<Class<? extends DEECoMode>> excludeModeClasses = Arrays.asList(((ExcludeModes) unknownAnnotation).value());
 			
 			if (includedModeClasses.isEmpty()) {
 				Log.w("When using the ExcludeModes annotation you should include some modes in the mode chart of the component.");

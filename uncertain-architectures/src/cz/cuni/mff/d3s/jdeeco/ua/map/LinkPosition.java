@@ -18,11 +18,13 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 import java.io.IOException;
 
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
-import cz.cuni.mff.d3s.jdeeco.visualizer.network.EnteredLinkRecord;
-import cz.cuni.mff.d3s.jdeeco.visualizer.network.LeftLinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
-import cz.cuni.mff.d3s.jdeeco.visualizer.network.LinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.ArrivalRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.DepartureRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredLinkRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftLinkRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.LinkRecord;
 
 public class LinkPosition {
 
@@ -52,13 +54,26 @@ public class LinkPosition {
 					record.setLink(this.link);
 					record.setPerson(robotId);
 					runtimeLogger.log(record);
+					
+					ArrivalRecord aRecord = new ArrivalRecord(robotId);
+					aRecord.setLink(this.link);
+					aRecord.setPerson(robotId);
+					aRecord.setLegMode("bot");
+					runtimeLogger.log(aRecord);
 				}
+
+				DepartureRecord dRecord = new DepartureRecord(robotId);
+				dRecord.setLink(link);
+				dRecord.setPerson(robotId);
+				dRecord.setLegMode("bot");
+				runtimeLogger.log(dRecord);
 				
 				// Log the entered link event
 				LinkRecord record = new EnteredLinkRecord(robotId);
 				record.setLink(link);
 				record.setPerson(robotId);
 				runtimeLogger.log(record);
+
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

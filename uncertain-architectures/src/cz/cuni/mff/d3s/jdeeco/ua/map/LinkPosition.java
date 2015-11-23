@@ -54,6 +54,7 @@ public class LinkPosition {
 					LinkRecord record = new LeftLinkRecord(robotId);
 					record.setLink(this.link);
 					record.setPerson(robotId);
+					record.setVehicle(robotId);
 					runtimeLogger.log(record);
 					
 					VehicleRecord lRecord = new LeftVehicleRecord(robotId);
@@ -71,6 +72,7 @@ public class LinkPosition {
 				LinkRecord record = new EnteredLinkRecord(robotId);
 				record.setLink(link);
 				record.setPerson(robotId);
+				record.setVehicle(robotId);
 				runtimeLogger.log(record);
 
 			} catch (IllegalStateException e) {

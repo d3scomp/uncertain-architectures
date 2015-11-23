@@ -17,20 +17,18 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Set;
 
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 public class RobotFactory {
 
 	private final Robot robot;
-	private final RuntimeLogger runtimeLogger;
 	private boolean batterySet = false;
 	private boolean batteryNoiseSet = false;
 	private boolean positionSet = false;
@@ -38,15 +36,14 @@ public class RobotFactory {
 	private boolean plannerSet = false;
 	private boolean moverSet = false;
 	
-	private RobotFactory(String robotId, RuntimeLogger runtimeLogger){
-		robot = new Robot(robotId, runtimeLogger);
-		this.runtimeLogger = runtimeLogger;
+	private RobotFactory(String robotId){
+		robot = new Robot(robotId);
 	}
 	
-	public static RobotFactory newRobot(String robotId, RuntimeLogger runtimeLogger){
+	public static RobotFactory newRobot(String robotId){
 		if(robotId == null || robotId.length() == 0) throw new IllegalArgumentException(
 				String.format("The \"%s\" argument cannot be null nor empty string.", "robotId"));
-		return new RobotFactory(robotId, runtimeLogger);
+		return new RobotFactory(robotId);
 	}
 	
 	public RobotFactory withBatteryLevel(double initialBatteryLevel){
@@ -70,7 +67,7 @@ public class RobotFactory {
 		for(Link link : links)
 		{
 			if(index == linkNumber){
-				robot.position = new LinkPosition(link, robot.id, runtimeLogger);
+				robot.position = new LinkPosition(link, robot.id);
 				positionSet = true;
 				robot.map.updateRobotsPosition(robot.id, robot.position);
 				break;

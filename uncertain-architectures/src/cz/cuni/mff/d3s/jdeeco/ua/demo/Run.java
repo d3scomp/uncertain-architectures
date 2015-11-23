@@ -35,7 +35,6 @@ import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
-import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
@@ -79,19 +78,17 @@ public class Run {
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
-		//simulation.addPlugin(new PositionPlugin(0, 0));
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 
 		// create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
-		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
+		Robot r1 = Configuration.createRobot1();
 		deeco1.deployComponent(r1);
 
 		// Place docking stations
-		r1.map.placeDockingStation(r1.map.getRandomNode());
-		r1.map.placeDockingStation(r1.map.getRandomNode());
-		r1.map.placeDockingStation(r1.map.getRandomNode());
+		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
+		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
 
 		DEECoNode deeco2 = simulation.createNode(2);
 		nodesInSimulation.add(deeco2);

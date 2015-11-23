@@ -27,10 +27,10 @@ public class RobotModeChartHolder extends ModeChartHolder {
 
 	@SuppressWarnings("unchecked")
 	public RobotModeChartHolder(){
-		ModeGuard batteryDrainedGuard = new ModeGuard() {
+		final ModeGuard deadBatteryGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
-				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() <= 0;
 			}
 			
 			@Override
@@ -38,7 +38,19 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"batteryLevel"};
 			}
 		};
-		ModeGuard dockReachedGuard = new ModeGuard() {
+		final ModeGuard batteryDrainedGuard = new ModeGuard() {
+			@Override
+			public boolean isSatisfied(Object[] knowledgeValue) {
+				return !deadBatteryGuard.isSatisfied(knowledgeValue)
+						&& ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+			}
+			
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"batteryLevel"};
+			}
+		};
+		final ModeGuard dockReachedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
@@ -53,7 +65,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"map", "position"};
 			}
 		};
-		ModeGuard batteryChargedGuard = new ModeGuard() {
+		final ModeGuard batteryChargedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
 				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() > 0.95;
@@ -64,23 +76,25 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"batteryLevel"};
 			}
 		};
-		ModeGuard CleanGuard = new ModeGuard() {
+		final ModeGuard cleanGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
 				LinkPosition position = (LinkPosition) knowledgeValues[1];
 				Node positionNode = position.atNode();
-				return (positionNode != null
+				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
+						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
+						&& positionNode != null
 						&& map.getDirtiness().keySet().contains(positionNode)
 						&& map.getDirtiness().get(positionNode) > 0);
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"map", "position"};
+				return new String[] {"map", "position", "batteryLevel"};
 			}
 		};
-		ModeGuard SearchGuard = new ModeGuard() {
+		final ModeGuard searchGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
@@ -98,15 +112,16 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		ModeChartFactory factory = new ModeChartFactory();
-		factory.withTransitionWithGuard(CleanMode.class, SearchMode.class, SearchGuard);
-		factory.withTransition(SearchMode.class, CleanMode.class, CleanGuard, 1);
+		factory.withTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
+		factory.withTransition(SearchMode.class, CleanMode.class, cleanGuard, 1);
 		factory.withTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		factory.withTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
 		//factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
 		factory.withTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
+		factory.withTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
 		factory.withTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
 		factory.withInitialMode(SearchMode.class);
 		//currentMode = SearchMode.class;
-		// TODO: state for dead battey
 		
 		modeChart = factory.create();
 	}

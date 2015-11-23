@@ -18,12 +18,15 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_SPEED;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
-import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;;
 
 /**
  * Moves the robot on the shortest path to the next planned trajectory
@@ -69,7 +72,6 @@ public class TrajectoryExecutor {
 	 * @throws IllegalStateException Thrown if the {@link #map} field is not initialized.
 	 */
 	public void move(List<Link> plan, LinkPosition position) {
-		// NOTE: This strategy works only for rectangular maps, for more complex maps this needs to be revised.
 		if(map == null) throw new IllegalStateException(String.format(
 				"The \"%s\" field is not initialized.", "map"));
 		
@@ -91,11 +93,53 @@ public class TrajectoryExecutor {
 				plan.remove(0);
 			}
 			if(!plan.isEmpty()){
-				position.startFrom(plan.get(0));
+				// Check collisions
+				Link nextLink = plan.get(0);
+				Collection<LinkPosition> others = map.getOthersPosition(robotId);
+				// Can't go where other goes or meet them between nodes
+				if(isNodeCollision(nextLink.getTo(), others)
+						|| isLinkCollision(nextLink, others)){
+					// TODO: go randomly or wait, clear plan
+					nextLink = getDeflection(position.atNode(), others);
+				}
+				if(nextLink != null){
+					position.startFrom(nextLink);
+				}
 			}
 		}
 		// Update robots position in the centralized storage
 		map.updateRobotsPosition(robotId, position);
+	}
+	
+	private boolean isNodeCollision(Node target, Collection<LinkPosition> others){
+		for(LinkPosition otherPosition : others){
+			if(otherPosition.getLink().getTo().equals(target)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isLinkCollision(Link link, Collection<LinkPosition> others){
+		for(LinkPosition otherPosition : others){
+			Link otherLink = otherPosition.getLink(); 
+			if(link.getTo().equals(otherLink.getFrom())
+					&& link.getFrom().equals(otherLink.getTo())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private Link getDeflection(Node from, Collection<LinkPosition> others){
+		Set<Link> choices = map.getNetwork().getLinksFrom(from);
+		for(Link choice : choices){
+			if(!isNodeCollision(choice.getTo(), others)
+					&& !isLinkCollision(choice, others)){
+				return choice;
+			}
+		}
+		return null;
 	}
 
 }

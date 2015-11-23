@@ -60,7 +60,7 @@ public class Configuration {
 	 */
 	public static final int MAP_HEIGHT = 20;
 	
-	public static final double DIRT_GENERATION_RATE = 0.5;
+	public static final double DIRT_GENERATION_RATE = 0.1;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 

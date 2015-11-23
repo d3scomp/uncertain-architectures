@@ -50,18 +50,23 @@ public class DirtinessMapSceneExtension implements MapSceneExtensionPoint {
 			DirtinessEvent de = (DirtinessEvent) e;
 			double timeVal = mapScene.convertToVisualizationTime(de.getTime());
 			Duration time = new Duration(timeVal);
-			MyNode node = mapScene.getNodes().get(de.getNode()); 
+			MyNode node = mapScene.getNodes().get(de.getNode());
+			
 			if (mapScene.getAdditionalResourcesPath() == null) {
 				// additionalResourcesPath is not yet set, this is done by the acmescripts 
 				return res; 
 			}
 			double intensity = de.getIntensity();
-			ShapeProvider provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "dirt.png",
-					mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, intensity);
+			ShapeProvider provider;
+			if (intensity == 0.0) {
+				provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "tile.png", mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, 1);
+			} else { 
+				provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "dirt.png", mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, intensity);
+			}
 			Node dirtinessShape = MapSceneExtensionHelper.generateNodeWithBackgroundImage(mapScene, provider, node);
 			KeyValue kv = new KeyValue(dirtinessShape.visibleProperty(), Boolean.TRUE);
 			KeyFrame kf = new KeyFrame(time, kv);
-			String id = DirtinessEvent.DIRTINESS_EVENT_TYPE + de.getNode();
+			String id = DirtinessEvent.DIRTINESS_EVENT_TYPE + "_" + de.getNode() + "_" + de.getTime();
 			localDirtinessShapes.put(id, dirtinessShape);
 			res.add(kf);
 		}

@@ -15,9 +15,11 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
@@ -33,7 +35,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class DockTrajectoryPlanner implements TrajectoryPlanner {
+public class NearestTrajectoryPlanner {
 
 	/**
 	 * The {@link DirtinessMap} to operate on.
@@ -49,7 +51,6 @@ public class DockTrajectoryPlanner implements TrajectoryPlanner {
 	 *
 	 * @throws IllegalArgumentException Thrown if the robot argument is null.
 	 */
-	@Override
 	public void setRobot(Robot robot) {
 		if (robot == null)
 			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "robot"));
@@ -60,13 +61,13 @@ public class DockTrajectoryPlanner implements TrajectoryPlanner {
 	}	
 
 	/**
-	 * Create a new instance of {@link DockTrajectoryPlanner}.
+	 * Create a new instance of {@link NearestTrajectoryPlanner}.
 	 * Each robot is supposed to have its own {@link TrajectoryPlanner} because
 	 * the planner holds information private to each robot.
 	 */
-	public DockTrajectoryPlanner() {
+	public NearestTrajectoryPlanner() {
 	}
-	
+		
 	/**
 	 * Update or create a route plan with the knowledge of the current plan.
 	 * 
@@ -74,25 +75,30 @@ public class DockTrajectoryPlanner implements TrajectoryPlanner {
 	 * 
 	 * @throws IllegalArgumentException Thrown if the plan argument is null.
 	 */
-	@Override
-	public void updateTrajectory(List<Link> plan) {
+	public void updateTrajectory(Set<Node> targets, List<Link> plan) {
 		if(plan == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "plan"));
 		
 		// Fill the plan
-		if(plan.isEmpty()){
+		if(plan.isEmpty()
+				&& !targets.isEmpty()
+				&& !targets.contains(map.getPosition(robotId).atNode())){
 			LinkPosition robotPosition = map.getPosition(robotId);
-			Set<Node> dockingNodes = map.getDockingStations();
-			if(!dockingNodes.isEmpty()){
-				// Visit the nearest docking station
-				Node dock = getRandomDock(dockingNodes);
+			// Visit the nearest target
+			SortedSet<List<Link>> plans = new TreeSet<>(new Comparator<List<Link>>(){
+				@Override
+				public int compare(List<Link> l1, List<Link> l2) {
+					return Integer.compare(l1.size(), l2.size());
+				}
 				
-				List<Link> newPlan = Dijkstra.getShortestPath(map.getNetwork(),
-						robotPosition.getLink().getTo(), dock);
-				assert(newPlan != null);
-				assert(!newPlan.isEmpty());
-				plan.addAll(newPlan);
+			});
+			for(Node target : targets){
+				plans.add(Dijkstra.getShortestPath(map.getNetwork(),
+						robotPosition.getLink().getTo(), target));
 			}
+			
+			plan.addAll(plans.first());
+			
 			if(plan.isEmpty()){
 				Log.e("Empty plan has been generated.");
 				return;
@@ -100,21 +106,4 @@ public class DockTrajectoryPlanner implements TrajectoryPlanner {
 		}
 
 	}
-	
-	private Node getRandomDock(Set<Node> dockingNodes){
-		
-		Random rand = new Random();// TODO: use centralized random with seed
-		int end = rand.nextInt(dockingNodes.size());
-		int index = 0;
-		for(Node dock : dockingNodes){
-			if(index == end){
-				return dock;
-			}
-			index++;
-		}
-		// Should never reach this code
-		assert(false);
-		return null;
-	}
-
 }

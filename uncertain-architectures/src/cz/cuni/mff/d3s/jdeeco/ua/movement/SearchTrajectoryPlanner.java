@@ -36,7 +36,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
+public class SearchTrajectoryPlanner {
 
 	/**
 	 * The {@link DirtinessMap} to operate on.
@@ -52,7 +52,6 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 *
 	 * @throws IllegalArgumentException Thrown if the robot argument is null.
 	 */
-	@Override
 	public void setRobot(Robot robot) {
 		if (robot == null)
 			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "robot"));
@@ -63,11 +62,11 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	}	
 
 	/**
-	 * Create a new instance of {@link NearestOldestTrajectoryPlanner}.
+	 * Create a new instance of {@link SearchTrajectoryPlanner}.
 	 * Each robot is supposed to have its own {@link TrajectoryPlanner} because
 	 * the planner holds information private to each robot.
 	 */
-	public NearestOldestTrajectoryPlanner() {
+	public SearchTrajectoryPlanner() {
 	}
 	
 	/**
@@ -77,7 +76,6 @@ public class NearestOldestTrajectoryPlanner implements TrajectoryPlanner {
 	 * 
 	 * @throws IllegalArgumentException Thrown if the plan argument is null.
 	 */
-	@Override
 	public void updateTrajectory(List<Link> plan) {
 		if(plan == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "plan"));

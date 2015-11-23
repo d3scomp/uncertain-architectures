@@ -106,6 +106,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		factory.withTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
 		factory.withInitialMode(SearchMode.class);
 		//currentMode = SearchMode.class;
+		// TODO: state for dead battey
 		
 		modeChart = factory.create();
 	}

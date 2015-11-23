@@ -16,19 +16,22 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.ComponentModeChart;
+import cz.cuni.mff.d3s.deeco.annotations.ExcludeModes;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
@@ -49,8 +52,9 @@ import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.SearchMode;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  
@@ -79,10 +83,10 @@ public class Robot {
 	public final List<Link> trajectory;
 
 	@Local
-	public TrajectoryPlanner searchPlanner;
+	public SearchTrajectoryPlanner searchPlanner;
 	
 	@Local
-	public TrajectoryPlanner dockPlanner;
+	public NearestTrajectoryPlanner targetPlanner;
 	
 	@Local
 	public TrajectoryExecutor mover;
@@ -150,54 +154,78 @@ public class Robot {
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
 	
+
+	///////////////////////////////////////////////////////////////////////////
+	// Handle Movement ////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	
 	@Process
+	@ExcludeModes({ChargingMode.class, CleanMode.class})
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("mover") TrajectoryExecutor mover,
 			@In("trajectory") List<Link> trajectory,
 			@InOut("position") ParamHolder<LinkPosition> position,
-			@In("map") DirtinessMap map) {
+			@InOut("map") ParamHolder<DirtinessMap> map) {
+		// Move
 		mover.move(trajectory, position.value);
-		//Node currentNode = position.value.atNode();
-	}
-	
-	@Process
-	@Mode(SearchMode.class)
-	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
-	public static void planSearch(@In("searchPlanner") TrajectoryPlanner planner,
-			@InOut("trajectory") ParamHolder<List<Link>> trajectory) {
-		planner.updateTrajectory(trajectory.value);
+
+		// Check the tile for dirt
+		Node node = position.value.atNode();
+		if(node != null){
+			map.value.checkDirtiness(node);
+		}
+		
 	}
 
-	@Process
-	@Mode(DockingMode.class)
-	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
-	public static void planDock(@In("dockPlanner") TrajectoryPlanner planner,
-			@InOut("trajectory") ParamHolder<List<Link>> trajectory) {
-		planner.updateTrajectory(trajectory.value);
-	}
+	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
 	
-	@Process
-	@Mode(CleanMode.class)
-	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
-	public static void planClean(
-			@InOut("trajectory") ParamHolder<List<Link>> trajectory) {
-		// No movement during cleaning
-		trajectory.value.clear();
-	}
-	
+
+	///////////////////////////////////////////////////////////////////////////
+	// Handle Planning ////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+
 	@Process
 	@Mode(SearchMode.class)
-	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
-	public static void checkDirt(@In("id") String id,
-			@InOut("map") ParamHolder<DirtinessMap> map,
-			@In("position") LinkPosition position) {
-		Node node = position.atNode();
-		if(node != null){
-			System.out.println(id + ": Dirt detected.");
-			map.value.checkDirtiness(node);
+	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
+	public static void planSearch(@In("searchPlanner") SearchTrajectoryPlanner planner,
+			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
+			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
+			@In("map") DirtinessMap map) {
+		Map<Node, Double> dirtiness = map.getDirtiness(); 
+		if(dirtiness.isEmpty()){
+			planner.updateTrajectory(trajectory.value);
+		} else {
+			Node targetTile = trajectory.value.isEmpty() ? 
+					null
+					 : trajectory.value.get(trajectory.value.size()-1).getTo();
+			if(targetTile == null || !dirtiness.keySet().contains(targetTile)){
+				trajectory.value.clear();
+				targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
+			}
 		}
 	}
 	
+	@Process
+	@Mode(DockingMode.class)
+	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
+	public static void planDock(@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
+			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
+			@In("map") DirtinessMap map) {
+		Set<Node> docks = map.getDockingStations();
+		Node targetTile = trajectory.value.isEmpty() ? 
+				null
+				 : trajectory.value.get(trajectory.value.size()-1).getTo();
+		if(targetTile == null || !docks.contains(targetTile)){
+			trajectory.value.clear();
+			targetPlanner.updateTrajectory(docks, trajectory.value);
+		}
+		
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
+		
 	@Process
 	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)

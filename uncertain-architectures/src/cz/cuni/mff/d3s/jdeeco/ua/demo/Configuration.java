@@ -21,9 +21,9 @@ import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.DockTrajectoryPlanner;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestOldestTrajectoryPlanner;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.ShortestTrajectoryExecutor;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 
 /**
  * This class holds the overall configuration of the demo simulation.
@@ -146,9 +146,9 @@ public class Configuration {
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
-			.withDockingPlanner(new DockTrajectoryPlanner())
-			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
+			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
+			.withDockingPlanner(new NearestTrajectoryPlanner())
+			.withTrajectoryExecutor(new TrajectoryExecutor())
 			.create();
 	}
 
@@ -160,9 +160,9 @@ public class Configuration {
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
-			.withDockingPlanner(new DockTrajectoryPlanner())
-			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
+			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
+			.withDockingPlanner(new NearestTrajectoryPlanner())
+			.withTrajectoryExecutor(new TrajectoryExecutor())
 			.create();
 	}
 	
@@ -174,9 +174,9 @@ public class Configuration {
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new NearestOldestTrajectoryPlanner())
-			.withDockingPlanner(new DockTrajectoryPlanner())
-			.withTrajectoryExecutor(new ShortestTrajectoryExecutor())
+			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
+			.withDockingPlanner(new NearestTrajectoryPlanner())
+			.withTrajectoryExecutor(new TrajectoryExecutor())
 			.create();
 	}
 	

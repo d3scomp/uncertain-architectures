@@ -22,8 +22,9 @@ import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 public class RobotFactory {
@@ -85,7 +86,7 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory withTrajectoryPlanner(TrajectoryPlanner planner){
+	public RobotFactory withTrajectoryPlanner(SearchTrajectoryPlanner planner){
 		if(planner == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "planner"));
 		planner.setRobot(robot);
@@ -94,11 +95,11 @@ public class RobotFactory {
 		return this;
 	}
 	
-	public RobotFactory withDockingPlanner(TrajectoryPlanner planner){
+	public RobotFactory withDockingPlanner(NearestTrajectoryPlanner planner){
 		if(planner == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "planner"));
 		planner.setRobot(robot);
-		robot.dockPlanner = planner;
+		robot.targetPlanner = planner;
 		plannerSet = true;
 		return this;
 	}

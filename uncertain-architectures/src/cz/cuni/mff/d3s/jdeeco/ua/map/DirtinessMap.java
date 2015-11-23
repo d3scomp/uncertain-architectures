@@ -118,9 +118,6 @@ public class DirtinessMap {
 	public DirtinessMap(String robotId, RuntimeLogger runtimeLogger) {
 		visitedNodes = new HashMap<>();
 		dirtiness = new HashMap<>(MAP_WIDTH * MAP_HEIGHT);
-		for (Node n : NETWORK.getNodes()) {
-			dirtiness.put(n, 0.0);
-		}
 		this.robotId = robotId;
 		this.runtimeLogger = runtimeLogger;
 	}
@@ -264,6 +261,10 @@ public class DirtinessMap {
 				dirtiness.put(node, intensity);
 
 				logDirtiness(node, intensity);
+				
+				if(intensity <= 0){
+					dirtiness.remove(node);
+				}
 			}
 			return intensity;
 		}

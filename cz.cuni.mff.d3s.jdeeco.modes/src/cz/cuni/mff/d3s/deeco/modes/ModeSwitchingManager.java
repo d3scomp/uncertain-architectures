@@ -73,7 +73,7 @@ public class ModeSwitchingManager {
 			
 			if (processModes != null && !processModes.isEmpty()) {
 				
-				List<Class> processModeClasses = new ArrayList<>();
+				List<Class<? extends DEECoMode>> processModeClasses = new ArrayList<>();
 				processModes.forEach(pm -> processModeClasses.add(pm.getClass()));
 			
 				if (processModeClasses.contains(currentMode)) {

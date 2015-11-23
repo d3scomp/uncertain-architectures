@@ -55,18 +55,8 @@ public class LinkPosition {
 					record.setLink(this.link);
 					record.setPerson(robotId);
 					record.setVehicle(robotId);
-					runtimeLogger.log(record);
-					
-					VehicleRecord lRecord = new LeftVehicleRecord(robotId);
-					lRecord.setVehicle(robotId);
-					lRecord.setPerson(robotId);
-					runtimeLogger.log(lRecord);
+					runtimeLogger.log(record);	
 				}
-
-				VehicleRecord eRecord = new EnteredVehicleRecord(robotId);
-				eRecord.setVehicle(robotId);
-				eRecord.setPerson(robotId);
-				runtimeLogger.log(eRecord);
 				
 				// Log the entered link event
 				LinkRecord record = new EnteredLinkRecord(robotId);

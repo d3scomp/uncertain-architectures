@@ -15,7 +15,11 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.deeco.modes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ModeChartFactory {
@@ -26,7 +30,7 @@ public class ModeChartFactory {
 		modeChart = new ModeChartImpl();
 	}
 
-	public ModeChartFactory withTransitionWithGuard(
+	public ModeChartFactory addTransitionWithGuard(
 			Class<? extends DEECoMode> from, Class<? extends DEECoMode> to,
 			ModeGuard guard) {
 		if (from == null) throw new IllegalArgumentException(
@@ -50,7 +54,7 @@ public class ModeChartFactory {
 		return this;
 	}
 
-	public ModeChartFactory withTransitionWithProbability(
+	public ModeChartFactory addTransitionWithProbability(
 			Class<? extends DEECoMode> from, Class<? extends DEECoMode> to,
 			double probability) {
 		if (from == null) throw new IllegalArgumentException(
@@ -75,7 +79,7 @@ public class ModeChartFactory {
 		return this;
 	}
 
-	public ModeChartFactory withTransition(
+	public ModeChartFactory addTransition(
 			Class<? extends DEECoMode> from, Class<? extends DEECoMode> to,
 			ModeGuard guard, double probability) {
 		if (from == null) throw new IllegalArgumentException(
@@ -101,8 +105,32 @@ public class ModeChartFactory {
 
 		return this;
 	}
+	
+	public ModeChartFactory addTransitionListener(
+			Class<? extends DEECoMode> from, Class<? extends DEECoMode> to,
+			ModeTransitionListener transitionListener){
+		if (from == null) throw new IllegalArgumentException(
+				String.format("The \"%s\" argument is null.", "from"));
+		if (to == null) throw new IllegalArgumentException(
+				String.format("The \"%s\" argument is null.", "to"));
+		if (transitionListener == null) throw new IllegalArgumentException(
+				String.format("The \"%s\" argument is null.", "transitionListener"));
+		
+		if(!modeChart.transitionListeners.containsKey(from)){
+			modeChart.transitionListeners.put(from, new HashMap<>());
+		}
+		Map<Class<? extends DEECoMode>, List<ModeTransitionListener>> fromTransitions = modeChart.transitionListeners.get(from);
+		if(!fromTransitions.containsKey(to)){
+			fromTransitions.put(to, new ArrayList<>());
+		}
+		List<ModeTransitionListener> transition = fromTransitions.get(to);
+		transition.add(transitionListener);
+		
+		return this;
+	}
+	
 
-	public ModeChartFactory withInitialMode(Class<? extends DEECoMode> mode){
+	public ModeChartFactory addInitialMode(Class<? extends DEECoMode> mode){
 		modeChart.setInitialNode(mode);
 		return this;
 	}

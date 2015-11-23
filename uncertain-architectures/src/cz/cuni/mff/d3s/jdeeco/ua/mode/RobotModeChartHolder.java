@@ -15,15 +15,23 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
+import java.io.IOException;
+
 import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
+import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredVehicleRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftVehicleRecord;
+import cz.cuni.mff.d3s.jdeeco.visualizer.records.VehicleRecord;
 
 public class RobotModeChartHolder extends ModeChartHolder {
+	
 
 	@SuppressWarnings("unchecked")
 	public RobotModeChartHolder(){
@@ -110,17 +118,63 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"map", "position"};
 			}
 		};
+		final ModeTransitionListener waitEventListener = new ModeTransitionListener() {
+			@Override
+			public void transitionTaken(Object[] knowledgeValues) {
+				String id = (String)knowledgeValues[0];
+				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				
+				VehicleRecord record = new LeftVehicleRecord(id);
+				record.setVehicle(id);
+				record.setPerson(id);
+				try {
+					ProcessContext.getRuntimeLogger().log(record);
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"id", "position"};
+			}
+		};
+		final ModeTransitionListener goEventListener = new ModeTransitionListener() {
+			@Override
+			public void transitionTaken(Object[] knowledgeValues) {
+				String id = (String)knowledgeValues[0];
+				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				
+				VehicleRecord record = new EnteredVehicleRecord(id);
+				record.setVehicle(id);
+				record.setPerson(id);
+				try {
+					ProcessContext.getRuntimeLogger().log(record);
+				} catch (IllegalStateException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"id", "position"};
+			}
+		};
 		
 		ModeChartFactory factory = new ModeChartFactory();
-		factory.withTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
-		factory.withTransition(SearchMode.class, CleanMode.class, cleanGuard, 1);
-		factory.withTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
-		factory.withTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
+		factory.addTransitionListener(CleanMode.class, SearchMode.class, goEventListener);
+		factory.addTransition(SearchMode.class, CleanMode.class, cleanGuard, 1);
+		factory.addTransitionListener(SearchMode.class, CleanMode.class, waitEventListener);
+		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		factory.addTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, waitEventListener);
 		//factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
-		factory.withTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
-		factory.withTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
-		factory.withTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
-		factory.withInitialMode(SearchMode.class);
+		factory.addTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
+		factory.addTransitionListener(DockingMode.class, ChargingMode.class, waitEventListener);
+		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, waitEventListener);
+		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
+		factory.addTransitionListener(ChargingMode.class, SearchMode.class, goEventListener);
+		factory.addInitialMode(SearchMode.class);
 		//currentMode = SearchMode.class;
 		
 		modeChart = factory.create();

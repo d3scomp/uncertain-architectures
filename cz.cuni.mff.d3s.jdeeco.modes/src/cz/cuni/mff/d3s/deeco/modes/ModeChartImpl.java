@@ -26,13 +26,14 @@ import java.util.Random;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
+import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.KnowledgePath;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.PathNodeField;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 
 // TODO: make tests
-public class ModeChartImpl extends ModeChart{
+class ModeChartImpl extends ModeChart{
 	
 	public static final double MODE_NOT_FOUND = -1;
 	
@@ -49,6 +50,7 @@ public class ModeChartImpl extends ModeChart{
 	ModeChartImpl() {
 		currentMode = null;
 		modes = new HashMap<>();
+		transitionListeners = new HashMap<>();
 	}
 	
 	void setInitialNode(Class<? extends DEECoMode> mode){
@@ -83,11 +85,7 @@ public class ModeChartImpl extends ModeChart{
 			// Filter out inapplicable transitions
 			for(ModeSuccessor succ : successors.toArray(new ModeSuccessor[]{})){
 				String[] knowledge = succ.guard.getKnowledgeNames();
-				Object[] values = new Object[knowledge.length];
-				for(int i = 0; i < knowledge.length; i++){
-					values[i] = getValue(knowledge[i]);
-					// TODO: maybe can be done without the cycle if the getValue method can return all knowledge items at once
-				}
+				Object[] values = getValues(knowledge);
 				//System.out.format("Knowledge: %s Value %s%n", knowledge, String.valueOf(value));
 				if(!succ.guard.isSatisfied(values)){
 					successors.remove(succ);
@@ -121,6 +119,9 @@ public class ModeChartImpl extends ModeChart{
 			for(ModeSuccessor s : successors){
 				successorTreshold += s.probability;
 				if(random < successorTreshold){
+					// Call the transition listeners before the mode is switched
+					invokeTransitionListeners(currentMode, s.successor);
+					// Switch the mode
 					currentMode = s.successor;
 					break;
 				}
@@ -130,17 +131,39 @@ public class ModeChartImpl extends ModeChart{
 		return currentMode;
 	}
 	
-	private Object getValue(String knowledge) {
-		KnowledgePath path = RuntimeMetadataFactoryExt.eINSTANCE.createKnowledgePath();
-		PathNodeField pNode = RuntimeMetadataFactoryExt.eINSTANCE.createPathNodeField();
-		pNode.setName(knowledge);
-		path.getNodes().add(pNode);
-		ArrayList<KnowledgePath> paths = new ArrayList<>();
-		paths.add(path);
+	private void invokeTransitionListeners(Class<? extends DEECoMode> from, Class<? extends DEECoMode> to){
+		if(transitionListeners.containsKey(from)){
+			Map<Class<? extends DEECoMode>, List<ModeTransitionListener>> fromListeners = transitionListeners.get(from); 
+			if(fromListeners.containsKey(to)){
+				for(ModeTransitionListener transitionListener : fromListeners.get(to)){
+					// Get the knowledge values
+					String[] knowledge = transitionListener.getKnowledgeNames();
+					Object[] values = getValues(knowledge);
+					// Call the listener with proper values
+					transitionListener.transitionTaken(values);
+				}
+			}
+		}
+	}
+	
+	private Object[] getValues(String[] knowledgeNames) {
+		List<KnowledgePath> paths = new ArrayList<>();
+		for(String knowledgeName : knowledgeNames){
+			KnowledgePath path = RuntimeMetadataFactoryExt.eINSTANCE.createKnowledgePath();
+			PathNodeField pNode = RuntimeMetadataFactoryExt.eINSTANCE.createPathNodeField();
+			pNode.setName(knowledgeName);
+			path.getNodes().add(pNode);
+			paths.add(path);
+		}
 		try {
-			return component.getKnowledgeManager().get(paths).getValue(path);
+			ValueSet vSet = component.getKnowledgeManager().get(paths);
+			Object[] values = new Object[knowledgeNames.length];
+			for (int i = 0; i < knowledgeNames.length; i++) {
+				values[i] = vSet.getValue(paths.get(i));
+			}
+			return values;
 		} catch (KnowledgeNotFoundException e) {
-			Log.e("Couldn't find knowledge " + knowledge + " in component " + component);
+			Log.e("Couldn't find knowledge " + knowledgeNames + " in component " + component);
 			return null;
 		}
 	}

@@ -17,15 +17,12 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 
 import java.io.IOException;
 
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredLinkRecord;
-import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredVehicleRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftLinkRecord;
-import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftVehicleRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.LinkRecord;
-import cz.cuni.mff.d3s.jdeeco.visualizer.records.VehicleRecord;
 
 public class LinkPosition {
 
@@ -35,43 +32,15 @@ public class LinkPosition {
 	
 	private double epsilon = 0.001; // 1 mm
 	
-	private final RuntimeLogger runtimeLogger;
-	
 	private final String robotId;
 	
-	public LinkPosition(Link link, String robotId, RuntimeLogger runtimeLogger){
+	public LinkPosition(Link link, String robotId){
 		this.link = null;
-		this.runtimeLogger = runtimeLogger;
 		this.robotId = robotId;
 		startFrom(link);
 	}
 	
 	public void startFrom(Link link){
-		if(runtimeLogger != null){
-			try {
-				// Log left link event if the previous link is present
-				if(this.link != null){
-					LinkRecord record = new LeftLinkRecord(robotId);
-					record.setLink(this.link);
-					record.setPerson(robotId);
-					record.setVehicle(robotId);
-					runtimeLogger.log(record);	
-				}
-				
-				// Log the entered link event
-				LinkRecord record = new EnteredLinkRecord(robotId);
-				record.setLink(link);
-				record.setPerson(robotId);
-				record.setVehicle(robotId);
-				runtimeLogger.log(record);
-
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
 		this.link = link;
 		distance = 0;
 	}
@@ -102,9 +71,35 @@ public class LinkPosition {
 		if(length < 0) throw new IllegalArgumentException(
 				"The length argument is a negative number.");
 		
+		if(distance == 0){
+			// Log the entered link event
+			LinkRecord record = new EnteredLinkRecord(robotId);
+			record.setLink(link);
+			record.setPerson(robotId);
+			record.setVehicle(robotId);
+			try {
+				ProcessContext.getRuntimeLogger().log(record);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		distance += length;
 		if(distance > link.getLength()){
 			distance = link.getLength();
+		}
+		
+		if(Math.abs(distance - link.getLength()) < epsilon){
+			// Log left link event if the previous link is present
+			LinkRecord record = new LeftLinkRecord(robotId);
+			record.setLink(this.link);
+			record.setPerson(robotId);
+			record.setVehicle(robotId);
+			try {
+				ProcessContext.getRuntimeLogger().log(record);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

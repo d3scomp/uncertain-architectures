@@ -39,7 +39,6 @@ import cz.cuni.mff.d3s.deeco.annotations.Mode;
 import cz.cuni.mff.d3s.deeco.annotations.Modes;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
@@ -52,8 +51,8 @@ import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.SearchMode;
-import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
+import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -105,9 +104,9 @@ public class Robot {
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Robot(final String id, RuntimeLogger runtimeLogger) {
+	public Robot(final String id) {
 		this.id = id;
-		map = new DirtinessMap(id, runtimeLogger);
+		map = new DirtinessMap(id);
 		trajectory = new ArrayList<>();
 	}
 

@@ -33,6 +33,7 @@ import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.DockingStationRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
@@ -67,8 +68,6 @@ public class DirtinessMap {
 	private final Map<Node, Long> visitedNodes;
 
 	private final String robotId;
-
-	private final RuntimeLogger runtimeLogger;
 
 	static {
 		NETWORK = new Network();
@@ -115,11 +114,10 @@ public class DirtinessMap {
 		return null;
 	}
 
-	public DirtinessMap(String robotId, RuntimeLogger runtimeLogger) {
+	public DirtinessMap(String robotId) {
 		visitedNodes = new HashMap<>();
 		dirtiness = new HashMap<>(MAP_WIDTH * MAP_HEIGHT);
 		this.robotId = robotId;
-		this.runtimeLogger = runtimeLogger;
 	}
 
 	public Network getNetwork() {
@@ -282,7 +280,7 @@ public class DirtinessMap {
 			DirtinessRecord record = new DirtinessRecord(robotId);
 			record.setNode(node);
 			record.setIntensity(intensity);
-			runtimeLogger.log(record);
+			ProcessContext.getRuntimeLogger().log(record);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -290,7 +288,7 @@ public class DirtinessMap {
 		}
 	}
 	
-	public void placeDockingStation(Node node){
+	public void placeDockingStation(Node node, RuntimeLogger runtimeLogger){
 		if (node == null)
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));

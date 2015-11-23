@@ -140,8 +140,8 @@ public class Configuration {
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
-	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB1", runtimeLogger)
+	public static final Robot createRobot1(){
+		return RobotFactory.newRobot("TB1")
 			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
@@ -155,7 +155,7 @@ public class Configuration {
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB2", runtimeLogger)
+		return RobotFactory.newRobot("TB2")
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)
@@ -169,7 +169,7 @@ public class Configuration {
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB3", runtimeLogger)
+		return RobotFactory.newRobot("TB3")
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(1)

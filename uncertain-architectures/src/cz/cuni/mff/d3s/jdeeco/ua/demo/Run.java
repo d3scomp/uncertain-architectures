@@ -48,7 +48,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 500_000;
 
-	static final boolean enableMetaAdaptation = true;
+	static final boolean enableMetaAdaptation = false;
 
 	/**
 	 * Runs centralized simulation.
@@ -104,12 +104,14 @@ public class Run {
 			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
 			// Meta-adaptation enabled
 			deeco3 = simulation.createNode(3, correlationPlugin);
-
-			nodesInSimulation.add(deeco3);
+		} else {
+			deeco3 = simulation.createNode(3);
 		}
+
+		nodesInSimulation.add(deeco3);
 		// deploy components
 		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
-		deeco3.deployEnsemble(RobotDataAggregation.class);
+		//deeco3.deployEnsemble(RobotDataAggregation.class);
 
 		// Assign the FF1 to the evaluation component
 

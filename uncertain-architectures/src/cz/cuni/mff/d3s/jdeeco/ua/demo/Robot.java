@@ -162,11 +162,11 @@ public class Robot {
 	@ExcludeModes({ChargingMode.class, CleanMode.class})
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("mover") TrajectoryExecutor mover,
-			@In("trajectory") List<Link> trajectory,
+			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<LinkPosition> position,
 			@InOut("map") ParamHolder<DirtinessMap> map) {
 		// Move
-		mover.move(trajectory, position.value);
+		mover.move(trajectory.value, position.value);
 
 		// Check the tile for dirt
 		Node node = position.value.atNode();

@@ -99,8 +99,9 @@ public class TrajectoryExecutor {
 				// Can't go where other goes or meet them between nodes
 				if(isNodeCollision(nextLink.getTo(), others)
 						|| isLinkCollision(nextLink, others)){
-					// TODO: go randomly or wait, clear plan
+					// Go randomly or wait, clear plan
 					nextLink = getDeflection(position.atNode(), others);
+					plan.clear();
 				}
 				if(nextLink != null){
 					position.startFrom(nextLink);

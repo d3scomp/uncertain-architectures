@@ -171,7 +171,17 @@ public class Robot {
 		// Check the tile for dirt
 		Node node = position.value.atNode();
 		if(node != null){
-			map.value.checkDirtiness(node);
+			map.value.getVisitedNodes().put(
+					node,ProcessContext.getTimeProvider().getCurrentMilliseconds());
+			double intensity = map.value.checkDirtiness(node);
+			if(intensity > 0){
+				System.out.format("\nDirtiness %f detected at %d\n\n", intensity, node.getId());
+			}
+			/*
+			System.out.format("%nAt node: %d%n", node.getId());
+			System.out.format("At state: %s%n", ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
+			System.out.format("At time: %s%n", ProcessContext.getTimeProvider().getCurrentMilliseconds());
+			*/
 		}
 		
 	}
@@ -190,15 +200,16 @@ public class Robot {
 	public static void planSearch(@In("searchPlanner") SearchTrajectoryPlanner planner,
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
+			@In("position") LinkPosition position,
 			@In("map") DirtinessMap map) {
 		Map<Node, Double> dirtiness = map.getDirtiness(); 
 		if(dirtiness.isEmpty()){
 			planner.updateTrajectory(trajectory.value);
 		} else {
-			Node targetTile = trajectory.value.isEmpty() ? 
-					null
-					 : trajectory.value.get(trajectory.value.size()-1).getTo();
-			if(targetTile == null || !dirtiness.keySet().contains(targetTile)){
+			Node targetTile = trajectory.value.isEmpty()
+					? position.getLink().getTo()
+					: trajectory.value.get(trajectory.value.size()-1).getTo();
+			if(!dirtiness.keySet().contains(targetTile)){
 				trajectory.value.clear();
 				targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
 			}
@@ -235,6 +246,7 @@ public class Robot {
 			Double intensity = map.value.getDirtiness().get(node);
 			if(intensity != null && intensity > 0){
 				map.value.cleanDirtiness(node, intensity);
+				System.out.format("\nCleaned %d\n\n", node.getId());
 			}
 		}
 	}

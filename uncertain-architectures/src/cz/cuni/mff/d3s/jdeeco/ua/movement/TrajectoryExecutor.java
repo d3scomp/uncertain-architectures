@@ -82,7 +82,7 @@ public class TrajectoryExecutor {
 		// Compute the distance between origin and destination
 		final double destinationDistance = position.getRemainingDistance();
 		// Compute the maximum distance the robot can travel in a single step
-		final double maxStepDistance = (double) ROBOT_SPEED / (double) MOVE_PROCESS_PERIOD;
+		final double maxStepDistance = (double) ROBOT_SPEED * (double) MOVE_PROCESS_PERIOD / 1000;
 		// Compute the distance the robot will travel in this step
 		final double stepDistance = Math.min(destinationDistance, maxStepDistance);
 		// Move towards the next node

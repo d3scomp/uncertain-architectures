@@ -212,7 +212,7 @@ public class DirtinessMap {
 
 		generateDirt();
 		
-		if (DIRTINESS.containsKey(node)) {
+		if (DIRTINESS.containsKey(node) && DIRTINESS.get(node) > 0) {
 			double intensity = DIRTINESS.get(node);
 			dirtiness.put(node, intensity);
 			return intensity;
@@ -222,7 +222,7 @@ public class DirtinessMap {
 
 	private void generateDirt() {
 		if (RANDOM.nextDouble() <= DIRT_GENERATION_RATE) {
-			Node node = getRandomNode();
+			Node node = getRandomNode(); // TODO: don't generate dirt where docking stations are
 			double intensityIncrement = (double) RANDOM.nextInt(10) / 10.0;
 			double currentIntensity;
 			if(DIRTINESS.containsKey(node)){
@@ -233,6 +233,8 @@ public class DirtinessMap {
 
 			double intensity = Math.min(currentIntensity + intensityIncrement, 1);
 			DIRTINESS.put(node, intensity);
+			
+			System.out.format("\nDirt %f generated at %d\n\n", intensity, node.getId());
 
 			logDirtiness(node, intensity);
 		}

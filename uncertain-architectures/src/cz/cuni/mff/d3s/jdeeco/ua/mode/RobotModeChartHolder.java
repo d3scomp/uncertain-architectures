@@ -93,8 +93,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& positionNode != null
-						&& map.getDirtiness().keySet().contains(positionNode)
-						&& map.getDirtiness().get(positionNode) > 0);
+						&& map.getDirtiness().keySet().contains(positionNode));
 			}
 			
 			@Override

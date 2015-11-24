@@ -63,16 +63,14 @@ public class RobotFactory {
 		if(linkNumber < 0 || linkNumber >= links.size())
 			throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument is out of bounds.", "linkNumber"));
-		int index = 0;
 		for(Link link : links)
 		{
-			if(index == linkNumber){
+			if(link.getId() == linkNumber){
 				robot.position = new LinkPosition(link, robot.id);
 				positionSet = true;
 				robot.map.updateRobotsPosition(robot.id, robot.position);
 				break;
 			}
-			index++;
 		}
 		return this;
 	}

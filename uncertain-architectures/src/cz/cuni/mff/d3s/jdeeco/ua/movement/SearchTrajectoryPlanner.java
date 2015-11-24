@@ -18,11 +18,10 @@ package cz.cuni.mff.d3s.jdeeco.ua.movement;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
@@ -83,32 +82,30 @@ public class SearchTrajectoryPlanner {
 		// Fill the plan
 		if(plan.isEmpty()){
 			LinkPosition robotPosition = map.getPosition(robotId);
-			Set<Node> unvisitedNodes = unvisitedNodes();
-			if(!unvisitedNodes.isEmpty()){
-				// Visit the nearest unvisited tile
-				Node lastNode = lastNodeInPlan(plan);
-				Node nodeToVisit;
-				if(lastNode == null){
-					// return random tile if none was visited yet
-					nodeToVisit = map.getRandomNode();
-				} else {
-					nodeToVisit = getClosestNode(lastNode);
-				}
-				assert(nodeToVisit != null);
-				List<Link> newPlan = Dijkstra.getShortestPath(map.getNetwork(),
-						robotPosition.getLink().getTo() , nodeToVisit);
-				assert(newPlan != null);
-				assert(!newPlan.isEmpty());
-				plan.addAll(newPlan);
+			Node lastNode = lastNodeInPlan(plan, robotPosition);
+// TODO: check whether the visited nodes are update correctly
+			// Visit the nearest unvisited node or the oldest visited node
+			Node nodeToVisit = unvisitedNodes().isEmpty() 
+								? getOldestNode(map.getVisitedNodes())
+								: getClosestNode(lastNode, unvisitedNodes());
+								
+			if(nodeToVisit == null)
+			{
+				Log.e("The planning in " + this.getClass().getName() + " doesn't work!");
+				return;
 			}
+			List<Link> newPlan = Dijkstra.getShortestPath(map.getNetwork(),
+					lastNode , nodeToVisit);
+			plan.addAll(newPlan);
+
 			if(plan.isEmpty()){
-				Log.e("Empty plan has been generated.");
+				Log.w("Empty plan has been generated.");
 				return;
 			}
 		}
 
 	}
-	
+
 	/**
 	 * Return the set of unvisited {@link Tile}s.
 	 * 
@@ -125,49 +122,46 @@ public class SearchTrajectoryPlanner {
 	}
 	
 	/**
-	 * Returns the last {@link Tile} in plan or the most recently visited
-	 * {@link Tile} if the plan is empty.
+	 * Returns the last {@link Tile} in the plan or robot position if the plan is empty.
 	 * 
 	 * @param plan The trajectory plan.
 	 * 
 	 * @return The last {@link Tile} in plan or the most recently visited
 	 * {@link Tile} if the plan is empty.
 	 */
-	private Node lastNodeInPlan(List<Link> plan){
+	private Node lastNodeInPlan(List<Link> plan, LinkPosition robotPosition){
 		if(!plan.isEmpty()){
 			return plan.get(plan.size()-1).getTo();
 		}
-		Node node = lastVisitedNode();
-		return node;
+		return robotPosition.getLink().getTo();
 	}
-	
+
 	/**
-	 * Get the most recently visited {@link Tile}.
-	 * 
-	 * @return The most recently visited {@link Tile}.
+	 * @param visitedNodes
+	 * @return
 	 */
-	private Node lastVisitedNode(){
-		if(map.getVisitedNodes().size() == 0){
+	private Node getOldestNode(Map<Node, Long> nodes) {
+		if(nodes.size() == 0){
 			return null;
 		}
 		
-		Node lastNode = null;
-		long timestamp = 0;
-		for(Node n : map.getVisitedNodes().keySet()){
-			if(lastNode == null){
-				lastNode = n;
-				timestamp = map.getVisitedNodes().get(n);
+		Node oldest = null;
+		long timestamp = 0; // NOTE: assuming that time cannot be negative
+		for(Node n : nodes.keySet()){
+			if(oldest == null){
+				oldest = n;
+				timestamp = nodes.get(n);
 			} else {
-				long newTimestamp = map.getVisitedNodes().get(n); 
-				if(timestamp < newTimestamp){
-					lastNode = n;
+				long newTimestamp = nodes.get(n); 
+				if(newTimestamp < timestamp){
+					oldest = n;
 					timestamp = newTimestamp;
 				}
 			}
 		}
-		return lastNode;
+		return oldest;
 	}
-	
+		
 	/**
 	 * Randomly choose the closest {@link Tile} to visit.
 	 * @param tile The {@link Tile} to be close to.
@@ -176,22 +170,36 @@ public class SearchTrajectoryPlanner {
 	 * @throws IllegalArgumentException Thrown if either tile of rand argument
 	 * 			is null.
 	 */
-	private Node getClosestNode(Node node){
+	private Node getClosestNode(Node node, Set<Node> nodes){
 		if(node == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument cannot be null.", "node"));
+		if(nodes == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument cannot be null.", "nodes"));
 
-		Random rand = Configuration.RANDOM;
-		Set<Link> sucessors = map.getNetwork().getLinksFrom(node);
-		int end = rand.nextInt(sucessors.size());
-		int index = 0;
-		for(Link sucessor : sucessors){
-			if(index == end){
-				return sucessor.getTo();
-			}
-			index++;
+		if(nodes.isEmpty()){
+			return null;
 		}
-		// Should never reach this code
-		assert(false);
+		
+		Set<Node> newReachableNodes = new HashSet<>();
+		Set<Node> oldReachableNodes = new HashSet<>();
+		newReachableNodes.add(node);
+		
+		// DFS search
+		while(!oldReachableNodes.containsAll(newReachableNodes)){
+			oldReachableNodes.addAll(newReachableNodes);
+			// DFS step
+			for(Node reachableNode : oldReachableNodes){
+				for(Link successor : map.getNetwork().getLinksFrom(reachableNode)){
+					if(nodes.contains(successor.getTo())){
+						// If the successor node is in the set we want to reach return it
+						return successor.getTo();
+					}
+					newReachableNodes.add(successor.getTo());
+				}
+			}
+		}
+		
+		// If we are here it means that no Node from 'nodes' is reachable from 'node' 
 		return null;
 	}
 

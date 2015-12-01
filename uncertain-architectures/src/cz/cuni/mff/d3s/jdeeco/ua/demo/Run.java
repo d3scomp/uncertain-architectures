@@ -49,7 +49,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 500_000;
 
-	static final boolean enableMetaAdaptation = false;
+	static final boolean enableMetaAdaptation = true;
 
 	/**
 	 * Runs centralized simulation.
@@ -74,10 +74,10 @@ public class Run {
 
 		// create main application container
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new SimpleBroadcastDevice(0, 0, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
-		simulation.addPlugin(Network.class);
-		simulation.addPlugin(DefaultKnowledgePublisher.class);
-		simulation.addPlugin(KnowledgeInsertingStrategy.class);
+		//simulation.addPlugin(new SimpleBroadcastDevice(0, 0, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
+		//simulation.addPlugin(Network.class);
+		//simulation.addPlugin(DefaultKnowledgePublisher.class);
+		//simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
 

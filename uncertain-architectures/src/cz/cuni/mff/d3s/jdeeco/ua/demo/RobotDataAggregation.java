@@ -28,7 +28,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 
 /**
@@ -40,26 +40,26 @@ public class RobotDataAggregation {
 
 	@Membership
 	public static boolean membership(@In("member.id") String memberId,
-			@In("member.batteryLevel") MetadataWrapper<Double> batteryLevel,
-			@In("member.position") MetadataWrapper<LinkPosition> position,
+			@In("member.batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel,
+			@In("member.position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("coord.knowledgeHistoryOfAllComponents")
-				Map<String, Map<String, List<MetadataWrapper<?>>>>
+				Map<String, Map<String, List<CorrelationMetadataWrapper<?>>>>
 					knowledgeHistoryOfAllComponents) {
 		return true;
 	}
 
 	@KnowledgeExchange
 	public static void map(@In("member.id") String memberId,
-			@In("member.batteryLevel") MetadataWrapper<Double> batteryLevel,
-			@In("member.position") MetadataWrapper<LinkPosition> position,
+			@In("member.batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel,
+			@In("member.position") CorrelationMetadataWrapper<LinkPosition> position,
 			@InOut("coord.knowledgeHistoryOfAllComponents")
-				ParamHolder<Map<String, Map<String, List<MetadataWrapper<?>>>>>
+				ParamHolder<Map<String, Map<String, List<CorrelationMetadataWrapper<?>>>>>
 					knowledgeHistoryOfAllComponents)
 				throws KnowledgeNotFoundException {
 
 		System.out.println("KnowledgeExchange for component " + memberId);
 
-		Map<String, List<MetadataWrapper<?>>> memberKnowledgeHistory = 
+		Map<String, List<CorrelationMetadataWrapper<?>>> memberKnowledgeHistory = 
 				knowledgeHistoryOfAllComponents.value.get(memberId);
 		if (memberKnowledgeHistory == null) {
 			memberKnowledgeHistory = new HashMap<>();
@@ -80,9 +80,9 @@ public class RobotDataAggregation {
 	 * @param value
 	 *            field value
 	 */
-	static private void addFieldToHistory(final Map<String, List<MetadataWrapper<?>>> histories, final String name,
-			final MetadataWrapper<?> value) {
-		List<MetadataWrapper<?>> fieldHistory = histories.get(name);
+	static private void addFieldToHistory(final Map<String, List<CorrelationMetadataWrapper<?>>> histories, final String name,
+			final CorrelationMetadataWrapper<?> value) {
+		List<CorrelationMetadataWrapper<?>> fieldHistory = histories.get(name);
 		if (fieldHistory == null) {
 			fieldHistory = new ArrayList<>();
 			histories.put(name, fieldHistory);

@@ -31,6 +31,7 @@ import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.ComponentModeChart;
+import cz.cuni.mff.d3s.deeco.annotations.CorrelationData;
 import cz.cuni.mff.d3s.deeco.annotations.ExcludeModes;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
@@ -41,11 +42,12 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.ChargingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
@@ -70,13 +72,14 @@ public class Robot {
 	public String id;
 	
 	/** Battery level. */
-	public MetadataWrapper<Double> batteryLevel;
+	public CorrelationMetadataWrapper<Double> batteryLevel;
 			
 	@Local
 	public final DirtinessMap map;
 	
 	@Local
-	public MetadataWrapper<LinkPosition> position;
+	@CorrelationData(metric=PositionMetric.class,boundary=4,confidence=0.9)
+	public CorrelationMetadataWrapper<LinkPosition> position;
 
 	@Local
 	public final List<Link> trajectory;
@@ -118,7 +121,7 @@ public class Robot {
 	@Modes({SearchMode.class, DockingMode.class})
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
 	public static void consumeBatterySearch(
-			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
 	) {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = MOVEMENT_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
@@ -130,7 +133,7 @@ public class Robot {
 	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
 	public static void consumeBatteryClean(
-			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
 	) {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = CLEANING_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
@@ -142,7 +145,7 @@ public class Robot {
 	@Mode(ChargingMode.class)
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
 	public static void consumeBatteryCharge(
-			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
 	) {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
@@ -163,7 +166,7 @@ public class Robot {
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("mover") TrajectoryExecutor mover,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@InOut("position") ParamHolder<MetadataWrapper<LinkPosition>> position,
+			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<DirtinessMap> map) {
 		// Move
 		mover.move(trajectory.value, position.value.getValue());
@@ -202,7 +205,7 @@ public class Robot {
 	public static void planSearch(@In("searchPlanner") SearchTrajectoryPlanner planner,
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@In("position") MetadataWrapper<LinkPosition> position,
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") DirtinessMap map) {
 		Map<Node, Double> dirtiness = map.getDirtiness(); 
 		if(dirtiness.isEmpty()){
@@ -242,7 +245,7 @@ public class Robot {
 	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
 	public static void clean(@InOut("map") ParamHolder<DirtinessMap> map,
-			@In("position") MetadataWrapper<LinkPosition> position) {
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
 		Node node = position.getValue().atNode();
 		if(node != null){
 			Double intensity = map.value.getDirtiness().get(node);
@@ -256,8 +259,8 @@ public class Robot {
 	@Process
 	@PeriodicScheduling(period = STATUS_PROCESS_PERIOD)
 	public static void printStatus(@In("id") String id,
-			@In("batteryLevel") MetadataWrapper<Double> batteryLevel,
-			@In("position") MetadataWrapper<LinkPosition> position) {
+			@In("batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel,
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
 		System.out.println("#########################################");
 		System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("ID: " + id);

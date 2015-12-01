@@ -22,7 +22,7 @@ import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
 import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -38,7 +38,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard deadBatteryGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
-				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() <= 0;
+				return ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() <= 0;
 			}
 			
 			@Override
@@ -50,7 +50,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
 				return !deadBatteryGuard.isSatisfied(knowledgeValue)
-						&& ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+						&& ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
 			}
 			
 			@Override
@@ -62,7 +62,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
-				LinkPosition position = ((MetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
+				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (positionNode != null
 						&& map.getDockingStations().contains(positionNode));
@@ -76,7 +76,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard batteryChargedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
-				return ((MetadataWrapper<Double>)knowledgeValue[0]).getValue() > 0.95;
+				return ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() > 0.95;
 			}
 			
 			@Override
@@ -88,7 +88,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
-				LinkPosition position = ((MetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
+				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
@@ -105,7 +105,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
-				LinkPosition position = ((MetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
+				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return !(positionNode != null
 						&& map.getDirtiness().keySet().contains(positionNode)

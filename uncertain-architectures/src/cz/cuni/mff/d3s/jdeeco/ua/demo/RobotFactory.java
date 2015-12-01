@@ -17,7 +17,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Set;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -48,7 +48,7 @@ public class RobotFactory {
 	}
 	
 	public RobotFactory withBatteryLevel(double initialBatteryLevel){
-		robot.batteryLevel = new MetadataWrapper<>(initialBatteryLevel);
+		robot.batteryLevel = new CorrelationMetadataWrapper<>(initialBatteryLevel);
 		batterySet = true;
 		return this;
 	}
@@ -67,7 +67,7 @@ public class RobotFactory {
 		for(Link link : links)
 		{
 			if(link.getId() == linkNumber){
-				robot.position = new MetadataWrapper<>(new LinkPosition(link, robot.id));
+				robot.position = new CorrelationMetadataWrapper<>(new LinkPosition(link, robot.id));
 				positionSet = true;
 				robot.map.updateRobotsPosition(robot.id, robot.position.getValue());
 				break;

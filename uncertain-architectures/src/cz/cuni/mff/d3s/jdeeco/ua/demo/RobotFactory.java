@@ -20,6 +20,7 @@ import java.util.Set;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
@@ -59,16 +60,16 @@ public class RobotFactory {
 	}
 	
 	public RobotFactory atPosition(int linkNumber){
-		Set<Link> links = robot.map.getNetwork().getLinks();
+		Set<Link> links = DirtinessMap.getNetwork().getLinks();
 		if(linkNumber < 0 || linkNumber >= links.size())
 			throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument is out of bounds.", "linkNumber"));
 		for(Link link : links)
 		{
 			if(link.getId() == linkNumber){
-				robot.position = new LinkPosition(link, robot.id);
+				robot.position = new MetadataWrapper<>(new LinkPosition(link, robot.id));
 				positionSet = true;
-				robot.map.updateRobotsPosition(robot.id, robot.position);
+				robot.map.updateRobotsPosition(robot.id, robot.position.getValue());
 				break;
 			}
 		}

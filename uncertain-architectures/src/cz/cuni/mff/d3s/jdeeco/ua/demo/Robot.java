@@ -76,7 +76,7 @@ public class Robot {
 	public final DirtinessMap map;
 	
 	@Local
-	public LinkPosition position;
+	public MetadataWrapper<LinkPosition> position;
 
 	@Local
 	public final List<Link> trajectory;
@@ -163,19 +163,21 @@ public class Robot {
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("mover") TrajectoryExecutor mover,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@InOut("position") ParamHolder<LinkPosition> position,
+			@InOut("position") ParamHolder<MetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<DirtinessMap> map) {
 		// Move
-		mover.move(trajectory.value, position.value);
+		mover.move(trajectory.value, position.value.getValue());
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		position.value.setValue(position.value.getValue(), currentTime);
 
 		// Check the tile for dirt
-		Node node = position.value.atNode();
+		Node node = position.value.getValue().atNode();
 		if(node != null){
-			map.value.getVisitedNodes().put(
-					node,ProcessContext.getTimeProvider().getCurrentMilliseconds());
+			map.value.getVisitedNodes().put(node, currentTime);
 			double intensity = map.value.checkDirtiness(node);
 			if(intensity > 0){
-				System.out.format("\nDirtiness %f detected at %d\n\n", intensity, node.getId());
+				System.out.format("\nDirtiness %f detected at %d\n\n",
+						intensity, node.getId());
 			}
 			/*
 			System.out.format("%nAt node: %d%n", node.getId());
@@ -200,14 +202,14 @@ public class Robot {
 	public static void planSearch(@In("searchPlanner") SearchTrajectoryPlanner planner,
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@In("position") LinkPosition position,
+			@In("position") MetadataWrapper<LinkPosition> position,
 			@In("map") DirtinessMap map) {
 		Map<Node, Double> dirtiness = map.getDirtiness(); 
 		if(dirtiness.isEmpty()){
 			planner.updateTrajectory(trajectory.value);
 		} else {
 			Node targetTile = trajectory.value.isEmpty()
-					? position.getLink().getTo()
+					? position.getValue().getLink().getTo()
 					: trajectory.value.get(trajectory.value.size()-1).getTo();
 			if(!dirtiness.keySet().contains(targetTile)){
 				trajectory.value.clear();
@@ -240,8 +242,8 @@ public class Robot {
 	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
 	public static void clean(@InOut("map") ParamHolder<DirtinessMap> map,
-			@In("position") LinkPosition position) {
-		Node node = position.atNode();
+			@In("position") MetadataWrapper<LinkPosition> position) {
+		Node node = position.getValue().atNode();
 		if(node != null){
 			Double intensity = map.value.getDirtiness().get(node);
 			if(intensity != null && intensity > 0){
@@ -255,7 +257,7 @@ public class Robot {
 	@PeriodicScheduling(period = STATUS_PROCESS_PERIOD)
 	public static void printStatus(@In("id") String id,
 			@In("batteryLevel") MetadataWrapper<Double> batteryLevel,
-			@In("position") LinkPosition position) {
+			@In("position") MetadataWrapper<LinkPosition> position) {
 		System.out.println("#########################################");
 		System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("ID: " + id);

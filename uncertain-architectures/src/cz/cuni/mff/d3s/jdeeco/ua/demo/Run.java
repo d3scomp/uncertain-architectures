@@ -35,6 +35,7 @@ import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
+import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
@@ -61,7 +62,6 @@ public class Run {
 	 * @throws InstantiationException
 	 */
 	public static void main(final String args[])
-			// TODO: implement simulation
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException,
 			IOException {
 		Log.i("Preparing simulation");
@@ -74,14 +74,33 @@ public class Run {
 
 		// create main application container
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new SimpleBroadcastDevice(100, 50, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
+		simulation.addPlugin(new SimpleBroadcastDevice(0, 0, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
+		simulation.addPlugin(new PositionPlugin(0, 0));
 
+		DEECoNode deeco1;
+		//final DEECoNode deeco3;
+		if (enableMetaAdaptation) {
+			// Meta-adaptation enabled
+			// create correlation plugin
+		    registerMetadataForFields();
+			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
+			//deeco3 = simulation.createNode(3, correlationPlugin);
+			deeco1 = simulation.createNode(1, correlationPlugin);
+			// Deploy the data aggregation ensemble
+			//deeco3.deployEnsemble(RobotDataAggregation.class);
+			deeco1.deployEnsemble(RobotDataAggregation.class);
+		} else {
+			//deeco3 = simulation.createNode(3);
+			deeco1 = simulation.createNode(3);
+		}
+
+		
 		// create nodes without adaptation
-		DEECoNode deeco1 = simulation.createNode(1);
+//		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
 		Robot r1 = Configuration.createRobot1();
 		deeco1.deployComponent(r1);
@@ -90,28 +109,31 @@ public class Run {
 		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
 		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
 
-		DEECoNode deeco2 = simulation.createNode(2);
-		nodesInSimulation.add(deeco2);
-//		deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
+		//DEECoNode deeco2 = simulation.createNode(2);
+		//nodesInSimulation.add(deeco2);
+		//deeco2.deployComponent(Configuration.createRobot2());
+		deeco1.deployComponent(Configuration.createRobot2());
 
-		// create correlation plugin
-		registerMetadataForFields();
-
-		// MonitorPlugin monitorPlugin = new MonitorPlugin(model, design,
-		// irmPlugin.getTrace());
-		final DEECoNode deeco3;
+		//final DEECoNode deeco3;
 		if (enableMetaAdaptation) {
-			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
 			// Meta-adaptation enabled
-			deeco3 = simulation.createNode(3, correlationPlugin);
+			// create correlation plugin
+		    registerMetadataForFields();
+			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
+			//deeco3 = simulation.createNode(3, correlationPlugin);
+			deeco1 = simulation.createNode(1, correlationPlugin);
+			// Deploy the data aggregation ensemble
+			//deeco3.deployEnsemble(RobotDataAggregation.class);
+			deeco1.deployEnsemble(RobotDataAggregation.class);
 		} else {
-			deeco3 = simulation.createNode(3);
+			//deeco3 = simulation.createNode(3);
+			deeco1 = simulation.createNode(3);
 		}
-
-		nodesInSimulation.add(deeco3);
+		
+		//nodesInSimulation.add(deeco3);
 		// deploy components
-//		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
-		//deeco3.deployEnsemble(RobotDataAggregation.class);
+		//deeco3.deployComponent(Configuration.createRobot3());
+		deeco1.deployComponent(Configuration.createRobot3());
 
 		// Assign the FF1 to the evaluation component
 

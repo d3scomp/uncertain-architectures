@@ -94,7 +94,7 @@ public class SearchTrajectoryPlanner {
 				Log.e("The planning in " + this.getClass().getName() + " doesn't work!");
 				return;
 			}
-			List<Link> newPlan = Dijkstra.getShortestPath(map.getNetwork(),
+			List<Link> newPlan = Dijkstra.getShortestPath(DirtinessMap.getNetwork(),
 					lastNode , nodeToVisit);
 			plan.addAll(newPlan);
 
@@ -116,7 +116,7 @@ public class SearchTrajectoryPlanner {
 		if(map.size() <= map.getVisitedNodes().size()){
 			return Collections.emptySet();
 		}
-		Set<Node> nodes = new HashSet<>(map.getNetwork().getNodes());
+		Set<Node> nodes = new HashSet<>(DirtinessMap.getNetwork().getNodes());
 		nodes.removeAll(map.getVisitedNodes().keySet());
 		return nodes;
 	}
@@ -189,7 +189,7 @@ public class SearchTrajectoryPlanner {
 			oldReachableNodes.addAll(newReachableNodes);
 			// DFS step
 			for(Node reachableNode : oldReachableNodes){
-				for(Link successor : map.getNetwork().getLinksFrom(reachableNode)){
+				for(Link successor : DirtinessMap.getNetwork().getLinksFrom(reachableNode)){
 					if(nodes.contains(successor.getTo())){
 						// If the successor node is in the set we want to reach return it
 						return successor.getTo();

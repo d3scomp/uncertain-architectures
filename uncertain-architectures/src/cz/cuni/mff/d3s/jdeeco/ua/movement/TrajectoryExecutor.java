@@ -133,7 +133,7 @@ public class TrajectoryExecutor {
 	}
 	
 	private Link getDeflection(Node from, Collection<LinkPosition> others){
-		Set<Link> choices = map.getNetwork().getLinksFrom(from);
+		Set<Link> choices = DirtinessMap.getNetwork().getLinksFrom(from);
 		for(Link choice : choices){
 			if(!isNodeCollision(choice.getTo(), others)
 					&& !isLinkCollision(choice, others)){

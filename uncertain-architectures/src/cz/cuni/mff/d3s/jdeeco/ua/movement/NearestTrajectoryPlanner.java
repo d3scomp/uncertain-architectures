@@ -93,7 +93,7 @@ public class NearestTrajectoryPlanner {
 				
 			});
 			for(Node target : targets){
-				plans.add(Dijkstra.getShortestPath(map.getNetwork(),
+				plans.add(Dijkstra.getShortestPath(DirtinessMap.getNetwork(),
 						robotPosition.getLink().getTo(), target));
 			}
 			

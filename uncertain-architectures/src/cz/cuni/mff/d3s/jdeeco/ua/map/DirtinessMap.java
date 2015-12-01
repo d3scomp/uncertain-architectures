@@ -120,7 +120,7 @@ public class DirtinessMap {
 		this.robotId = robotId;
 	}
 
-	public Network getNetwork() {
+	public static Network getNetwork() {
 		return NETWORK;
 	}
 
@@ -222,7 +222,11 @@ public class DirtinessMap {
 
 	private void generateDirt() {
 		if (RANDOM.nextDouble() <= DIRT_GENERATION_RATE) {
-			Node node = getRandomNode(); // TODO: don't generate dirt where docking stations are
+			Node node = getRandomNode();
+			if(DOCKING_STATIONS.contains(node)){
+				// Don't generate dirt on docking stations
+				return;
+			}
 			double intensityIncrement = (double) RANDOM.nextInt(10) / 10.0;
 			double currentIntensity;
 			if(DIRTINESS.containsKey(node)){

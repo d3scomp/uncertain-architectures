@@ -17,7 +17,6 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Random;
 
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -154,7 +153,7 @@ public class Configuration {
 
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
-	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
+	public static final Robot createRobot2(){
 		return RobotFactory.newRobot("TB2")
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
@@ -168,7 +167,7 @@ public class Configuration {
 	
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
-	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
+	public static final Robot createRobot3(){
 		return RobotFactory.newRobot("TB3")
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))

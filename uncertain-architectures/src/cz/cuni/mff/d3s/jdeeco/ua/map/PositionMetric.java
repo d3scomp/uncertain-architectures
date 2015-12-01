@@ -15,22 +15,36 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
+import java.util.List;
+
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
-import cz.cuni.mff.d3s.jdeeco.position.Position;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Dijkstra;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 
 public class PositionMetric implements Metric {
 
-	static public double distance(final Position pos1, final Position pos2) {
-		return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+	static public double distance(final LinkPosition pos1, final LinkPosition pos2) {
+		// Find the shortest path
+		List<Link> path = Dijkstra.getShortestPath(DirtinessMap.getNetwork(),
+				pos1.getLink().getTo(),
+				pos1.getLink().getTo());
+		// Initialize the distance
+		double dist = pos1.getRemainingDistance();
+		// Compute the distance of the path
+		for(Link l : path){
+			dist += l.getLength();
+		}
+		
+		return dist;
 	}
 
 	@Override
 	public double distance(Object value1, Object value2) {
-		if(!(value1 instanceof Position) || !(value2 instanceof Position))
-			throw new IllegalArgumentException("Can't compute a distance of anything else than Positions.");
+		if(!(value1 instanceof LinkPosition) || !(value2 instanceof LinkPosition))
+			throw new IllegalArgumentException("Can't compute a distance of anything else than LinkPosition.");
 
-		final Position pos1 = (Position) value1;
-		final Position pos2 = (Position) value2;
+		final LinkPosition pos1 = (LinkPosition) value1;
+		final LinkPosition pos2 = (LinkPosition) value2;
 		return distance(pos1, pos2);
 	}
 }

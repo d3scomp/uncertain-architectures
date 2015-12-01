@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
@@ -24,7 +25,12 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredLinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftLinkRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.LinkRecord;
 
-public class LinkPosition {
+public class LinkPosition implements Serializable{
+
+	/**
+	 * Generated UID.
+	 */
+	private static final long serialVersionUID = -8458304837790584432L;
 
 	private Link link;
 	
@@ -127,7 +133,8 @@ public class LinkPosition {
 		double yDistance = link.getTo().getY() - link.getFrom().getY();
 		y = link.getFrom().getY() + yDistance*fraction;
 		
-		return String.format("Position: link: %d distance: %.3f [%.3f, %.3f]", 
-				link.getId(), distance, x, y);
+		return String.format("[%.3f, %.3f]", x, y);
+		/*return String.format("Position: link: %d distance: %.3f [%.3f, %.3f]", 
+				link.getId(), distance, x, y);*/
 	}
 }

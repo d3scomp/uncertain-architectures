@@ -62,7 +62,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
-				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				LinkPosition position = ((MetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (positionNode != null
 						&& map.getDockingStations().contains(positionNode));
@@ -88,7 +88,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
-				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				LinkPosition position = ((MetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
@@ -105,7 +105,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
-				LinkPosition position = (LinkPosition) knowledgeValues[1];
+				LinkPosition position = ((MetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return !(positionNode != null
 						&& map.getDirtiness().keySet().contains(positionNode)
@@ -121,7 +121,6 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public void transitionTaken(Object[] knowledgeValues) {
 				String id = (String)knowledgeValues[0];
-				LinkPosition position = (LinkPosition) knowledgeValues[1];
 				
 				VehicleRecord record = new LeftVehicleRecord(id);
 				record.setVehicle(id);
@@ -134,14 +133,13 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"id", "position"};
+				return new String[] {"id"};
 			}
 		};
 		final ModeTransitionListener goEventListener = new ModeTransitionListener() {
 			@Override
 			public void transitionTaken(Object[] knowledgeValues) {
 				String id = (String)knowledgeValues[0];
-				LinkPosition position = (LinkPosition) knowledgeValues[1];
 				
 				VehicleRecord record = new EnteredVehicleRecord(id);
 				record.setVehicle(id);
@@ -154,7 +152,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"id", "position"};
+				return new String[] {"id"};
 			}
 		};
 		

@@ -117,6 +117,10 @@ public class TrajectoryExecutor {
 			if(otherPosition.getLink().getTo().equals(target)){
 				return true;
 			}
+			if(otherPosition.getLink().getFrom().equals(target)
+					&& otherPosition.getDistance() < LinkPosition.POSITION_EPSILON){
+				return true;
+			}
 		}
 		return false;
 	}

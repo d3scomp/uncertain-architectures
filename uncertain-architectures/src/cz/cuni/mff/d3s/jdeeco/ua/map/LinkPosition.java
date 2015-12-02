@@ -36,7 +36,7 @@ public class LinkPosition implements Serializable{
 	
 	private double distance;
 	
-	private double epsilon = 0.001; // 1 mm
+	public final static double POSITION_EPSILON = 0.001; // 1 mm
 	
 	private final String robotId;
 	
@@ -95,7 +95,7 @@ public class LinkPosition implements Serializable{
 			distance = link.getLength();
 		}
 		
-		if(Math.abs(distance - link.getLength()) < epsilon){
+		if(Math.abs(distance - link.getLength()) < POSITION_EPSILON){
 			// Log left link event if the previous link is present
 			LinkRecord record = new LeftLinkRecord(robotId);
 			record.setLink(this.link);
@@ -110,11 +110,11 @@ public class LinkPosition implements Serializable{
 	}
 	
 	public boolean isEndReached(){
-		return Math.abs(distance - link.getLength()) < epsilon;
+		return Math.abs(distance - link.getLength()) < POSITION_EPSILON;
 	}
 	
 	public boolean isAtStart(){
-		return Math.abs(distance - 0) < epsilon;
+		return Math.abs(distance - 0) < POSITION_EPSILON;
 	}
 	
 	public Link getLink(){

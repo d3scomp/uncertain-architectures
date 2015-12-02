@@ -31,7 +31,8 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftVehicleRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.VehicleRecord;
 
 public class RobotModeChartHolder extends ModeChartHolder {
-	
+
+	private final boolean enableTransitionActions = false;
 
 	@SuppressWarnings("unchecked")
 	public RobotModeChartHolder(){
@@ -158,21 +159,22 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		ModeChartFactory factory = new ModeChartFactory();
 		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
-		factory.addTransitionListener(CleanMode.class, SearchMode.class, goEventListener);
 		factory.addTransition(SearchMode.class, CleanMode.class, cleanGuard, 1);
-		factory.addTransitionListener(SearchMode.class, CleanMode.class, waitEventListener);
 		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
 		factory.addTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
-		factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, waitEventListener);
 		//factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
 		factory.addTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
-		factory.addTransitionListener(DockingMode.class, ChargingMode.class, waitEventListener);
 		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
-		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, waitEventListener);
 		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
-		factory.addTransitionListener(ChargingMode.class, SearchMode.class, goEventListener);
 		factory.addInitialMode(SearchMode.class);
-		//currentMode = SearchMode.class;
+		if(enableTransitionActions){
+			factory.addTransitionListener(CleanMode.class, SearchMode.class, goEventListener);
+			factory.addTransitionListener(SearchMode.class, CleanMode.class, waitEventListener);
+			factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, waitEventListener);
+			factory.addTransitionListener(DockingMode.class, ChargingMode.class, waitEventListener);
+			factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, waitEventListener);
+			factory.addTransitionListener(ChargingMode.class, SearchMode.class, goEventListener);
+		}
 		
 		modeChart = factory.create();
 	}

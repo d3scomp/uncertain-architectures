@@ -78,7 +78,6 @@ public class Robot {
 	@Local
 	public final DirtinessMap map;
 	
-	@Local
 	@CorrelationData(metric=PositionMetric.class,boundary=4,confidence=0.9)
 	public CorrelationMetadataWrapper<LinkPosition> position;
 

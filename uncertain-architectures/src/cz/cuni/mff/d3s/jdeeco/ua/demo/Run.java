@@ -49,7 +49,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 500_000;
 
-	static final boolean enableMetaAdaptation = false;
+	static final boolean enableMetaAdaptation = true;
 
 	/**
 	 * Runs centralized simulation.
@@ -74,33 +74,15 @@ public class Run {
 
 		// create main application container
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		//simulation.addPlugin(new SimpleBroadcastDevice(0, 0, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
-		//simulation.addPlugin(Network.class);
-		//simulation.addPlugin(DefaultKnowledgePublisher.class);
-		//simulation.addPlugin(KnowledgeInsertingStrategy.class);
+		simulation.addPlugin(new SimpleBroadcastDevice(0, 0, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
+		simulation.addPlugin(Network.class);
+		simulation.addPlugin(DefaultKnowledgePublisher.class);
+		simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
 
-		DEECoNode deeco1;
-		//final DEECoNode deeco3;
-		if (enableMetaAdaptation) {
-			// Meta-adaptation enabled
-			// create correlation plugin
-		    registerMetadataForFields();
-			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
-			//deeco3 = simulation.createNode(3, correlationPlugin);
-			deeco1 = simulation.createNode(1, correlationPlugin);
-			// Deploy the data aggregation ensemble
-			//deeco3.deployEnsemble(RobotDataAggregation.class);
-			deeco1.deployEnsemble(RobotDataAggregation.class);
-		} else {
-			//deeco3 = simulation.createNode(3);
-			deeco1 = simulation.createNode(3);
-		}
-
-		
 		// create nodes without adaptation
-//		DEECoNode deeco1 = simulation.createNode(1);
+		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
 		Robot r1 = Configuration.createRobot1();
 		deeco1.deployComponent(r1);
@@ -109,57 +91,28 @@ public class Run {
 		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
 		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
 
-		//DEECoNode deeco2 = simulation.createNode(2);
-		//nodesInSimulation.add(deeco2);
-		//deeco2.deployComponent(Configuration.createRobot2());
-		deeco1.deployComponent(Configuration.createRobot2());
+		DEECoNode deeco2 = simulation.createNode(2);
+		nodesInSimulation.add(deeco2);
+		deeco2.deployComponent(Configuration.createRobot2());
 
-		//final DEECoNode deeco3;
+		DEECoNode deeco3;
 		if (enableMetaAdaptation) {
 			// Meta-adaptation enabled
 			// create correlation plugin
-		    registerMetadataForFields();
 			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
-			//deeco3 = simulation.createNode(3, correlationPlugin);
-			deeco1 = simulation.createNode(1, correlationPlugin);
-			// Deploy the data aggregation ensemble
-			//deeco3.deployEnsemble(RobotDataAggregation.class);
-			deeco1.deployEnsemble(RobotDataAggregation.class);
+			deeco3 = simulation.createNode(3, correlationPlugin);
+			// Deploy the data aggregation ensemble (FIXME deploy this happen within the plugin)
+			deeco3.deployEnsemble(RobotDataAggregation.class);
 		} else {
-			//deeco3 = simulation.createNode(3);
-			deeco1 = simulation.createNode(3);
+			deeco3 = simulation.createNode(3);
 		}
 		
-		//nodesInSimulation.add(deeco3);
-		// deploy components
-		//deeco3.deployComponent(Configuration.createRobot3());
-		deeco1.deployComponent(Configuration.createRobot3());
-
-		// Assign the FF1 to the evaluation component
+		nodesInSimulation.add(deeco3);
+		deeco3.deployComponent(Configuration.createRobot3());
 
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
 		Log.i("Simulation Finished");
 	}
 
-	/**
-	 * Prepare and register metadata for fields.
-	 */
-	private static void registerMetadataForFields() {
-		// TODO: revise this
-		final String positionLabel = "position";
-		final String batteryLabel = "batteryLevel";
-
-		final int positionBoundary = 4;
-		final int batteryBoundary = 20;
-
-		final Metric simpleMetric = new DifferenceMetric();
-		final Metric positionMetric = new PositionMetric();
-
-		final double positionConfidence = 0.9;
-		final double batteryConfidence = 0.9;
-
-		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, positionMetric, positionConfidence);
-		KnowledgeMetadataHolder.setBoundAndMetric(batteryLabel, batteryBoundary, simpleMetric, batteryConfidence);
-	}
 }

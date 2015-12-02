@@ -23,6 +23,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_RATE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,11 +178,8 @@ public class Robot {
 		Node node = position.value.getValue().atNode();
 		if(node != null){
 			map.value.getVisitedNodes().put(node, currentTime);
-			double intensity = map.value.checkDirtiness(node);
-			if(intensity > 0){
-				System.out.format("\nDirtiness %f detected at %d\n\n",
-						intensity, node.getId());
-			}
+			// Check the dirtiness
+			map.value.checkDirtiness(node);
 			/*
 			System.out.format("%nAt node: %d%n", node.getId());
 			System.out.format("At state: %s%n", ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
@@ -244,14 +242,14 @@ public class Robot {
 	@Process
 	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
-	public static void clean(@InOut("map") ParamHolder<DirtinessMap> map,
+	public static void clean(@In("id") String id,
+			@InOut("map") ParamHolder<DirtinessMap> map,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
 		Node node = position.getValue().atNode();
-		if(node != null){
-			Double intensity = map.value.getDirtiness().get(node);
-			if(intensity != null && intensity > 0){
-				map.value.cleanDirtiness(node, intensity);
-				System.out.format("\nCleaned %d\n\n", node.getId());
+		if(node != null && map.value.getDirtiness().containsKey(node)){
+			double intensity = map.value.getDirtiness().get(node);
+			if(intensity > 0.0){
+				map.value.cleanDirtiness(node, CLEANING_RATE);
 			}
 		}
 	}

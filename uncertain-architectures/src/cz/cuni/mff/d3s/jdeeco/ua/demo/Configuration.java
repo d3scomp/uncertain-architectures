@@ -72,10 +72,10 @@ public class Configuration {
 	public static final long MOVE_PROCESS_PERIOD = 100; // ms
 	
 	/**
-	 * The period of a process that moves the robot.
+	 * The period of a cleaning process.
 	 * Expressed in milliseconds.
 	 */
-	public static final long CLEAN_PROCESS_PERIOD = 1000; // ms
+	public static final long CLEAN_PROCESS_PERIOD = 500; // ms
 
 	/**
 	 * The period of a process that determines the robots position.
@@ -130,6 +130,12 @@ public class Configuration {
 	 * Expressed in percents per second.
 	 */
 	public static final double IDLE_ENERGY_COST = 0.0001; // %/s, 1 is 100%
+	
+	/**
+	 * The amount of dirt that is cleaned in one cycle of cleaning.
+	 * Expressed in percents per {@link #CLEAN_PROCESS_PERIOD}
+	 */
+	public static final double CLEANING_RATE = 0.1;
 	
 	/**
 	 * The charging rate of the robot.

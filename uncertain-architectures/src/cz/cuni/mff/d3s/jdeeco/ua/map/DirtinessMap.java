@@ -49,6 +49,12 @@ public class DirtinessMap {
 	 * The network representation of the map.
 	 */
 	private static final Network NETWORK;
+	
+	/**
+	 * The threshold beyond which a tile is considered clean.
+	 * Double rounding made problems around 0.
+	 */
+	private static final double DIRT_EPSILON = 0.01;
 
 	/**
 	 * This field stores the position of each robot for the purposes of easy
@@ -237,8 +243,6 @@ public class DirtinessMap {
 
 			double intensity = Math.min(currentIntensity + intensityIncrement, 1);
 			DIRTINESS.put(node, intensity);
-			
-			System.out.format("\nDirt %f generated at %d\n\n", intensity, node.getId());
 
 			logDirtiness(node, intensity);
 		}
@@ -260,13 +264,16 @@ public class DirtinessMap {
 		if (DIRTINESS.containsKey(node)) {
 			double intensity = DIRTINESS.get(node);
 			if(isCleaningRelevant(intensity)){
-				intensity = Math.max(intensity - portion, 0);
+				intensity -= portion;
+				if(intensity < DIRT_EPSILON){
+					intensity = 0;
+				}
 				DIRTINESS.put(node, intensity);
 				dirtiness.put(node, intensity);
 
 				logDirtiness(node, intensity);
 				
-				if(intensity <= 0){
+				if(intensity < DIRT_EPSILON){
 					dirtiness.remove(node);
 				}
 			}
@@ -318,7 +325,7 @@ public class DirtinessMap {
 	}
 
 	private boolean isCleaningRelevant(double intensity) {
-		if (!(intensity > 0)) {
+		if (!(intensity > 0.0)) {
 			Log.w("Trying to clean not dirty tile.");
 			return false;
 		}

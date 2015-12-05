@@ -48,7 +48,7 @@ public class RobotFactory {
 	}
 	
 	public RobotFactory withBatteryLevel(double initialBatteryLevel){
-		robot.batteryLevel = new CorrelationMetadataWrapper<>(initialBatteryLevel);
+		robot.batteryLevel = new CorrelationMetadataWrapper<>(initialBatteryLevel, "batteryLevel");
 		batterySet = true;
 		return this;
 	}
@@ -67,7 +67,7 @@ public class RobotFactory {
 		for(Link link : links)
 		{
 			if(link.getId() == linkNumber){
-				robot.position = new CorrelationMetadataWrapper<>(new LinkPosition(link, robot.id));
+				robot.position = new CorrelationMetadataWrapper<>(new LinkPosition(link, robot.id), "position");
 				positionSet = true;
 				robot.map.updateRobotsPosition(robot.id, robot.position.getValue());
 				break;

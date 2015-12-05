@@ -164,12 +164,14 @@ public class Robot {
 	@Process
 	@ExcludeModes({ChargingMode.class, CleanMode.class})
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
-	public static void move(@In("mover") TrajectoryExecutor mover,
+	public static void move(@In("id") String id,
+			@In("mover") TrajectoryExecutor mover,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<DirtinessMap> map) {
 		// Move
 		mover.move(trajectory.value, position.value.getValue());
+		System.out.format("%s %s\n", id, position.value.getValue());
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		position.value.setValue(position.value.getValue(), currentTime);
 
@@ -199,13 +201,15 @@ public class Robot {
 	@Process
 	@Mode(SearchMode.class)
 	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
-	public static void planSearch(@In("searchPlanner") SearchTrajectoryPlanner planner,
+	public static void planSearch(@In("id") String id,
+			@In("searchPlanner") SearchTrajectoryPlanner planner,
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") DirtinessMap map) {
 		Map<Node, Double> dirtiness = map.getDirtiness(); 
 		if(dirtiness.isEmpty()){
+			System.out.println(id);
 			planner.updateTrajectory(trajectory.value);
 		} else {
 			Node targetTile = trajectory.value.isEmpty()

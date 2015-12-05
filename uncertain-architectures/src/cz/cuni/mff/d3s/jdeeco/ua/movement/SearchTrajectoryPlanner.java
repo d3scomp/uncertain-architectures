@@ -15,11 +15,11 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
-import java.util.Collections;
-import java.util.HashSet;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.RANDOM;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Robot;
@@ -84,16 +84,13 @@ public class SearchTrajectoryPlanner {
 			LinkPosition robotPosition = map.getPosition(robotId);
 			Node lastNode = lastNodeInPlan(plan, robotPosition);
 // TODO: check whether the visited nodes are update correctly
-			// Visit the nearest unvisited node or the oldest visited node
-			Node nodeToVisit = unvisitedNodes().isEmpty() 
-								? getOldestNode(map.getVisitedNodes())
-								: getClosestNode(lastNode, unvisitedNodes());
-								
-			if(nodeToVisit == null)
-			{
+			// Visit the oldest visited node
+			Node nodeToVisit = getOldestNode(map.getVisitedNodes());
+			if(nodeToVisit == null){
 				Log.e("The planning in " + this.getClass().getName() + " doesn't work!");
 				return;
 			}
+			System.out.format("Target %d\n", nodeToVisit.getId());
 			List<Link> newPlan = Dijkstra.getShortestPath(DirtinessMap.getNetwork(),
 					lastNode , nodeToVisit);
 			plan.addAll(newPlan);
@@ -104,21 +101,6 @@ public class SearchTrajectoryPlanner {
 			}
 		}
 
-	}
-
-	/**
-	 * Return the set of unvisited {@link Tile}s.
-	 * 
-	 * @return The set of unvisited {@link Tile}s.
-	 */
-	private Set<Node> unvisitedNodes(){
-		// Performance optimization - Check the number of visited tiles first
-		if(map.size() <= map.getVisitedNodes().size()){
-			return Collections.emptySet();
-		}
-		Set<Node> nodes = new HashSet<>(DirtinessMap.getNetwork().getNodes());
-		nodes.removeAll(map.getVisitedNodes().keySet());
-		return nodes;
 	}
 	
 	/**
@@ -141,6 +123,8 @@ public class SearchTrajectoryPlanner {
 	 * @return
 	 */
 	private Node getOldestNode(Map<Node, Long> nodes) {
+		// TODO: debug this part
+				
 		if(nodes.size() == 0){
 			return null;
 		}
@@ -152,7 +136,7 @@ public class SearchTrajectoryPlanner {
 				oldest = n;
 				timestamp = nodes.get(n);
 			} else {
-				long newTimestamp = nodes.get(n); 
+				long newTimestamp = nodes.get(n);
 				if(newTimestamp < timestamp){
 					oldest = n;
 					timestamp = newTimestamp;
@@ -160,47 +144,6 @@ public class SearchTrajectoryPlanner {
 			}
 		}
 		return oldest;
-	}
-		
-	/**
-	 * Randomly choose the closest {@link Tile} to visit.
-	 * @param tile The {@link Tile} to be close to.
-	 * @param rand Random number generator.
-	 * @return The closest {@Tile} to visit from the given tile.
-	 * @throws IllegalArgumentException Thrown if either tile of rand argument
-	 * 			is null.
-	 */
-	private Node getClosestNode(Node node, Set<Node> nodes){
-		if(node == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "node"));
-		if(nodes == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" argument cannot be null.", "nodes"));
-
-		if(nodes.isEmpty()){
-			return null;
-		}
-		
-		Set<Node> newReachableNodes = new HashSet<>();
-		Set<Node> oldReachableNodes = new HashSet<>();
-		newReachableNodes.add(node);
-		
-		// DFS search
-		while(!oldReachableNodes.containsAll(newReachableNodes)){
-			oldReachableNodes.addAll(newReachableNodes);
-			// DFS step
-			for(Node reachableNode : oldReachableNodes){
-				for(Link successor : DirtinessMap.getNetwork().getLinksFrom(reachableNode)){
-					if(nodes.contains(successor.getTo())){
-						// If the successor node is in the set we want to reach return it
-						return successor.getTo();
-					}
-					newReachableNodes.add(successor.getTo());
-				}
-			}
-		}
-		
-		// If we are here it means that no Node from 'nodes' is reachable from 'node' 
-		return null;
 	}
 
 }

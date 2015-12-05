@@ -133,7 +133,10 @@ public class LinkPosition implements Serializable{
 		double yDistance = link.getTo().getY() - link.getFrom().getY();
 		y = link.getFrom().getY() + yDistance*fraction;
 		
-		return String.format("[%.3f, %.3f]", x, y);
+		//return String.format("[%.3f, %.3f]", x, y);
+		return String.format("From [%.3f, %.3f] to [%.3f, %.3f] distance %.3f\n",
+				link.getFrom().getX(), link.getFrom().getY(),
+				link.getTo().getX(), link.getTo().getY(), distance);
 		/*return String.format("Position: link: %d distance: %.3f [%.3f, %.3f]", 
 				link.getId(), distance, x, y);*/
 	}

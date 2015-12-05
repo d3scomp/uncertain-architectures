@@ -89,7 +89,7 @@ public class TrajectoryExecutor {
 		position.move(stepDistance);
 		// Check whether the robot already overcame the link
 		if(position.isEndReached()){
-			if(position.atNode() == plan.get(0).getTo()){
+			if(position.atNode().equals(plan.get(0).getTo())){
 				plan.remove(0);
 			}
 			if(!plan.isEmpty()){

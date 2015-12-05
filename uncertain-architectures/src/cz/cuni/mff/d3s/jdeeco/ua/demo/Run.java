@@ -47,7 +47,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 public class Run {
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 500_000;
+	static private final long SIMULATION_END = 100_000;
 
 	static final boolean enableMetaAdaptation = true;
 

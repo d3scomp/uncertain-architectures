@@ -122,8 +122,15 @@ public class DirtinessMap {
 
 	public DirtinessMap(String robotId) {
 		visitedNodes = new HashMap<>();
+		initVisitedNodes();
 		dirtiness = new HashMap<>(MAP_WIDTH * MAP_HEIGHT);
 		this.robotId = robotId;
+	}
+	
+	private void initVisitedNodes(){
+		for(Node n : NETWORK.getNodes()){
+			visitedNodes.put(n, 0L);
+		}
 	}
 
 	public static Network getNetwork() {

@@ -42,7 +42,7 @@ public class ModeSwitchingManager {
 	 * just to pass the annotation processor check:
 	 * "every DEECo component should have an ID"
 	 */
-	public String id;
+	public String id = "ModeSwitchingManager";
 
 	@Process
 	@PeriodicScheduling(period = 1)

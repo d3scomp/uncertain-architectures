@@ -26,9 +26,11 @@ import cz.cuni.mff.d3s.deeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
+import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationDataAggregation;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.KnowledgeMetadataHolder;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
@@ -101,8 +103,6 @@ public class Run {
 			// create correlation plugin
 			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
 			deeco3 = simulation.createNode(3, correlationPlugin);
-			// Deploy the data aggregation ensemble (FIXME deploy this happen within the plugin)
-			deeco3.deployEnsemble(RobotDataAggregation.class);
 		} else {
 			deeco3 = simulation.createNode(3);
 		}

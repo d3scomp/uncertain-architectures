@@ -47,6 +47,11 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 public class DirtinessMap implements Serializable{
 
 	/**
+	 * Generated UID.
+	 */
+	private static final long serialVersionUID = 2027348736872922839L;
+
+	/**
 	 * The network representation of the map.
 	 */
 	private static final Network NETWORK;
@@ -219,19 +224,25 @@ public class DirtinessMap implements Serializable{
 		return null;
 	}
 
-	public double checkDirtiness(Node node) {
+	public void checkDirtiness(Node node) {
 		if (node == null)
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
 
 		generateDirt();
 		
+		// Check the given tile
 		if (DIRTINESS.containsKey(node) && DIRTINESS.get(node) > 0) {
 			double intensity = DIRTINESS.get(node);
 			dirtiness.put(node, intensity);
-			return intensity;
 		}
-		return 0;
+		
+		// Check the surrounding tiles
+		for(Node n : NETWORK.getSuccessors(node)){
+			double intensity = DIRTINESS.get(n);
+			dirtiness.put(n, intensity);
+		}
+		
 	}
 
 	private void generateDirt() {
@@ -258,6 +269,16 @@ public class DirtinessMap implements Serializable{
 
 	public Map<Node, Double> getDirtiness() {
 		return Collections.unmodifiableMap(dirtiness);
+	}
+	
+	public double getDirtinessLevel(){
+		double dirt = 0;
+		
+		for(Double d : dirtiness.values()){
+			dirt += d;
+		}
+		
+		return dirt;
 	}
 
 	public double cleanDirtiness(Node node, double portion) {

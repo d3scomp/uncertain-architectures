@@ -209,14 +209,16 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
-		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
-		if(dirtiness.isEmpty() && trajectory.value.isEmpty()){
+		if(map.getValue().getDirtinessLevel() > 5 && trajectory.value.isEmpty()){
+			// Plan to search
 //			System.out.println(id);
 			Set<Node> target = new HashSet<>();
 			target.add(map.getValue().getRandomNode());
 			targetPlanner.updateTrajectory(target, trajectory.value);
 			//planner.updateTrajectory(trajectory.value);
 		} else {
+			// Plan to clean
+			Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
 			Node targetTile = trajectory.value.isEmpty()
 					? position.getValue().getLink().getTo()
 					: trajectory.value.get(trajectory.value.size()-1).getTo();

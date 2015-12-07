@@ -18,14 +18,15 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_RATE;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -208,9 +209,12 @@ public class Robot {
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") DirtinessMap map) {
 		Map<Node, Double> dirtiness = map.getDirtiness(); 
-		if(dirtiness.isEmpty()){
+		if(dirtiness.isEmpty() && trajectory.value.isEmpty()){
 			System.out.println(id);
-			planner.updateTrajectory(trajectory.value);
+			Set<Node> target = new HashSet<>();
+			target.add(map.getRandomNode());
+			targetPlanner.updateTrajectory(target, trajectory.value);
+			//planner.updateTrajectory(trajectory.value);
 		} else {
 			Node targetTile = trajectory.value.isEmpty()
 					? position.getValue().getLink().getTo()

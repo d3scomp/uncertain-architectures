@@ -40,7 +40,7 @@ import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
 import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
-import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
+import cz.cuni.mff.d3s.jdeeco.ua.metric.PositionMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
 /**
@@ -90,8 +90,12 @@ public class Run {
 		deeco1.deployComponent(r1);
 
 		// Place docking stations
-		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
-		r1.map.placeDockingStation(r1.map.getRandomNode(), deeco1.getRuntimeLogger());
+		r1.map.getValue().placeDockingStation(
+				r1.map.getValue().getRandomNode(),
+				deeco1.getRuntimeLogger());
+		r1.map.getValue().placeDockingStation(
+				r1.map.getValue().getRandomNode(),
+				deeco1.getRuntimeLogger());
 
 		DEECoNode deeco2 = simulation.createNode(2);
 		nodesInSimulation.add(deeco2);

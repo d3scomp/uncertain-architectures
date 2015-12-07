@@ -56,7 +56,7 @@ public class TrajectoryExecutor {
 			throw new IllegalArgumentException(String.format("The \"%s\" argument cannot be null.", "robot"));
 		if (robot.map == null)
 			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
-		this.map = robot.map;
+		this.map = robot.map.getValue();
 		robotId = robot.id;
 	}
 

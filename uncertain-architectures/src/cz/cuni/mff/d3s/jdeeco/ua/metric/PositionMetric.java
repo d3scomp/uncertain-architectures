@@ -13,11 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *******************************************************************************/
-package cz.cuni.mff.d3s.jdeeco.ua.map;
+package cz.cuni.mff.d3s.jdeeco.ua.metric;
 
 import java.util.List;
 
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Dijkstra;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 

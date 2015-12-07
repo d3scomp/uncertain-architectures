@@ -69,7 +69,7 @@ public class RobotFactory {
 			if(link.getId() == linkNumber){
 				robot.position = new CorrelationMetadataWrapper<>(new LinkPosition(link, robot.id), "position");
 				positionSet = true;
-				robot.map.updateRobotsPosition(robot.id, robot.position.getValue());
+				robot.map.getValue().updateRobotsPosition(robot.id, robot.position.getValue());
 				break;
 			}
 		}

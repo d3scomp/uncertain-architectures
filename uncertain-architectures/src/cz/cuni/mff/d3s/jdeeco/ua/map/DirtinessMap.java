@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 /**
  * Environment heat map holder.
  */
-public class DirtinessMap {
+public class DirtinessMap implements Serializable{
 
 	/**
 	 * The network representation of the map.

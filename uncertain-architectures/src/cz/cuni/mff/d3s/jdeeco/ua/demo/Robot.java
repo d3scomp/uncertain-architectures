@@ -49,7 +49,8 @@ import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
-import cz.cuni.mff.d3s.jdeeco.ua.map.PositionMetric;
+import cz.cuni.mff.d3s.jdeeco.ua.metric.DirtinessMapMetric;
+import cz.cuni.mff.d3s.jdeeco.ua.metric.PositionMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.ChargingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
@@ -76,8 +77,8 @@ public class Robot {
 	/** Battery level. */
 	public CorrelationMetadataWrapper<Double> batteryLevel;
 			
-	@Local
-	public final DirtinessMap map;
+	@CorrelationData(metric=DirtinessMapMetric.class,boundary=5,confidence=0.9)
+	public final CorrelationMetadataWrapper<DirtinessMap> map;
 	
 	@CorrelationData(metric=PositionMetric.class,boundary=4,confidence=0.9)
 	public CorrelationMetadataWrapper<LinkPosition> position;
@@ -110,7 +111,7 @@ public class Robot {
 	 */
 	public Robot(final String id) {
 		this.id = id;
-		map = new DirtinessMap(id);
+		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
 	}
 
@@ -169,24 +170,24 @@ public class Robot {
 			@In("mover") TrajectoryExecutor mover,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
-			@InOut("map") ParamHolder<DirtinessMap> map) {
+			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
 		// Move
 		mover.move(trajectory.value, position.value.getValue());
-		System.out.format("%s %s\n", id, position.value.getValue());
+//		System.out.format("%s %s\n", id, position.value.getValue());
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		position.value.setValue(position.value.getValue(), currentTime);
 
 		// Check the tile for dirt
 		Node node = position.value.getValue().atNode();
 		if(node != null){
-			map.value.getVisitedNodes().put(node, currentTime);
+			map.value.getValue().getVisitedNodes().put(node, currentTime);
 			// Check the dirtiness
-			map.value.checkDirtiness(node);
-			/*
-			System.out.format("%nAt node: %d%n", node.getId());
-			System.out.format("At state: %s%n", ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
-			System.out.format("At time: %s%n", ProcessContext.getTimeProvider().getCurrentMilliseconds());
-			*/
+			map.value.getValue().checkDirtiness(node);
+			
+//			System.out.format("%n %s At node: %d%n", id, node.getId());
+//			System.out.format("At state: %s%n", ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
+//			System.out.format("At time: %s%n", ProcessContext.getTimeProvider().getCurrentMilliseconds());
+			
 		}
 		
 	}
@@ -207,12 +208,12 @@ public class Robot {
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
-			@In("map") DirtinessMap map) {
-		Map<Node, Double> dirtiness = map.getDirtiness(); 
+			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
+		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
 		if(dirtiness.isEmpty() && trajectory.value.isEmpty()){
-			System.out.println(id);
+//			System.out.println(id);
 			Set<Node> target = new HashSet<>();
-			target.add(map.getRandomNode());
+			target.add(map.getValue().getRandomNode());
 			targetPlanner.updateTrajectory(target, trajectory.value);
 			//planner.updateTrajectory(trajectory.value);
 		} else {
@@ -231,8 +232,8 @@ public class Robot {
 	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
 	public static void planDock(@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@In("map") DirtinessMap map) {
-		Set<Node> docks = map.getDockingStations();
+			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
+		Set<Node> docks = map.getValue().getDockingStations();
 		Node targetTile = trajectory.value.isEmpty() ? 
 				null
 				 : trajectory.value.get(trajectory.value.size()-1).getTo();
@@ -250,13 +251,13 @@ public class Robot {
 	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
 	public static void clean(@In("id") String id,
-			@InOut("map") ParamHolder<DirtinessMap> map,
+			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
 		Node node = position.getValue().atNode();
-		if(node != null && map.value.getDirtiness().containsKey(node)){
-			double intensity = map.value.getDirtiness().get(node);
+		if(node != null && map.value.getValue().getDirtiness().containsKey(node)){
+			double intensity = map.value.getValue().getDirtiness().get(node);
 			if(intensity > 0.0){
-				map.value.cleanDirtiness(node, CLEANING_RATE);
+				map.value.getValue().cleanDirtiness(node, CLEANING_RATE);
 			}
 		}
 	}

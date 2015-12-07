@@ -57,7 +57,7 @@ public class SearchTrajectoryPlanner {
 		if (robot.map == null)
 			throw new IllegalArgumentException(String.format("The \"%s\" argument doesn't contain any map.", "robot"));
 		robotId = robot.id;
-		this.map = robot.map;
+		this.map = robot.map.getValue();
 	}	
 
 	/**

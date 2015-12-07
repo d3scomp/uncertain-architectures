@@ -62,7 +62,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard dockReachedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
-				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
+				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (positionNode != null
@@ -88,7 +88,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard cleanGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
-				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
+				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
@@ -105,7 +105,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard searchGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
-				DirtinessMap map = (DirtinessMap) knowledgeValues[0];
+				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return !(positionNode != null

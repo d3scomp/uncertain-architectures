@@ -16,15 +16,18 @@
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
 import java.io.IOException;
+import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
 import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
+import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredVehicleRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftVehicleRecord;
@@ -36,6 +39,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 
 	@SuppressWarnings("unchecked")
 	public RobotModeChartHolder(){
+		
 		final ModeGuard deadBatteryGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
@@ -47,6 +51,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"batteryLevel"};
 			}
 		};
+		
 		final ModeGuard batteryDrainedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
@@ -59,6 +64,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"batteryLevel"};
 			}
 		};
+		
 		final ModeGuard dockReachedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
@@ -74,6 +80,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"map", "position"};
 			}
 		};
+		
 		final ModeGuard batteryChargedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
@@ -85,15 +92,16 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"batteryLevel"};
 			}
 		};
+		
 		final ModeGuard cleanGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
-				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
+				return (/*!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
-						&& positionNode != null
+						&& */positionNode != null
 						&& map.getDirtiness().keySet().contains(positionNode));
 			}
 			
@@ -102,6 +110,26 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"map", "position", "batteryLevel"};
 			}
 		};
+
+		final ModeGuard approachGuard = new ModeGuard() {
+			@Override
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
+				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
+				Node positionNode = position.atNode();
+				boolean b = (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
+						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
+						&& positionNode != null
+						&& map.getDirtiness().keySet().size() > 0);
+				return b;
+			}
+			
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"map", "position", "batteryLevel"};
+			}
+		};
+		
 		final ModeGuard searchGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
@@ -118,10 +146,23 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"map", "position"};
 			}
 		};
+		
+		final ModeTransitionListener clearPlanEventListener = new ModeTransitionListener() {
+			@Override
+			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
+				List<Link> trajectory = (List<Link>)knowledgeValues[0].value;
+				trajectory.clear();
+			}
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"trajectory"};
+			}
+		};
+		
 		final ModeTransitionListener waitEventListener = new ModeTransitionListener() {
 			@Override
-			public void transitionTaken(Object[] knowledgeValues) {
-				String id = (String)knowledgeValues[0];
+			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
+				String id = (String)knowledgeValues[0].value;
 				
 				VehicleRecord record = new LeftVehicleRecord(id);
 				record.setVehicle(id);
@@ -137,10 +178,11 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"id"};
 			}
 		};
+		
 		final ModeTransitionListener goEventListener = new ModeTransitionListener() {
 			@Override
-			public void transitionTaken(Object[] knowledgeValues) {
-				String id = (String)knowledgeValues[0];
+			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
+				String id = (String)knowledgeValues[0].value;
 				
 				VehicleRecord record = new EnteredVehicleRecord(id);
 				record.setVehicle(id);
@@ -159,14 +201,29 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		ModeChartFactory factory = new ModeChartFactory();
 		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
-		factory.addTransition(SearchMode.class, CleanMode.class, cleanGuard, 1);
+		
+		factory.addTransition(SearchMode.class, DirtApproachMode.class, approachGuard, 1);
+		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, clearPlanEventListener);
+		
+		factory.addTransition(DirtApproachMode.class, CleanMode.class, cleanGuard, 1);
+		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, clearPlanEventListener);
+		
 		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		factory.addTransitionListener(SearchMode.class, DockingMode.class, clearPlanEventListener);
+		
 		factory.addTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		
 		//factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
+		
 		factory.addTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
+		factory.addTransitionListener(DockingMode.class, ChargingMode.class, clearPlanEventListener);
+		
 		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		
 		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
+		
 		factory.addInitialMode(SearchMode.class);
+		
 		if(enableTransitionActions){
 			factory.addTransitionListener(CleanMode.class, SearchMode.class, goEventListener);
 			factory.addTransitionListener(SearchMode.class, CleanMode.class, waitEventListener);

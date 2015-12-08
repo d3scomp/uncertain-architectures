@@ -53,6 +53,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.metric.DirtinessMapMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.metric.PositionMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.ChargingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.DirtApproachMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.SearchMode;
@@ -209,24 +210,33 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
-		if(map.getValue().getDirtinessLevel() < 5 && trajectory.value.isEmpty()){
-			// Plan to search
+		// Plan to search
 //			System.out.println(id);
-			Set<Node> target = new HashSet<>();
-			target.add(map.getValue().getRandomNode());
-			targetPlanner.updateTrajectory(target, trajectory.value);
-			//planner.updateTrajectory(trajectory.value);
-		} else {
-			// Plan to clean
-			Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
-			Node targetTile = trajectory.value.isEmpty()
-					? position.getValue().getLink().getTo()
-					: trajectory.value.get(trajectory.value.size()-1).getTo();
-			if(!dirtiness.keySet().contains(targetTile)){
-				trajectory.value.clear();
-				targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
-			}
+		Set<Node> target = new HashSet<>();
+		target.add(map.getValue().getRandomNode());
+		targetPlanner.updateTrajectory(target, trajectory.value);
+		if(id.equals("TB1")){
+			System.out.println("SEARCH TRAJECTORY");
+			System.out.println(trajectory.value);
 		}
+		//planner.updateTrajectory(trajectory.value);
+	}
+	@Process
+	@Mode(DirtApproachMode.class)
+	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
+	public static void planClean(@In("id") String id,
+			@In("searchPlanner") SearchTrajectoryPlanner planner,
+			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
+			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
+			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
+		// Plan to clean
+		if(id.equals("TB1")){
+			System.out.println("CLEAN TRAJECTORY");
+			System.out.println(trajectory.value);
+		}
+		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
+		targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
 	}
 	
 	@Process

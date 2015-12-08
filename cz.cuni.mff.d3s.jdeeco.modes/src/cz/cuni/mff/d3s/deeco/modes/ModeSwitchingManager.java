@@ -58,7 +58,7 @@ public class ModeSwitchingManager {
 		for (ComponentInstance c : runtime.getComponentInstances()) {
 			ModeChart modeChart = c.getModeChart();
 			if (modeChart != null) {
-				Class<? extends DEECoMode> currentMode = modeChart.switchMode();
+				Class<? extends DEECoMode> currentMode = modeChart.switchMode(c);
 
 				reconfigureArchitecture(c, currentMode);
 			}

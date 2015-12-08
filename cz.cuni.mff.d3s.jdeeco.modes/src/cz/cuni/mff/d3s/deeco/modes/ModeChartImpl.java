@@ -25,12 +25,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.knowledge.ChangeSet;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
+import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeUpdateException;
 import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.KnowledgePath;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.PathNodeField;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
+import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 // TODO: make tests
 class ModeChartImpl extends ModeChart{
@@ -76,7 +80,7 @@ class ModeChartImpl extends ModeChart{
 	}
 	
 	@Override
-	public Class<? extends DEECoMode> switchMode(){
+	public Class<? extends DEECoMode> switchMode(ComponentInstance c){
 		
 		// Switch mode only if there is a transition from it
 		if(modes.containsKey(currentMode)){
@@ -138,14 +142,15 @@ class ModeChartImpl extends ModeChart{
 				for(ModeTransitionListener transitionListener : fromListeners.get(to)){
 					// Get the knowledge values
 					String[] knowledge = transitionListener.getKnowledgeNames();
-					Object[] values = getValues(knowledge);
+					ParamHolder<?>[] values = getValuesForUpdate(knowledge);
 					// Call the listener with proper values
 					transitionListener.transitionTaken(values);
+					updateValues(knowledge, values);	
 				}
 			}
 		}
 	}
-	
+
 	private Object[] getValues(String[] knowledgeNames) {
 		List<KnowledgePath> paths = new ArrayList<>();
 		for(String knowledgeName : knowledgeNames){
@@ -165,6 +170,48 @@ class ModeChartImpl extends ModeChart{
 		} catch (KnowledgeNotFoundException e) {
 			Log.e("Couldn't find knowledge " + knowledgeNames + " in component " + component);
 			return null;
+		}
+	}
+	
+	private ParamHolder<?>[] getValuesForUpdate(String[] knowledgeNames) {
+		List<KnowledgePath> paths = new ArrayList<>();
+		for(String knowledgeName : knowledgeNames){
+			KnowledgePath path = RuntimeMetadataFactoryExt.eINSTANCE.createKnowledgePath();
+			PathNodeField pNode = RuntimeMetadataFactoryExt.eINSTANCE.createPathNodeField();
+			pNode.setName(knowledgeName);
+			path.getNodes().add(pNode);
+			paths.add(path);
+		}
+		try {
+			ValueSet vSet = component.getKnowledgeManager().get(paths);
+			ParamHolder<?>[] values = new ParamHolder<?>[knowledgeNames.length];
+			for (int i = 0; i < knowledgeNames.length; i++) {
+				values[i] = new ParamHolder<>(vSet.getValue(paths.get(i)));
+			}
+			return values;
+		} catch (KnowledgeNotFoundException e) {
+			Log.e("Couldn't find knowledge " + knowledgeNames + " in component " + component);
+			return null;
+		}
+	}
+	
+	private void updateValues(String[] knowledgeNames, ParamHolder<?>[] values){
+		ChangeSet valuesToUpdate = new ChangeSet();
+		List<KnowledgePath> paths = new ArrayList<>();
+		for(String knowledgeName : knowledgeNames){
+			KnowledgePath path = RuntimeMetadataFactoryExt.eINSTANCE.createKnowledgePath();
+			PathNodeField pNode = RuntimeMetadataFactoryExt.eINSTANCE.createPathNodeField();
+			pNode.setName(knowledgeName);
+			path.getNodes().add(pNode);
+			paths.add(path);
+		}
+		for (int i = 0; i < paths.size(); i++) {
+			valuesToUpdate.setValue(paths.get(i), values[i].value);
+		}
+		try {
+			component.getKnowledgeManager().update(valuesToUpdate);
+		} catch (KnowledgeUpdateException e) {
+			Log.e("Couldn't update knowledge " + knowledgeNames + " in component " + component);
 		}
 	}
 	

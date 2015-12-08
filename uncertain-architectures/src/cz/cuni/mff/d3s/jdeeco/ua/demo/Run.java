@@ -51,7 +51,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 100_000;
 
-	static final boolean enableMetaAdaptation = true;
+	static final boolean enableMetaAdaptation = false;
 
 	/**
 	 * Runs centralized simulation.

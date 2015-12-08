@@ -82,7 +82,6 @@ public class LinkPosition implements Serializable{
 			LinkRecord record = new EnteredLinkRecord(robotId);
 			record.setLink(link);
 			record.setPerson(robotId);
-			record.setVehicle(robotId);
 			try {
 				ProcessContext.getRuntimeLogger().log(record);
 			} catch (IllegalStateException | IOException e) {
@@ -100,7 +99,6 @@ public class LinkPosition implements Serializable{
 			LinkRecord record = new LeftLinkRecord(robotId);
 			record.setLink(this.link);
 			record.setPerson(robotId);
-			record.setVehicle(robotId);
 			try {
 				ProcessContext.getRuntimeLogger().log(record);
 			} catch (IllegalStateException | IOException e) {

@@ -173,7 +173,7 @@ public class Robot {
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
 		// Move
 		mover.move(trajectory.value, position.value.getValue());
-//		System.out.format("%s %s\n", id, position.value.getValue());
+		System.out.format("%s %s\n", id, position.value.getValue());
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		position.value.setValue(position.value.getValue(), currentTime);
 
@@ -209,7 +209,7 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
-		if(map.getValue().getDirtinessLevel() > 5 && trajectory.value.isEmpty()){
+		if(map.getValue().getDirtinessLevel() < 5 && trajectory.value.isEmpty()){
 			// Plan to search
 //			System.out.println(id);
 			Set<Node> target = new HashSet<>();
@@ -274,7 +274,7 @@ public class Robot {
 		System.out.println("ID: " + id);
 		System.out.println("MODE: " + ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
 		System.out.println("batteryLevel = " + batteryLevel.getValue());
-		System.out.println("position = " + position);
+		System.out.println("position = " + position.getValue());
 		System.out.println("#########################################");
 	}
 }

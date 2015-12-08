@@ -239,8 +239,10 @@ public class DirtinessMap implements Serializable{
 		
 		// Check the surrounding tiles
 		for(Node n : NETWORK.getSuccessors(node)){
-			double intensity = DIRTINESS.get(n);
-			dirtiness.put(n, intensity);
+			if (DIRTINESS.containsKey(n) && DIRTINESS.get(n) > 0) {
+				double intensity = DIRTINESS.get(n);
+				dirtiness.put(n, intensity);
+			}
 		}
 		
 	}

@@ -1,0 +1,1334 @@
+<events>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="0" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="333" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="666" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>MilosZeman</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>MilosZeman</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Mazda</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Mazda</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Seat Ibiza</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Seat Ibiza</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>142</coordinatorID>
+	<membership>true</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>142</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>Valdstejnsky palac</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>ChuckNorris</memberID>
+</event>
+<event time="999" id="EnsembleTask" eventType="cz.cuni.mff.d3s.deeco.runtimelog.EnsembleLogRecord" >
+	<coordinatorID>ChuckNorris</coordinatorID>
+	<membership>false</membership>
+	<ensembleName>cz.cuni.mff.d3s.jdeeco.roleSwitching.demo.BoardingEnsemble</ensembleName>
+	<memberID>Valdstejnsky palac</memberID>
+</event>
+</events>

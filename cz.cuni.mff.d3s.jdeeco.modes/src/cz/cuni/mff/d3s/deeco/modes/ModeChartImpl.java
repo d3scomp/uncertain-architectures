@@ -80,7 +80,7 @@ class ModeChartImpl extends ModeChart{
 	}
 	
 	@Override
-	public Class<? extends DEECoMode> switchMode(ComponentInstance c){
+	public Class<? extends DEECoMode> switchMode(){
 		
 		// Switch mode only if there is a transition from it
 		if(modes.containsKey(currentMode)){

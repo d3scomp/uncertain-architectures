@@ -24,6 +24,7 @@ import java.util.Map;
 
 import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.MapSceneExtensionPoint;
 import cz.filipekt.jdcv.MapScene;
+import cz.filipekt.jdcv.MapScene.OtherShapeMetaData;
 import cz.filipekt.jdcv.SceneImportHandler.ImageProvider;
 import cz.filipekt.jdcv.SceneImportHandler.ShapeProvider;
 import cz.filipekt.jdcv.events.Event;
@@ -44,7 +45,7 @@ public class DockingStationMapSceneExtension implements MapSceneExtensionPoint {
 	@Override
 	public Collection<KeyFrame> buildFrames(Map<String, List<Event>> otherEvents, MapScene mapScene) throws IOException {
 		Collection<KeyFrame> res = new ArrayList<>();
-		Map<String,Node> localDockingStationShapes = new HashMap<>();
+		Map<OtherShapeMetaData,Node> localDockingStationShapes = new HashMap<>();
 		List<Event> dockingStationEvents = otherEvents.get(DockingStationEvent.DOCKING_STATION_EVENT_TYPE);
 		for (Event e : dockingStationEvents) {
 			DockingStationEvent de = (DockingStationEvent) e;
@@ -52,27 +53,28 @@ public class DockingStationMapSceneExtension implements MapSceneExtensionPoint {
 			Duration time = new Duration(timeVal);
 			MyNode node = mapScene.getNodes().get(de.getNode()); 
 			if (mapScene.getAdditionalResourcesPath() == null) {
-				// additionalResourcesPath is not yet set, this is done by the
-				// acmescripts
+				// additionalResourcesPath is not yet set, this is done by the acmescripts
 				return res;
 			}
-			ShapeProvider provider = new ImageProvider(false,
-					mapScene.getAdditionalResourcesPath() + "dockingStation.png", mapScene.NODE_IMAGE_WIDTH,
+			ImageProvider provider = new ImageProvider(false,
+					mapScene.getAdditionalResourcesPath() + "dockingStation.png", null, mapScene.NODE_IMAGE_WIDTH,
 					mapScene.NODE_IMAGE_HEIGHT, 1);
 			Node dockingStationShape = MapSceneExtensionHelper.generateNodeWithBackgroundImage(mapScene, provider,node);
 			KeyValue kv = new KeyValue(dockingStationShape.visibleProperty(), Boolean.TRUE);
 			KeyFrame kf = new KeyFrame(time, kv);
-			String id = DockingStationEvent.DOCKING_STATION_EVENT_TYPE + de.getNode();
-			localDockingStationShapes.put(id ,dockingStationShape);
 			res.add(kf);
+
+			OtherShapeMetaData metadata = new OtherShapeMetaData(DockingStationEvent.DOCKING_STATION_EVENT_TYPE,
+					de.getNode(), de.getTime());
+			localDockingStationShapes.put(metadata, dockingStationShape);
 		}
-		Map<String,Node> otherShapes = mapScene.getOtherShapes();
-		
-		otherShapes.entrySet().removeIf(e-> e.getKey().startsWith(DockingStationEvent.DOCKING_STATION_EVENT_TYPE));
+		Map<OtherShapeMetaData, Node> otherShapes = mapScene.getOtherShapes();
+
+		otherShapes.entrySet().removeIf(e -> e.getKey().getEventType().equals(DockingStationEvent.DOCKING_STATION_EVENT_TYPE));
 		otherShapes.putAll(localDockingStationShapes);
 			
-		for (Node dockingStationShape : otherShapes.values()){
-			KeyValue kv = new KeyValue(dockingStationShape.visibleProperty(), Boolean.FALSE);
+		for (Node otherShape : otherShapes.values()){
+			KeyValue kv = new KeyValue(otherShape.visibleProperty(), Boolean.FALSE);
 			KeyFrame kf = new KeyFrame(Duration.ZERO, kv);
 			res.add(kf);
 		}

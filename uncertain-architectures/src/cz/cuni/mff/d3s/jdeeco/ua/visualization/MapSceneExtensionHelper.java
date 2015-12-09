@@ -15,12 +15,13 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.visualization;
 
+import java.awt.Shape;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cz.filipekt.jdcv.MapScene;
-import cz.filipekt.jdcv.SceneImportHandler.ShapeProvider;
+import cz.filipekt.jdcv.SceneImportHandler.ImageProvider;
 import cz.filipekt.jdcv.network.MyNode;
 import cz.filipekt.jdcv.plugins.InfoPanel;
 import javafx.event.EventHandler;
@@ -34,7 +35,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class MapSceneExtensionHelper {
 
-	public static Node generateNodeWithBackgroundImage(MapScene mapScene, ShapeProvider provider, MyNode node)
+	public static Node generateNodeWithBackgroundImage(MapScene mapScene, ImageProvider provider, MyNode node)
 			throws IOException {
 
 		double x = mapScene.getMatsimToVisual().transformX(node.getX());
@@ -50,6 +51,7 @@ public class MapSceneExtensionHelper {
 		data.put("Node ID", node.getId());
 		data.put("x-coordinate", node.getX() + "");
 		data.put("y-coordinate", node.getY() + "");
+		data.put("opacity", provider.getOpacity() + "");
 
 		shape.setOnMouseEntered(null);
 		shape.setOnMouseExited(null);

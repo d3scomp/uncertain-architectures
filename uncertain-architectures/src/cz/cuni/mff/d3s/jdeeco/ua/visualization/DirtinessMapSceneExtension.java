@@ -24,8 +24,8 @@ import java.util.Map;
 
 import cz.cuni.mff.d3s.jdeeco.visualizer.extensions.MapSceneExtensionPoint;
 import cz.filipekt.jdcv.MapScene;
+import cz.filipekt.jdcv.MapScene.OtherShapeMetaData;
 import cz.filipekt.jdcv.SceneImportHandler.ImageProvider;
-import cz.filipekt.jdcv.SceneImportHandler.ShapeProvider;
 import cz.filipekt.jdcv.events.Event;
 import cz.filipekt.jdcv.network.MyNode;
 import javafx.animation.KeyFrame;
@@ -44,39 +44,46 @@ public class DirtinessMapSceneExtension implements MapSceneExtensionPoint {
 	@Override
 	public Collection<KeyFrame> buildFrames(Map<String, List<Event>> otherEvents, MapScene mapScene) throws IOException {
 		Collection<KeyFrame> res = new ArrayList<>();
-		Map<String,Node> localDirtinessShapes = new HashMap<>();
+		Map<OtherShapeMetaData,Node> localDirtinessShapes = new HashMap<>();
 		List<Event> dirtinessEvents = otherEvents.get(DirtinessEvent.DIRTINESS_EVENT_TYPE);
 		for (Event e : dirtinessEvents) {
 			DirtinessEvent de = (DirtinessEvent) e;
 			double timeVal = mapScene.convertToVisualizationTime(de.getTime());
 			Duration time = new Duration(timeVal);
 			MyNode node = mapScene.getNodes().get(de.getNode());
-			
+						
 			if (mapScene.getAdditionalResourcesPath() == null) {
 				// additionalResourcesPath is not yet set, this is done by the acmescripts 
 				return res; 
 			}
+			
 			double intensity = de.getIntensity();
-			ShapeProvider provider;
+			ImageProvider provider;
 			if (intensity == 0.0) {
-				provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "tile.png", mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, 1);
-			} else { 
-				provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "dirt.png", mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, intensity);
+				provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "tile.png", null,
+						mapScene.NODE_IMAGE_WIDTH, mapScene.NODE_IMAGE_HEIGHT, 1.0);
+			} else {
+				provider = new ImageProvider(false, mapScene.getAdditionalResourcesPath() + "dirt.png",
+						mapScene.getAdditionalResourcesPath() + "tile.png", mapScene.NODE_IMAGE_WIDTH,
+						mapScene.NODE_IMAGE_HEIGHT, intensity);
 			}
+
 			Node dirtinessShape = MapSceneExtensionHelper.generateNodeWithBackgroundImage(mapScene, provider, node);
 			KeyValue kv = new KeyValue(dirtinessShape.visibleProperty(), Boolean.TRUE);
 			KeyFrame kf = new KeyFrame(time, kv);
-			String id = DirtinessEvent.DIRTINESS_EVENT_TYPE + "_" + de.getNode() + "_" + de.getTime();
-			localDirtinessShapes.put(id, dirtinessShape);
 			res.add(kf);
-		}
-		Map<String,Node> otherShapes = mapScene.getOtherShapes();
 
-		otherShapes.entrySet().removeIf(e-> e.getKey().startsWith(DirtinessEvent.DIRTINESS_EVENT_TYPE));
+			OtherShapeMetaData metadata = new OtherShapeMetaData(DirtinessEvent.DIRTINESS_EVENT_TYPE, de.getNode(),
+					de.getTime());
+			localDirtinessShapes.put(metadata, dirtinessShape);
+		}
+		Map<OtherShapeMetaData, Node> otherShapes = mapScene.getOtherShapes();
+
+		otherShapes.entrySet().removeIf(e -> e.getKey().getEventType().equals(DirtinessEvent.DIRTINESS_EVENT_TYPE));
 		otherShapes.putAll(localDirtinessShapes);
-		
-		for (Node dirtinessShape : otherShapes.values()){
-			KeyValue kv = new KeyValue(dirtinessShape.visibleProperty(), Boolean.FALSE);
+
+		for (Node otherShape : otherShapes.values()){
+			KeyValue kv = new KeyValue(otherShape.visibleProperty(), Boolean.FALSE);
 			KeyFrame kf = new KeyFrame(Duration.ZERO, kv);
 			res.add(kf);
 		}

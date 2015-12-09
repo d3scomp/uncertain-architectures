@@ -120,7 +120,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				boolean b = (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& positionNode != null
-						&& map.getDirtiness().keySet().size() > 0);
+						&& map.getDirtiness().keySet().size() > 5);
 				return b;
 			}
 			
@@ -134,11 +134,20 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
-				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
-				Node positionNode = position.atNode();
-				return !(positionNode != null
-						&& map.getDirtiness().keySet().contains(positionNode)
-						&& map.getDirtiness().get(positionNode) > 0);
+				return map.getDirtiness().keySet().size() == 0;
+			}
+			
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"map", "position"};
+			}
+		};
+
+		final ModeGuard keepCleaningGuard = new ModeGuard() {
+			@Override
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
+				return map.getDirtiness().keySet().size() > 0;
 			}
 			
 			@Override
@@ -201,6 +210,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		ModeChartFactory factory = new ModeChartFactory();
 		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
+		factory.addTransitionWithGuard(CleanMode.class, DirtApproachMode.class, keepCleaningGuard);
 		
 		factory.addTransition(SearchMode.class, DirtApproachMode.class, approachGuard, 1);
 		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, clearPlanEventListener);

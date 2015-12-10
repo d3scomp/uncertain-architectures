@@ -75,7 +75,7 @@ public class TrajectoryExecutor {
 		if(map == null) throw new IllegalStateException(String.format(
 				"The \"%s\" field is not initialized.", "map"));
 		
-		if(plan.isEmpty()){
+		if(plan.isEmpty() && position.isEndReached()){
 			// If there is no plan don't move
 			return;
 		}
@@ -89,7 +89,7 @@ public class TrajectoryExecutor {
 		position.move(stepDistance);
 		// Check whether the robot already overcame the link
 		if(position.isEndReached()){
-			if(position.atNode().equals(plan.get(0).getTo())){
+			if(!plan.isEmpty() && position.atNode().equals(plan.get(0).getTo())){
 				plan.remove(0);
 			}
 			if(!position.isLinkLeft()){

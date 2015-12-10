@@ -15,7 +15,6 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
-import java.io.IOException;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
@@ -23,19 +22,14 @@ import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
 import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
-import cz.cuni.mff.d3s.jdeeco.visualizer.records.EnteredVehicleRecord;
-import cz.cuni.mff.d3s.jdeeco.visualizer.records.LeftVehicleRecord;
-import cz.cuni.mff.d3s.jdeeco.visualizer.records.VehicleRecord;
 
 public class RobotModeChartHolder extends ModeChartHolder {
 
-	private final boolean enableTransitionActions = false;
 
 	@SuppressWarnings("unchecked")
 	public RobotModeChartHolder(){
@@ -55,8 +49,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard batteryDrainedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
-				return !deadBatteryGuard.isSatisfied(knowledgeValue)
+				boolean b = !deadBatteryGuard.isSatisfied(knowledgeValue)
 						&& ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+				return b;
 			}
 			
 			@Override
@@ -173,82 +168,45 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"trajectory"};
 			}
 		};
-		
-		final ModeTransitionListener waitEventListener = new ModeTransitionListener() {
-			@Override
-			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
-				String id = (String)knowledgeValues[0].value;
-				
-				VehicleRecord record = new LeftVehicleRecord(id);
-				record.setVehicle(id);
-				record.setPerson(id);
-				try {
-					ProcessContext.getRuntimeLogger().log(record);
-				} catch (IllegalStateException | IOException e) {
-					e.printStackTrace();
-				}
-			}
-			@Override
-			public String[] getKnowledgeNames() {
-				return new String[] {"id"};
-			}
-		};
-		
-		final ModeTransitionListener goEventListener = new ModeTransitionListener() {
-			@Override
-			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
-				String id = (String)knowledgeValues[0].value;
-				
-				VehicleRecord record = new EnteredVehicleRecord(id);
-				record.setVehicle(id);
-				record.setPerson(id);
-				try {
-					ProcessContext.getRuntimeLogger().log(record);
-				} catch (IllegalStateException | IOException e) {
-					e.printStackTrace();
-				}
-			}
-			@Override
-			public String[] getKnowledgeNames() {
-				return new String[] {"id"};
-			}
-		};
+			
 		
 		ModeChartFactory factory = new ModeChartFactory();
+		
 		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
+		factory.addTransitionListener(CleanMode.class, SearchMode.class, new ModeTransitionLogger(CleanMode.class, SearchMode.class));
+		
 		factory.addTransitionWithGuard(CleanMode.class, DirtApproachMode.class, keepCleaningGuard);
+		factory.addTransitionListener(CleanMode.class, DirtApproachMode.class, new ModeTransitionLogger(CleanMode.class, DirtApproachMode.class));
 		
 		factory.addTransition(SearchMode.class, DirtApproachMode.class, approachGuard, 1);
+		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, new ModeTransitionLogger(SearchMode.class, DirtApproachMode.class));
 		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, clearPlanEventListener);
 		
 		factory.addTransition(DirtApproachMode.class, CleanMode.class, cleanGuard, 1);
+		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, new ModeTransitionLogger(DirtApproachMode.class, CleanMode.class));
 		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, clearPlanEventListener);
 		
 		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));
 		factory.addTransitionListener(SearchMode.class, DockingMode.class, clearPlanEventListener);
 		
 		factory.addTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, new ModeTransitionLogger(SearchMode.class, DeadBatteryMode.class));
 		
 		//factory.withTransition(SearchMode.class, DockingMode.class, new TrueGuard(), 0.1);
 		
 		factory.addTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
+		factory.addTransitionListener(DockingMode.class, ChargingMode.class, new ModeTransitionLogger(DockingMode.class, ChargingMode.class));
 		factory.addTransitionListener(DockingMode.class, ChargingMode.class, clearPlanEventListener);
 		
 		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
+		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, new ModeTransitionLogger(DockingMode.class, DeadBatteryMode.class));
 		
 		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
+		factory.addTransitionListener(ChargingMode.class, SearchMode.class, new ModeTransitionLogger(ChargingMode.class, SearchMode.class));
 		
 		factory.addInitialMode(SearchMode.class);
-		
-		if(enableTransitionActions){
-			factory.addTransitionListener(CleanMode.class, SearchMode.class, goEventListener);
-			factory.addTransitionListener(SearchMode.class, CleanMode.class, waitEventListener);
-			factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, waitEventListener);
-			factory.addTransitionListener(DockingMode.class, ChargingMode.class, waitEventListener);
-			factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, waitEventListener);
-			factory.addTransitionListener(ChargingMode.class, SearchMode.class, goEventListener);
-		}
-		
+				
 		modeChart = factory.create();
 	}
 	

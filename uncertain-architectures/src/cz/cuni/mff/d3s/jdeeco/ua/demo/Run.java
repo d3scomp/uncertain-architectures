@@ -49,7 +49,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 public class Run {
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 100_000;
+	static private final long SIMULATION_END = 500_000;
 
 	static final boolean enableMetaAdaptation = false;
 
@@ -99,11 +99,11 @@ public class Run {
 				r1.map.getValue().getRandomNode(),
 				deeco1.getRuntimeLogger());
 
-		//DEECoNode deeco2 = simulation.createNode(2);
-		//nodesInSimulation.add(deeco2);
-		//deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
+		DEECoNode deeco2 = simulation.createNode(2);
+		nodesInSimulation.add(deeco2);
+		deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
 
-		/*DEECoNode deeco3;
+		DEECoNode deeco3;
 		if (enableMetaAdaptation) {
 			// Meta-adaptation enabled
 			// create correlation plugin
@@ -114,7 +114,7 @@ public class Run {
 		}
 		
 		nodesInSimulation.add(deeco3);
-		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));*/
+		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
 
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);

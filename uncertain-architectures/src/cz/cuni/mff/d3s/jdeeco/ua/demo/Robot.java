@@ -173,9 +173,10 @@ public class Robot {
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
 		// Move
+//		System.out.format("%s move%n", id);
 		mover.move(trajectory.value, position.value.getValue());
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-		System.out.format("%s %d %s\n", id, currentTime, position.value.getValue());
+//		System.out.format("%s %d %s\n", id, currentTime, position.value.getValue());
 		position.value.setValue(position.value.getValue(), currentTime);
 
 		// Check the tile for dirt

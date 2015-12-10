@@ -51,14 +51,14 @@ public class Configuration {
 	 * The dimensions are expressed as number of tiles.
 	 * So far the map is represented only as a rectangle.
 	 */
-	public static final int MAP_WIDTH = 5;
+	public static final int MAP_WIDTH = 20;
 
 	/**
 	 * Heigt of the map.
 	 * The dimensions are expressed as number of tiles.
 	 * So far the map is represented only as a rectangle.
 	 */
-	public static final int MAP_HEIGHT = 5;
+	public static final int MAP_HEIGHT = 20;
 	
 	public static final double DIRT_GENERATION_RATE = 0.1;
 	

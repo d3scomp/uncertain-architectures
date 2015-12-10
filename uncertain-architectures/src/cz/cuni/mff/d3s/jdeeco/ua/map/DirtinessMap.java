@@ -233,6 +233,8 @@ public class DirtinessMap implements Serializable{
 		if (DIRTINESS.containsKey(node) && DIRTINESS.get(node) > 0) {
 			double intensity = DIRTINESS.get(node);
 			dirtiness.put(node, intensity);
+		} else if(dirtiness.containsKey(node)){
+			dirtiness.remove(node);
 		}
 		
 		// Check the surrounding tiles
@@ -240,6 +242,8 @@ public class DirtinessMap implements Serializable{
 			if (DIRTINESS.containsKey(n) && DIRTINESS.get(n) > 0) {
 				double intensity = DIRTINESS.get(n);
 				dirtiness.put(n, intensity);
+			} else if(dirtiness.containsKey(n)){
+				dirtiness.remove(n);
 			}
 		}
 		
@@ -252,7 +256,7 @@ public class DirtinessMap implements Serializable{
 				// Don't generate dirt on docking stations
 				return;
 			}
-			double intensityIncrement = (double) RANDOM.nextInt(10) / 10.0;
+			double intensityIncrement = ((double) RANDOM.nextInt(9) + 1 ) / 10.0;
 			double currentIntensity;
 			if(DIRTINESS.containsKey(node)){
 				currentIntensity = DIRTINESS.get(node);

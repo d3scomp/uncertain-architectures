@@ -64,4 +64,4 @@ if __name__ == '__main__':
     plt.boxplot([d.duration() for d in dirtinesses])
     plt.ylabel('Duration of dirtinesses')
     plt.savefig("foo.pdf")
-#     plt.show()
+    plt.show()

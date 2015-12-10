@@ -58,10 +58,19 @@ if __name__ == '__main__':
             dirtiness = Dirtiness(node, time, intensity)
             dirtinesses.append(dirtiness)
         
+    print("Printing " + str(len(dirtinesses)) + " dirtiness events")
     for d in dirtinesses:
         print(d)    
+
+    print("Plotting...")
+
+    plt.figure(1)
+    plt.plot([d.node for d in dirtinesses],[d.duration() for d in dirtinesses], 'bo')
+    plt.ylabel('Duration of dirtinesses')
+    plt.savefig("../results/scatter-plot.pdf")
         
+    plt.figure(2)
     plt.boxplot([d.duration() for d in dirtinesses])
     plt.ylabel('Duration of dirtinesses')
-    plt.savefig("foo.pdf")
+    plt.savefig("../results/boxplot.pdf")
 #     plt.show()

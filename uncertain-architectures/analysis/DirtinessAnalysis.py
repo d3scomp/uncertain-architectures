@@ -4,6 +4,8 @@ Created on Dec 8, 2015
 @author: Ilias
 '''
 import xml.etree.ElementTree as etree
+import matplotlib.pyplot as plt
+# import pylab
 
 class Dirtiness:
     "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finished when it's clean again"
@@ -24,9 +26,14 @@ class Dirtiness:
     def eventCompleted(self):
         return self.endTime != None
     
+    def getEndTime(self):
+        return self.endTime if self.endTime != None else self.simulationTime
+    
+    def duration(self):
+        return self.getEndTime() - self.startTime 
+        
     def __str__(self):
-        endTime = self.endTime if self.endTime != None else self.simulationTime
-        return "Dirtiness [node: {0:3d} \t duration: {1:7d}  \t start/end time: {2:6d}/{3:6d} \t changes: {4}".format(self.node, endTime - self.startTime, self.startTime, endTime, self.intensitites)
+        return "Dirtiness [node: {0:3d} \t duration: {1:7d}  \t start/end time: {2:6d}/{3:6d} \t changes: {4}".format(self.node, self.duration(), self.startTime, self.getEndTime(), self.intensitites)
         
 if __name__ == '__main__':      
 
@@ -53,3 +60,8 @@ if __name__ == '__main__':
         
     for d in dirtinesses:
         print(d)    
+        
+    plt.boxplot([d.duration() for d in dirtinesses])
+    plt.ylabel('Duration of dirtinesses')
+    plt.savefig("foo.pdf")
+#     plt.show()

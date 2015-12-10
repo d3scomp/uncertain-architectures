@@ -18,6 +18,8 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 import java.io.IOException;
 import java.io.Serializable;
 
+import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -36,19 +38,71 @@ public class LinkPosition implements Serializable{
 	
 	private double distance;
 	
+	private boolean linkLeft;
+	
 	public final static double POSITION_EPSILON = 0.001; // 1 mm
 	
 	private final String robotId;
 	
-	public LinkPosition(Link link, String robotId){
-		this.link = null;
+	public LinkPosition(Link link, String robotId, RuntimeLogger runtimeLogger){
+		if(link == null) throw new IllegalArgumentException(String.format(
+				"The argument %s cannot be null.", "link"));
+		if(robotId == null || robotId.isEmpty())
+			throw new IllegalArgumentException(String.format(
+				"The argument %s cannot be null nor empty.", "robotId"));
+				
+		this.link = link;
 		this.robotId = robotId;
-		startFrom(link);
+		distance = 0;
+		linkLeft = false;
+
+		// Log the entered link event
+		LinkRecord record = new EnteredLinkRecord(robotId);
+		record.setLink(link);
+		record.setPerson(robotId);
+		try {
+			runtimeLogger.log(record);
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void startFrom(Link link){
+		if(link == null) throw new IllegalArgumentException(String.format(
+				"The argument %s cannot be null.", "link"));
+
 		this.link = link;
 		distance = 0;
+		linkLeft = false;
+		
+		// Log the entered link event
+		LinkRecord record = new EnteredLinkRecord(robotId);
+		record.setLink(link);
+		record.setPerson(robotId);
+		try {
+			ProcessContext.getRuntimeLogger().log(record);
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void leave() {
+		if(!isEndReached()){
+			Log.e(String.format("Robot %s is leaving link %d before the end is reached.",
+					robotId, link.getId()));
+		}
+		
+		linkLeft = true;
+
+		// Log left link event if the previous link is present
+		LinkRecord record = new LeftLinkRecord(robotId);
+		record.setLink(this.link);
+		record.setPerson(robotId);
+		try {
+			ProcessContext.getRuntimeLogger().log(record);
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Node atNode(){
@@ -76,34 +130,10 @@ public class LinkPosition implements Serializable{
 				"The length argument is not finite number.");
 		if(length < 0) throw new IllegalArgumentException(
 				"The length argument is a negative number.");
-		
-		if(distance == 0){
-			// Log the entered link event
-			LinkRecord record = new EnteredLinkRecord(robotId);
-			record.setLink(link);
-			record.setPerson(robotId);
-			try {
-				ProcessContext.getRuntimeLogger().log(record);
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
+				
 		distance += length;
 		if(distance > link.getLength()){
 			distance = link.getLength();
-		}
-		
-		if(Math.abs(distance - link.getLength()) < POSITION_EPSILON){
-			// Log left link event if the previous link is present
-			LinkRecord record = new LeftLinkRecord(robotId);
-			record.setLink(this.link);
-			record.setPerson(robotId);
-			try {
-				ProcessContext.getRuntimeLogger().log(record);
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -113,6 +143,10 @@ public class LinkPosition implements Serializable{
 	
 	public boolean isAtStart(){
 		return Math.abs(distance - 0) < POSITION_EPSILON;
+	}
+	
+	public boolean isLinkLeft(){
+		return linkLeft;
 	}
 	
 	public Link getLink(){

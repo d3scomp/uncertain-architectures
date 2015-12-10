@@ -147,7 +147,13 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
-				return map.getDirtiness().keySet().size() > 0;
+				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
+				Node positionNode = position.atNode();
+				
+				return (!(positionNode != null
+						&& map.getDirtiness().containsKey(positionNode)
+						&& map.getDirtiness().get(positionNode) > 0))
+						&& map.getDirtiness().keySet().size() > 0;
 			}
 			
 			@Override

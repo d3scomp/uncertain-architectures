@@ -86,7 +86,7 @@ public class Run {
 		// create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
-		Robot r1 = Configuration.createRobot1();
+		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
 		deeco1.deployComponent(r1);
 
 		// Place docking stations
@@ -97,11 +97,11 @@ public class Run {
 				r1.map.getValue().getRandomNode(),
 				deeco1.getRuntimeLogger());
 
-		DEECoNode deeco2 = simulation.createNode(2);
-		nodesInSimulation.add(deeco2);
-		deeco2.deployComponent(Configuration.createRobot2());
+		//DEECoNode deeco2 = simulation.createNode(2);
+		//nodesInSimulation.add(deeco2);
+		//deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
 
-		DEECoNode deeco3;
+		/*DEECoNode deeco3;
 		if (enableMetaAdaptation) {
 			// Meta-adaptation enabled
 			// create correlation plugin
@@ -112,7 +112,7 @@ public class Run {
 		}
 		
 		nodesInSimulation.add(deeco3);
-		deeco3.deployComponent(Configuration.createRobot3());
+		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));*/
 
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);

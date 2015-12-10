@@ -174,8 +174,8 @@ public class Robot {
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
 		// Move
 		mover.move(trajectory.value, position.value.getValue());
-		System.out.format("%s %s\n", id, position.value.getValue());
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		System.out.format("%s %d %s\n", id, currentTime, position.value.getValue());
 		position.value.setValue(position.value.getValue(), currentTime);
 
 		// Check the tile for dirt
@@ -215,10 +215,6 @@ public class Robot {
 		Set<Node> target = new HashSet<>();
 		target.add(map.getValue().getRandomNode());
 		targetPlanner.updateTrajectory(target, trajectory.value);
-		if(id.equals("TB1")){
-			System.out.println("SEARCH TRAJECTORY");
-			System.out.println(trajectory.value);
-		}
 		//planner.updateTrajectory(trajectory.value);
 	}
 	@Process
@@ -231,10 +227,6 @@ public class Robot {
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
 		// Plan to clean
-		if(id.equals("TB1")){
-			System.out.println("CLEAN TRAJECTORY");
-			System.out.println(trajectory.value);
-		}
 		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
 		targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
 	}

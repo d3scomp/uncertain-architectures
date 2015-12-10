@@ -92,6 +92,9 @@ public class TrajectoryExecutor {
 			if(position.atNode().equals(plan.get(0).getTo())){
 				plan.remove(0);
 			}
+			if(!position.isLinkLeft()){
+				position.leave();
+			}
 			if(!plan.isEmpty()){
 				// Check collisions
 				Link nextLink = plan.get(0);

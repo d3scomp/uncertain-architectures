@@ -17,6 +17,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
@@ -30,6 +31,8 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 public class RobotFactory {
 
 	private final Robot robot;
+	private final RuntimeLogger runtimeLogger;
+	
 	private boolean batterySet = false;
 	private boolean batteryNoiseSet = false;
 	private boolean positionSet = false;
@@ -37,14 +40,17 @@ public class RobotFactory {
 	private boolean plannerSet = false;
 	private boolean moverSet = false;
 	
-	private RobotFactory(String robotId){
+	private RobotFactory(String robotId, RuntimeLogger runtimeLogger){
 		robot = new Robot(robotId);
+		this.runtimeLogger = runtimeLogger;
 	}
 	
-	public static RobotFactory newRobot(String robotId){
+	public static RobotFactory newRobot(String robotId, RuntimeLogger runtimeLogger){
 		if(robotId == null || robotId.length() == 0) throw new IllegalArgumentException(
 				String.format("The \"%s\" argument cannot be null nor empty string.", "robotId"));
-		return new RobotFactory(robotId);
+		if(robotId == null || robotId.length() == 0) throw new IllegalArgumentException(
+				String.format("The \"%s\" argument cannot be null.", "runtimeLogger"));
+		return new RobotFactory(robotId, runtimeLogger);
 	}
 	
 	public RobotFactory withBatteryLevel(double initialBatteryLevel){
@@ -67,7 +73,8 @@ public class RobotFactory {
 		for(Link link : links)
 		{
 			if(link.getId() == linkNumber){
-				robot.position = new CorrelationMetadataWrapper<>(new LinkPosition(link, robot.id), "position");
+				robot.position = new CorrelationMetadataWrapper<>(
+						new LinkPosition(link, robot.id, runtimeLogger), "position");
 				positionSet = true;
 				robot.map.getValue().updateRobotsPosition(robot.id, robot.position.getValue());
 				break;

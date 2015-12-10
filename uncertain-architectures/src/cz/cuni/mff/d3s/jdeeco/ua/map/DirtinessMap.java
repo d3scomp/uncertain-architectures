@@ -321,7 +321,7 @@ public class DirtinessMap implements Serializable{
 					"The \"%s\" argument cannot be null.", "node"));
 		
 		try {
-			DirtinessRecord record = new DirtinessRecord(robotId);
+			DirtinessRecord record = new DirtinessRecord("system");
 			record.setNode(node);
 			record.setIntensity(intensity);
 			ProcessContext.getRuntimeLogger().log(record);

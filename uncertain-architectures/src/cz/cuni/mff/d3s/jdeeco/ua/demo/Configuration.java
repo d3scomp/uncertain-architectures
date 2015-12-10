@@ -103,6 +103,12 @@ public class Configuration {
 	public static final long STATUS_PROCESS_PERIOD = 1000; // ms
 	
 	/**
+	 * The period of a process that generates dirtiness.
+	 * Expressed in milliseconds.
+	 */
+	public static final long DIRT_GENERATION_PERIOD = 200; // ms
+	
+	/**
 	 * The Speed of the robot.
 	 * Expressed in meters per second.
 	 */

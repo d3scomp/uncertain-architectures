@@ -228,8 +228,6 @@ public class DirtinessMap implements Serializable{
 		if (node == null)
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
-
-		generateDirt();
 		
 		// Check the given tile
 		if (DIRTINESS.containsKey(node) && DIRTINESS.get(node) > 0) {
@@ -247,9 +245,9 @@ public class DirtinessMap implements Serializable{
 		
 	}
 
-	private void generateDirt() {
+	public static void generateDirt() {
 		if (RANDOM.nextDouble() <= DIRT_GENERATION_RATE) {
-			Node node = getRandomNode();
+			Node node = randomNode();
 			if(DOCKING_STATIONS.contains(node)){
 				// Don't generate dirt on docking stations
 				return;
@@ -315,7 +313,7 @@ public class DirtinessMap implements Serializable{
 		return 0;
 	}
 	
-	private void logDirtiness(Node node, double intensity){
+	private static void logDirtiness(Node node, double intensity){
 		if (node == null)
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
@@ -363,7 +361,7 @@ public class DirtinessMap implements Serializable{
 		return true;
 	}
 
-	public Node getRandomNode() {
+	private static Node randomNode() {
 		int end = RANDOM.nextInt(MAP_WIDTH * MAP_HEIGHT);
 		int index = 0;
 		for (Node n : NETWORK.getNodes()) {
@@ -375,6 +373,10 @@ public class DirtinessMap implements Serializable{
 		// Should never reach this code
 		assert (false);
 		return null;
+	}
+	
+	public Node getRandomNode(){
+		return randomNode();
 	}
 
 	public static void outputToFile(File file) throws FileNotFoundException {

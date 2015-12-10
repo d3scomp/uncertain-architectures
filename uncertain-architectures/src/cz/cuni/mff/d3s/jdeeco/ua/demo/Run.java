@@ -86,6 +86,8 @@ public class Run {
 		// create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
+		deeco1.deployComponent(new Environment("Environment"));
+		
 		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
 		deeco1.deployComponent(r1);
 

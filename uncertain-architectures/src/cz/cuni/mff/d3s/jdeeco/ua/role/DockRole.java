@@ -13,38 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *******************************************************************************/
-package cz.cuni.mff.d3s.jdeeco.ua.demo;
+package cz.cuni.mff.d3s.jdeeco.ua.role;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_GENERATION_PERIOD;
+import java.util.List;
 
-import cz.cuni.mff.d3s.deeco.annotations.Component;
-import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
-import cz.cuni.mff.d3s.deeco.annotations.Process;
-import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.deeco.annotations.Role;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
+@Role
+public class DockRole {
 
-@Component
-public class Environment {
-
-	/** Mandatory id field. */
 	public String id;
-	
-
-	/**
-	 * Only constructor.
-	 * @param id component id
-	 */
-	public Environment(final String id) {
-		this.id = id;
-	}
-	
-	@Process
-	@PeriodicScheduling(period = DIRT_GENERATION_PERIOD)
-	public static void generateDirt() {
-		DirtinessMap.generateDirt();		
-	}
+	public List<String> robotsInLine;
+	public Node position;
 }

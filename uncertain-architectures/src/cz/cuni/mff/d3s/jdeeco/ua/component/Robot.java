@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  *******************************************************************************/
-package cz.cuni.mff.d3s.jdeeco.ua.demo;
+package cz.cuni.mff.d3s.jdeeco.ua.component;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
@@ -41,10 +41,12 @@ import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.Mode;
 import cz.cuni.mff.d3s.deeco.annotations.Modes;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
+import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -60,12 +62,14 @@ import cz.cuni.mff.d3s.jdeeco.ua.mode.SearchMode;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
+import cz.cuni.mff.d3s.jdeeco.ua.role.DockableRole;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  
 
 @Component
 @ComponentModeChart(RobotModeChartHolder.class)
+@PlaysRole(DockableRole.class)
 public class Robot {
 
 	///////////////////////////////////////////////////////////////////////////
@@ -76,6 +80,7 @@ public class Robot {
 	public String id;
 	
 	/** Battery level. */
+	@CorrelationData(metric=DifferenceMetric.class,boundary=0.02,confidence=0.9)
 	public CorrelationMetadataWrapper<Double> batteryLevel;
 			
 	@CorrelationData(metric=DirtinessMapMetric.class,boundary=5,confidence=0.9)
@@ -83,6 +88,10 @@ public class Robot {
 	
 	@CorrelationData(metric=PositionMetric.class,boundary=4,confidence=0.9)
 	public CorrelationMetadataWrapper<LinkPosition> position;
+	
+	public boolean isDocking;
+	
+	public String assignedDock;
 
 	@Local
 	public final List<Link> trajectory;
@@ -114,6 +123,8 @@ public class Robot {
 		this.id = id;
 		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
+		assignedDock = "";
+		isDocking = false;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

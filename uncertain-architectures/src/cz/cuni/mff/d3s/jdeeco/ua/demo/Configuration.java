@@ -18,6 +18,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 import java.util.Random;
 
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;

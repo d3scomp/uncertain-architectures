@@ -33,10 +33,8 @@ import java.util.Map;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord;
-import cz.cuni.mff.d3s.jdeeco.ua.visualization.DockingStationRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Network;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -68,10 +66,17 @@ public class DirtinessMap implements Serializable{
 	 */
 	private static final Map<String, LinkPosition> ROBOT_LOCATIONS = new HashMap<>();
 
-	private static final Map<Node, Double> DIRTINESS = new HashMap<>();
-	
 	private static final Set<Node> DOCKING_STATIONS = new HashSet<>();
 
+	/**
+	 * Global dirtiness. Holds the objective state of the dirtiness in the environment.
+	 */
+	private static final Map<Node, Double> DIRTINESS = new HashMap<>();
+
+	/**
+	 * Local dirtiness. Holds the state of the dirtiness in the environment
+	 * subjective to each robot.
+	 */
 	private final Map<Node, Double> dirtiness;
 
 	/**
@@ -334,27 +339,16 @@ public class DirtinessMap implements Serializable{
 		}
 	}
 	
-	public void placeDockingStation(Node node, RuntimeLogger runtimeLogger){
+	public static void placeDockingStation(Node node){
 		if (node == null)
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
 		
 		if(!DOCKING_STATIONS.contains(node)){
 			DOCKING_STATIONS.add(node);
-			try {
-				DockingStationRecord record = new DockingStationRecord("system");
-				record.setNode(node);
-				runtimeLogger.log(record);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		} else {
+			Log.w(String.format("The dock at %s already placed.", node.toString()));
 		}
-	}
-	
-	public Set<Node> getDockingStations(){
-		return Collections.unmodifiableSet(DOCKING_STATIONS);
 	}
 
 	private boolean isCleaningRelevant(double intensity) {
@@ -365,7 +359,7 @@ public class DirtinessMap implements Serializable{
 		return true;
 	}
 
-	private static Node randomNode() {
+	public static Node randomNode() {
 		int end = RANDOM.nextInt(MAP_WIDTH * MAP_HEIGHT);
 		int index = 0;
 		for (Node n : NETWORK.getNodes()) {

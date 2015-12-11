@@ -29,6 +29,7 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockRole;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockableRole;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
@@ -45,13 +46,13 @@ public class DockingEnsemble {
 			@In("coord.robotsInLine") List<String> robotsInLine,
 			@In("member.id") String mId,
 			@In("member.isDocking") boolean isDocking,
-			@In("member.assignedDock") String assignedDock) {
+			@In("member.assignedDockId") String assignedDockId) {
 		boolean b = robotsInLine.contains(mId)
 					? true
 					: robotsInLine.size() <= 2
 						&& isDocking
-						&& (assignedDock.isEmpty()
-								|| assignedDock.equals(cId));
+						&& (assignedDockId.isEmpty()
+								|| assignedDockId.equals(cId));
 		return b;
 	}
 	
@@ -59,11 +60,14 @@ public class DockingEnsemble {
 	public static void knowledgeExchange(
 			@In("coord.id") String cId,
 			@InOut("coord.robotsInLine") ParamHolder<List<String>> robotsInLine,
+			@In("coord.position") Node dockPosition,
 			@In("member.id") String mId,
-			@Out("member.assignedDock") ParamHolder<String> assignedDock) {
+			@Out("member.assignedDockId") ParamHolder<String> assignedDockId,
+			@Out("member.assignedDockPosition") ParamHolder<Node> assignedDockPos) {
 		if(!robotsInLine.value.contains(mId)){
 			robotsInLine.value.add(mId);
 		}
-		assignedDock.value = cId;
+		assignedDockId.value = cId;
+		assignedDockPos.value = dockPosition;
 	}
 }

@@ -15,12 +15,16 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockRole;
+import cz.cuni.mff.d3s.jdeeco.ua.visualization.DockingStationRecord;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  
 
@@ -47,9 +51,24 @@ public class Dock {
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Dock(final String id) {
+	public Dock(final String id, Node position, RuntimeLogger runtimeLogger) {
 		this.id = id;
+		this.position = position;
 		robotsInLine = new ArrayList<>();
+		
+		// Register the dock position in the dirtiness map
+		DirtinessMap.placeDockingStation(position);
+		
+		try {
+			// Log the event that the dock has been placed
+			DockingStationRecord record = new DockingStationRecord(id);
+			record.setNode(position);
+			runtimeLogger.log(record);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

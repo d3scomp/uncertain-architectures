@@ -18,6 +18,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.role;
 import cz.cuni.mff.d3s.deeco.annotations.Role;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
@@ -29,5 +30,6 @@ public class DockableRole {
 	public CorrelationMetadataWrapper<Double> batteryLevel;
 	public CorrelationMetadataWrapper<LinkPosition> position;
 	public boolean isDocking;
-	public String assignedDock;
+	public String assignedDockId;
+	public Node assignedDockPosition;
 }

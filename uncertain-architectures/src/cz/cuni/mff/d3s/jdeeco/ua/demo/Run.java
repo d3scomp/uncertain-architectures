@@ -26,23 +26,19 @@ import cz.cuni.mff.d3s.deeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
-import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationDataAggregation;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.KnowledgeMetadataHolder;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.DifferenceMetric;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
 import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
+import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
+import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
-import cz.cuni.mff.d3s.jdeeco.ua.metric.PositionMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
 /**
@@ -85,26 +81,35 @@ public class Run {
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
 
-		// create nodes without adaptation
+		// Create node 1
 		DEECoNode deeco1 = simulation.createNode(1);
 		nodesInSimulation.add(deeco1);
 		deeco1.deployComponent(new Environment("Environment"));
 		
+		// Deploy docking stations
+		Dock d1 = new Dock("Dock1", DirtinessMap.randomNode(), deeco1.getRuntimeLogger());
+		deeco1.deployComponent(d1);
+		Dock d2 = new Dock("Dock2", DirtinessMap.randomNode(), deeco1.getRuntimeLogger());
+		deeco1.deployComponent(d2);
+		
+		// Deploy robot 1
 		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
 		deeco1.deployComponent(r1);
 
-		// Place docking stations
-		r1.map.getValue().placeDockingStation(
-				r1.map.getValue().getRandomNode(),
-				deeco1.getRuntimeLogger());
-		r1.map.getValue().placeDockingStation(
-				r1.map.getValue().getRandomNode(),
-				deeco1.getRuntimeLogger());
-
+		// Deploy ensembles on node 1
+		deeco1.deployEnsemble(DockingEnsemble.class);
+		
+		// Create node 2
 		DEECoNode deeco2 = simulation.createNode(2);
 		nodesInSimulation.add(deeco2);
+		
+		// Deploy robot 2
 		deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
 
+		// Deploy ensembles on node 2
+		deeco2.deployEnsemble(DockingEnsemble.class);
+
+		// Create node 3
 		DEECoNode deeco3;
 		if (enableMetaAdaptation) {
 			// Meta-adaptation enabled
@@ -114,10 +119,16 @@ public class Run {
 		} else {
 			deeco3 = simulation.createNode(3);
 		}
-		
 		nodesInSimulation.add(deeco3);
+
+		// Deploy robot 3
 		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
 
+		// Deploy ensembles on node 3
+		deeco3.deployEnsemble(DockingEnsemble.class);
+		
+		
+		// Start the simulation
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
 		Log.i("Simulation Finished");

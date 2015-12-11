@@ -63,16 +63,16 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard dockReachedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
-				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
-				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
+				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[0]).getValue();
+				Node dockPosition = (Node) knowledgeValues[1];
 				Node positionNode = position.atNode();
 				return (positionNode != null
-						&& map.getDockingStations().contains(positionNode));
+						&& positionNode.equals(dockPosition));
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"map", "position"};
+				return new String[] {"position", "assignedDockPosition"};
 			}
 		};
 		
@@ -185,11 +185,15 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
 				ParamHolder<Boolean> isDocking = (ParamHolder<Boolean>) knowledgeValues[0];
+				ParamHolder<String> assignedDockId = (ParamHolder<String>) knowledgeValues[1];
+				ParamHolder<Node> assignedDockPosition = (ParamHolder<Node>) knowledgeValues[2];
 				isDocking.value = false;
+				assignedDockId.value = "";
+				assignedDockPosition.value = null; // TODO: check whether the null here doesn't cause trouble
 			}
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"isDocking"};
+				return new String[] {"isDocking", "assignedDockId", "assignedDockPosition"};
 			}
 		};
 		

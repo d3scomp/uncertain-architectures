@@ -43,6 +43,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Modes;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
@@ -91,7 +92,9 @@ public class Robot {
 	
 	public boolean isDocking;
 	
-	public String assignedDock;
+	public String assignedDockId;
+	
+	public Node assignedDockPosition;
 
 	@Local
 	public final List<Link> trajectory;
@@ -123,7 +126,8 @@ public class Robot {
 		this.id = id;
 		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
-		assignedDock = "";
+		assignedDockId = "";
+		assignedDockPosition = null;
 		isDocking = false;
 	}
 
@@ -246,18 +250,17 @@ public class Robot {
 	@Process
 	@Mode(DockingMode.class)
 	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
-	public static void planDock(@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
+	public static void planDock(@In("id") String id,
+			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
-		Set<Node> docks = map.getValue().getDockingStations();
-		Node targetTile = trajectory.value.isEmpty() ? 
-				null
-				 : trajectory.value.get(trajectory.value.size()-1).getTo();
-		if(targetTile == null || !docks.contains(targetTile)){
-			trajectory.value.clear();
-			targetPlanner.updateTrajectory(docks, trajectory.value);
+			@In("assignedDockPosition") Node dockPosition) {
+		if(dockPosition == null){
+			Log.e(String.format("%s Planning to dock, but no dock assigned.", id));
+		} else {
+			Set<Node> target = new HashSet<>();
+			target.add(dockPosition);
+			targetPlanner.updateTrajectory(target, trajectory.value);
 		}
-		
 	}
 
 	///////////////////////////////////////////////////////////////////////////

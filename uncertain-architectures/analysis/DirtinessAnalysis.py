@@ -7,9 +7,19 @@ import xml.etree.ElementTree as etree
 import matplotlib.pyplot as plt
 # import pylab
 
+def getDurationFromConfigFile():
+        configFile = open("../config/simulationParameters.txt")
+        for line in configFile.readlines():
+            tokens = line.split(";")
+            name = tokens[0]
+            if name == "duration": 
+                duration = int(tokens[1])
+                Dirtiness.simulationTime = duration 
+                print("The duration of the simulation is set to " + str(duration))
+
 class Dirtiness:
     "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finished when it's clean again"
-    simulationTime = 100000
+    simulationTime = None
     
     def __init__(self, node, startTime, initialIntensity):
         self.node = node
@@ -43,7 +53,9 @@ if __name__ == '__main__':
     dirtinesses = []
     dirtinessRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord']")
     print("Found " + str(len(dirtinessRecords)) + " dirtiness records")
-        
+    
+    getDurationFromConfigFile()
+    
     for r in dirtinessRecords:
         node = int(r[1].text)
         time = int(r.attrib["time"])

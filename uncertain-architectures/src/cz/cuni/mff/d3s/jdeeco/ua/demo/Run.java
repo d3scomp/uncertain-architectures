@@ -16,7 +16,11 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +50,12 @@ import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
  */
 public class Run {
 
-	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 500_000;
-
 	static final boolean enableMetaAdaptation = false;
+
+	private static final String CONFIG_FILE_PATH = "config/simulationParameters.txt";
+
+	/** End of the simulation in milliseconds. */
+	static private long SIMULATION_END;
 
 	/**
 	 * Runs centralized simulation.
@@ -65,6 +71,8 @@ public class Run {
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException,
 			IOException {
 		Log.i("Preparing simulation");
+		
+		parseSimulationConfigFile();
 
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);
@@ -134,6 +142,35 @@ public class Run {
 		simulation.start(SIMULATION_END);
 		Log.i("Simulation Finished");
 		System.out.println("Simulation Finished");
+	}
+
+	/**
+	 * Parses the simulation parameters from the configuration file. 
+	 * These parameters are used both for the simulation (Java) and the analysis (Python).
+	 */
+	private static void parseSimulationConfigFile() {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(CONFIG_FILE_PATH));
+			try {
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					String[] tokens = line.split(";");
+					String name = tokens[0];
+					switch (name) {
+					case ("duration"):
+						SIMULATION_END = Long.parseLong(tokens[1]);
+					default:
+						;
+					}
+				}
+			} catch (IOException e) {
+				Log.e("Error while reading the configuration file.", e);
+			} finally {
+				reader.close();
+			}
+		} catch (IOException e1) {
+			Log.e("Error while processing the configuration file.", e1);
+		}
 	}
 
 }

@@ -44,8 +44,16 @@ public class ModeSwitchingManager {
 	 */
 	public String id = "ModeSwitchingManager";
 
+	/**
+	 * Configure which processes will be active based on the mode of a component.
+	 * <p>The order of this process is set to -1 to ensure, that this process is called
+	 * before all the others. Otherwise it may happen, that in the beginning all
+	 * the processes run no matter what state they are marked for. Because this
+	 * process didn't disabled them on time.</p>
+	 * @param id
+	 */
 	@Process
-	@PeriodicScheduling(period = 1)
+	@PeriodicScheduling(period = 1, order=-1)
 	/*
 	 * this period is set here just to pass the annotation processor checks, the
 	 * actual period is set from the IRMPlugin

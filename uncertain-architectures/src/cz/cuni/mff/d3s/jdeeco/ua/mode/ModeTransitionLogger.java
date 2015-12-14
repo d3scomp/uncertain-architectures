@@ -17,6 +17,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
 import java.io.IOException;
 
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
 import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
@@ -59,6 +60,8 @@ public class ModeTransitionLogger implements ModeTransitionListener {
 			e.printStackTrace();
 		}
 
+		Log.i(String.format("%s switching from %s to %s", robotId,
+				oldMode.getSimpleName(), newMode.getSimpleName()));
 	}
 
 }

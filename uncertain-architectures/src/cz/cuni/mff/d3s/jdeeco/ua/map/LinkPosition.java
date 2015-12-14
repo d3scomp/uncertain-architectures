@@ -108,9 +108,6 @@ public class LinkPosition implements Serializable{
 	public Node atNode(){
 		if(link == null) throw new IllegalStateException(
 				"Requested atNode() but no Link is set.");
-		if(isAtStart()){
-			return link.getFrom();
-		}
 		if(isEndReached()){
 			return link.getTo();
 		}
@@ -140,11 +137,7 @@ public class LinkPosition implements Serializable{
 	public boolean isEndReached(){
 		return Math.abs(distance - link.getLength()) < POSITION_EPSILON;
 	}
-	
-	public boolean isAtStart(){
-		return Math.abs(distance - 0) < POSITION_EPSILON;
-	}
-	
+		
 	public boolean isLinkLeft(){
 		return linkLeft;
 	}
@@ -155,7 +148,7 @@ public class LinkPosition implements Serializable{
 	
 	@Override
 	public String toString() {
-		double x, y;
+		/*double x, y;
 		// calculate covered distance fraction
 		double fraction = distance / link.getLength();
 		// Calculate x coverage
@@ -163,13 +156,15 @@ public class LinkPosition implements Serializable{
 		x = link.getFrom().getX() + xDistance*fraction;
 		// Calculate y coverage
 		double yDistance = link.getTo().getY() - link.getFrom().getY();
-		y = link.getFrom().getY() + yDistance*fraction;
+		y = link.getFrom().getY() + yDistance*fraction;*/
 		
-		//return String.format("[%.3f, %.3f]", x, y);
-		return String.format("From [%.3f, %.3f] to [%.3f, %.3f] distance %.3f\n",
+		// [x, y] notation
+		/*return String.format("From [%.3f, %.3f] to [%.3f, %.3f] distance %.3f\n",
 				link.getFrom().getX(), link.getFrom().getY(),
-				link.getTo().getX(), link.getTo().getY(), distance);
-		/*return String.format("Position: link: %d distance: %.3f [%.3f, %.3f]", 
-				link.getId(), distance, x, y);*/
+				link.getTo().getX(), link.getTo().getY(), distance);*/
+		// nodeId notation
+		return String.format("From: %d to %d via %d distance: %.3f\n",
+				link.getFrom().getId(), link.getTo().getId(), link.getId(),
+				distance);
 	}
 }

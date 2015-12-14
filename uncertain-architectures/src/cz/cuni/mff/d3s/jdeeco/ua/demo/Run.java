@@ -126,12 +126,14 @@ public class Run {
 
 		// Deploy ensembles on node 3
 		deeco3.deployEnsemble(DockingEnsemble.class);
-		
+	
 		
 		// Start the simulation
+		System.out.println("Simulation Starts");
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
 		Log.i("Simulation Finished");
+		System.out.println("Simulation Finished");
 	}
 
 }

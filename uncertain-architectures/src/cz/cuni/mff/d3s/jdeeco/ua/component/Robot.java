@@ -188,10 +188,11 @@ public class Robot {
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
 		// Move
-//		System.out.format("%s move%n", id);
 		mover.move(trajectory.value, position.value.getValue());
+		
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-//		System.out.format("%s %d %s\n", id, currentTime, position.value.getValue());
+		Log.i(String.format("%s %d %s\n", id, currentTime, position.value.getValue()));
+		
 		position.value.setValue(position.value.getValue(), currentTime);
 
 		// Check the tile for dirt
@@ -200,11 +201,6 @@ public class Robot {
 			map.value.getValue().getVisitedNodes().put(node, currentTime);
 			// Check the dirtiness
 			map.value.getValue().checkDirtiness(node);
-			
-//			System.out.format("%n %s At node: %d%n", id, node.getId());
-//			System.out.format("At state: %s%n", ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
-//			System.out.format("At time: %s%n", ProcessContext.getTimeProvider().getCurrentMilliseconds());
-			
 		}
 		
 	}
@@ -227,7 +223,6 @@ public class Robot {
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
 		// Plan to search
-//			System.out.println(id);
 		Set<Node> target = new HashSet<>();
 		target.add(map.getValue().getRandomNode());
 		targetPlanner.updateTrajectory(target, trajectory.value);
@@ -255,7 +250,9 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("assignedDockPosition") Node dockPosition) {
 		if(dockPosition == null){
-			Log.e(String.format("%s Planning to dock, but no dock assigned.", id));
+			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+			Log.e(String.format("%s at %d planning to dock, but no dock assigned.",
+					id, currentTime));
 		} else {
 			Set<Node> target = new HashSet<>();
 			target.add(dockPosition);
@@ -285,13 +282,20 @@ public class Robot {
 	@PeriodicScheduling(period = STATUS_PROCESS_PERIOD)
 	public static void printStatus(@In("id") String id,
 			@In("batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel,
-			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
-		System.out.println("#########################################");
-		System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
-		System.out.println("ID: " + id);
-		System.out.println("MODE: " + ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
-		System.out.println("batteryLevel = " + batteryLevel.getValue());
-		System.out.println("position = " + position.getValue());
-		System.out.println("#########################################");
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
+			@In("trajectory") List<Link> trajectory) {
+		Log.i("#########################################");
+		Log.i("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
+		Log.i("ID: " + id);
+		Log.i("MODE: " + ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
+		Log.i("batteryLevel = " + batteryLevel.getValue());
+		Log.i("position = " + position.getValue());
+		StringBuilder builder = new StringBuilder();
+		for(Link l : trajectory){
+			builder.append(" -> ");
+			builder.append(l.getId());
+		}
+		Log.i("plan: " + builder.toString());
+		Log.i("#########################################");
 	}
 }

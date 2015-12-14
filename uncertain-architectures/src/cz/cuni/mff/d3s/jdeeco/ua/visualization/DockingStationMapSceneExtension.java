@@ -57,8 +57,8 @@ public class DockingStationMapSceneExtension implements MapSceneExtensionPoint {
 				return res;
 			}
 			ImageProvider provider = new ImageProvider(false,
-					mapScene.getAdditionalResourcesPath() + "dockingStation.png", null, mapScene.NODE_IMAGE_WIDTH,
-					mapScene.NODE_IMAGE_HEIGHT, 1);
+					mapScene.getAdditionalResourcesPath() + "dockingStation.png", null, 2 * mapScene.NODE_IMAGE_WIDTH,
+					2 * mapScene.NODE_IMAGE_HEIGHT, 1);
 			Node dockingStationShape = MapSceneExtensionHelper.generateNodeWithBackgroundImage(mapScene, provider,node);
 			KeyValue kv = new KeyValue(dockingStationShape.visibleProperty(), Boolean.TRUE);
 			KeyFrame kf = new KeyFrame(time, kv);

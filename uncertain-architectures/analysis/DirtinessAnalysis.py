@@ -5,6 +5,7 @@ Created on Dec 8, 2015
 '''
 import xml.etree.ElementTree as etree
 import matplotlib.pyplot as plt
+import numpy as np
 # import pylab
 
 def getDurationFromConfigFile():
@@ -18,7 +19,8 @@ def getDurationFromConfigFile():
                 print("The duration of the simulation is set to " + str(duration))
 
 class Dirtiness:
-    "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finished when it's clean again"
+    "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finishes when it's clean again"
+    
     simulationTime = None
     
     def __init__(self, node, startTime, initialIntensity):
@@ -76,14 +78,22 @@ if __name__ == '__main__':
 
     print("Plotting...")
 
+    durations = [d.duration() for d in dirtinesses]
+    nodes = [d.node for d in dirtinesses]
+    
     plt.figure(1)
-    plt.plot([d.node for d in dirtinesses],[d.duration() for d in dirtinesses], 'bo')
+    plt.plot(nodes,durations, 'bo')
     plt.ylabel('Duration of dirtinesses')
     plt.savefig("../results/scatter-plot.pdf")
         
     plt.figure(2)
-    plt.boxplot([d.duration() for d in dirtinesses])
+    plt.boxplot(durations)
     plt.ylabel('Duration of dirtinesses')
     plt.savefig("../results/boxplot.pdf")
 #     plt.show()
 
+    median = np.percentile(durations, 50)
+    print("the median of durations is " + str(median))
+    
+    ninetyfifthPercentile = np.percentile(durations, 95)
+    print("The 95th percentile of durations is " + str(ninetyfifthPercentile))

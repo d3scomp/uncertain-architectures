@@ -13,23 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *******************************************************************************/
-package cz.cuni.mff.d3s.jdeeco.ua.role;
+package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
-import java.util.Map;
+import java.io.Serializable;
+import java.util.List;
 
-import cz.cuni.mff.d3s.deeco.annotations.Role;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
-import cz.cuni.mff.d3s.jdeeco.ua.demo.DockData;
-import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-@Role
-public class DockableRole {
-	public String id;
-	public CorrelationMetadataWrapper<Double> batteryLevel;
-	public CorrelationMetadataWrapper<LinkPosition> position;
-	public Map<String, DockData> availableDocks;
+public class DockData implements Serializable {
+	/**
+	 * Generated UID.
+	 */
+	private static final long serialVersionUID = 2436907226577117551L;
+	
+	public Node position;
+	//public List<String> robotsInLine;
+	public long timestanp;
 }

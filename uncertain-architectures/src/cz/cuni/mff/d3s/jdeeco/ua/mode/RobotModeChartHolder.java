@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
 import java.util.List;
+import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.deeco.modes.ModeChartHolder;
@@ -23,6 +24,7 @@ import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
 import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.ua.demo.DockData;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
@@ -64,15 +66,21 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[0]).getValue();
-				Node dockPosition = (Node) knowledgeValues[1];
+				Map<String, DockData> availableDocks = (Map<String, DockData>) knowledgeValues[1];
 				Node positionNode = position.atNode();
-				return (positionNode != null
-						&& positionNode.equals(dockPosition));
+				if(positionNode != null){
+					for(String dock : availableDocks.keySet()){
+						if(positionNode.equals(availableDocks.get(dock).position)){
+							return true;
+						}
+					}
+				}
+				return false;
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"position", "assignedDockPosition"};
+				return new String[] {"position", "availableDocks"};
 			}
 		};
 		
@@ -168,34 +176,6 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				return new String[] {"trajectory"};
 			}
 		};
-
-		final ModeTransitionListener startDockingListener = new ModeTransitionListener() {
-			@Override
-			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
-				ParamHolder<Boolean> isDocking = (ParamHolder<Boolean>) knowledgeValues[0];
-				isDocking.value = true;
-			}
-			@Override
-			public String[] getKnowledgeNames() {
-				return new String[] {"isDocking"};
-			}
-		};
-		
-		final ModeTransitionListener stopDockingListener = new ModeTransitionListener() {
-			@Override
-			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
-				ParamHolder<Boolean> isDocking = (ParamHolder<Boolean>) knowledgeValues[0];
-				ParamHolder<String> assignedDockId = (ParamHolder<String>) knowledgeValues[1];
-				ParamHolder<Node> assignedDockPosition = (ParamHolder<Node>) knowledgeValues[2];
-				isDocking.value = false;
-				assignedDockId.value = "";
-				assignedDockPosition.value = null; // TODO: check whether the null here doesn't cause trouble
-			}
-			@Override
-			public String[] getKnowledgeNames() {
-				return new String[] {"isDocking", "assignedDockId", "assignedDockPosition"};
-			}
-		};
 		
 		ModeChartFactory factory = new ModeChartFactory();
 		
@@ -216,7 +196,6 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
 		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));
 		factory.addTransitionListener(SearchMode.class, DockingMode.class, clearPlanEventListener);
-		factory.addTransitionListener(SearchMode.class, DockingMode.class, startDockingListener);
 		
 		factory.addTransitionWithGuard(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard);
 		factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, new ModeTransitionLogger(SearchMode.class, DeadBatteryMode.class));
@@ -229,11 +208,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
 		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, new ModeTransitionLogger(DockingMode.class, DeadBatteryMode.class));
-		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, stopDockingListener);
 		
 		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
 		factory.addTransitionListener(ChargingMode.class, SearchMode.class, new ModeTransitionLogger(ChargingMode.class, SearchMode.class));
-		factory.addTransitionListener(ChargingMode.class, SearchMode.class, stopDockingListener);
 		
 		factory.addInitialMode(SearchMode.class);
 				

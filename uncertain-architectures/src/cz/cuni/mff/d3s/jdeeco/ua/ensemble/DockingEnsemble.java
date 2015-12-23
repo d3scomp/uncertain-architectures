@@ -15,7 +15,10 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.ensemble;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
+
 import java.util.List;
+import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.annotations.CoordinatorRole;
 import cz.cuni.mff.d3s.deeco.annotations.Ensemble;
@@ -24,11 +27,17 @@ import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
 import cz.cuni.mff.d3s.deeco.annotations.MemberRole;
 import cz.cuni.mff.d3s.deeco.annotations.Membership;
-import cz.cuni.mff.d3s.deeco.annotations.Out;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
+import cz.cuni.mff.d3s.jdeeco.ua.demo.DockData;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockRole;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockableRole;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Dijkstra;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
@@ -36,24 +45,13 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  *
  */
 @Ensemble
-@PeriodicScheduling(period = 1000)
+@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
 @CoordinatorRole(DockRole.class)
 @MemberRole(DockableRole.class)
 public class DockingEnsemble {
 	@Membership
-	public static boolean membership(
-			@In("coord.id") String cId,
-			@In("coord.robotsInLine") List<String> robotsInLine,
-			@In("member.id") String mId,
-			@In("member.isDocking") boolean isDocking,
-			@In("member.assignedDockId") String assignedDockId) {
-		boolean b = robotsInLine.contains(mId)
-					? true
-					: robotsInLine.size() <= 2
-						&& isDocking
-						&& (assignedDockId.isEmpty()
-								|| assignedDockId.equals(cId));
-		return b;
+	public static boolean membership() {
+		return true;
 	}
 	
 	@KnowledgeExchange
@@ -61,13 +59,14 @@ public class DockingEnsemble {
 			@In("coord.id") String cId,
 			@InOut("coord.robotsInLine") ParamHolder<List<String>> robotsInLine,
 			@In("coord.position") Node dockPosition,
+			@InOut("member.availableDocks") ParamHolder<Map<String, DockData>> availableDocks,
 			@In("member.id") String mId,
-			@Out("member.assignedDockId") ParamHolder<String> assignedDockId,
-			@Out("member.assignedDockPosition") ParamHolder<Node> assignedDockPos) {
-		if(!robotsInLine.value.contains(mId)){
-			robotsInLine.value.add(mId);
-		}
-		assignedDockId.value = cId;
-		assignedDockPos.value = dockPosition;
+			@In("member.position") CorrelationMetadataWrapper<LinkPosition> mPosition) {
+		
+		DockData dockData = new DockData();
+		dockData.position = dockPosition;
+		dockData.timestanp = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		
+		availableDocks.value.put(cId, dockData);
 	}
 }

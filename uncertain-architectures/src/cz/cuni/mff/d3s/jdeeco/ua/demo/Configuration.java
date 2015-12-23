@@ -149,7 +149,7 @@ public class Configuration {
 	 * The charging rate of the robot.
 	 * Expressed in percents per second.
 	 */
-	public static final double CHARGING_RATE = 0.05; // %/s, 1 is 100%
+	public static final double CHARGING_RATE = 5;//0.05; // %/s, 1 is 100%
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
@@ -157,7 +157,7 @@ public class Configuration {
 		return RobotFactory.newRobot("TB1", runtimeLogger)
 			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(1)
+			.withBatteryLevel(0.3)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
 			.withDockingPlanner(new NearestTrajectoryPlanner())
@@ -171,7 +171,7 @@ public class Configuration {
 		return RobotFactory.newRobot("TB2", runtimeLogger)
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(1)
+			.withBatteryLevel(0.3)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
 			.withDockingPlanner(new NearestTrajectoryPlanner())
@@ -185,7 +185,7 @@ public class Configuration {
 		return RobotFactory.newRobot("TB3", runtimeLogger)
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(1)
+			.withBatteryLevel(0.3)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
 			.withDockingPlanner(new NearestTrajectoryPlanner())

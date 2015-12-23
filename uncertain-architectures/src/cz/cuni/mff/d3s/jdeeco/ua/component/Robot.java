@@ -26,6 +26,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.DifferenceMetric;
+import cz.cuni.mff.d3s.jdeeco.ua.demo.DockData;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -56,6 +58,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.metric.DirtinessMapMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.metric.PositionMetric;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.ChargingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.CleanMode;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.DeadBatteryMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DirtApproachMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
@@ -89,12 +92,8 @@ public class Robot {
 	
 	@CorrelationData(metric=PositionMetric.class,boundary=4,confidence=0.9)
 	public CorrelationMetadataWrapper<LinkPosition> position;
-	
-	public boolean isDocking;
-	
-	public String assignedDockId;
-	
-	public Node assignedDockPosition;
+		
+	public Map<String, DockData> availableDocks;
 
 	@Local
 	public final List<Link> trajectory;
@@ -126,9 +125,7 @@ public class Robot {
 		this.id = id;
 		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
-		assignedDockId = "";
-		assignedDockPosition = null;
-		isDocking = false;
+		availableDocks = new HashMap<>();
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -136,7 +133,7 @@ public class Robot {
 	///////////////////////////////////////////////////////////////////////////
 
 	@Process
-	@Modes({SearchMode.class, DockingMode.class})
+	@Modes({SearchMode.class, DockingMode.class, DirtApproachMode.class})
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
 	public static void consumeBatterySearch(
 			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
@@ -180,7 +177,7 @@ public class Robot {
 	///////////////////////////////////////////////////////////////////////////
 	
 	@Process
-	@ExcludeModes({ChargingMode.class, CleanMode.class})
+	@ExcludeModes({ChargingMode.class, CleanMode.class, DeadBatteryMode.class})
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("id") String id,
 			@In("mover") TrajectoryExecutor mover,
@@ -191,7 +188,7 @@ public class Robot {
 		mover.move(trajectory.value, position.value.getValue());
 		
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-		Log.i(String.format("%s %d %s\n", id, currentTime, position.value.getValue()));
+		//Log.i(String.format("%s %d %s\n", id, currentTime, position.value.getValue()));
 		
 		position.value.setValue(position.value.getValue(), currentTime);
 
@@ -248,14 +245,17 @@ public class Robot {
 	public static void planDock(@In("id") String id,
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@In("assignedDockPosition") Node dockPosition) {
-		if(dockPosition == null){
+			@In("availableDocks") Map<String, DockData> docks) {
+		if(docks.isEmpty()){
 			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-			Log.e(String.format("%s at %d planning to dock, but no dock assigned.",
+			Log.e(String.format("%s at %d planning to dock, but no dock available.",
 					id, currentTime));
 		} else {
 			Set<Node> target = new HashSet<>();
-			target.add(dockPosition);
+			for(String dId : docks.keySet()){
+				target.add(docks.get(dId).position);
+			}
+			trajectory.value.clear();
 			targetPlanner.updateTrajectory(target, trajectory.value);
 		}
 	}
@@ -277,13 +277,16 @@ public class Robot {
 			}
 		}
 	}
+	
+	// TODO: check dock info obsolete
 
 	@Process
 	@PeriodicScheduling(period = STATUS_PROCESS_PERIOD)
 	public static void printStatus(@In("id") String id,
 			@In("batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
-			@In("trajectory") List<Link> trajectory) {
+			@In("trajectory") List<Link> trajectory,
+			@In("availableDocks") Map<String, DockData> availableDocks) {
 		Log.i("#########################################");
 		Log.i("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		Log.i("ID: " + id);
@@ -291,6 +294,15 @@ public class Robot {
 		Log.i("batteryLevel = " + batteryLevel.getValue());
 		Log.i("position = " + position.getValue());
 		StringBuilder builder = new StringBuilder();
+		for(String dock : availableDocks.keySet()){
+			builder.append("\tDock:")
+					.append("\n\t\tID = ").append(dock)
+					.append("\n\t\tPosition = ").append(availableDocks.get(dock).position)
+					.append("\n\t\tTimestamp = ").append(availableDocks.get(dock).timestanp)
+					.append("\n");
+		}
+		Log.i("docks:\n" + builder.toString());
+		builder = new StringBuilder();
 		for(Link l : trajectory){
 			builder.append(" -> ");
 			builder.append(l.getId());

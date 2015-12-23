@@ -47,9 +47,10 @@ import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 public class Run {
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 500_000;
+	static private final long SIMULATION_END = 150_000;
 
 	static final boolean enableMetaAdaptation = false;
+	static final boolean enableMultipleDEECoNodes = false;
 
 	/**
 	 * Runs centralized simulation.
@@ -82,8 +83,17 @@ public class Run {
 		simulation.addPlugin(new PositionPlugin(0, 0));
 
 		// Create node 1
-		DEECoNode deeco1 = simulation.createNode(1);
+		DEECoNode deeco1;
+		if (enableMetaAdaptation) {
+			// Meta-adaptation enabled
+			// create correlation plugin
+			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
+			deeco1 = simulation.createNode(1, correlationPlugin);
+		} else {
+			deeco1 = simulation.createNode(1);
+		}
 		nodesInSimulation.add(deeco1);
+		
 		deeco1.deployComponent(new Environment("Environment"));
 		
 		// Deploy docking stations
@@ -99,34 +109,35 @@ public class Run {
 		// Deploy ensembles on node 1
 		deeco1.deployEnsemble(DockingEnsemble.class);
 		
-		// Create node 2
-		DEECoNode deeco2 = simulation.createNode(2);
-		nodesInSimulation.add(deeco2);
-		
-		// Deploy robot 2
-		deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
-
-		// Deploy ensembles on node 2
-		deeco2.deployEnsemble(DockingEnsemble.class);
-
-		// Create node 3
-		DEECoNode deeco3;
-		if (enableMetaAdaptation) {
-			// Meta-adaptation enabled
-			// create correlation plugin
-			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
-			deeco3 = simulation.createNode(3, correlationPlugin);
-		} else {
-			deeco3 = simulation.createNode(3);
-		}
-		nodesInSimulation.add(deeco3);
-
-		// Deploy robot 3
-		deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
-
-		// Deploy ensembles on node 3
-		deeco3.deployEnsemble(DockingEnsemble.class);
+		if(enableMultipleDEECoNodes){
+			// Create node 2
+			DEECoNode deeco2 = simulation.createNode(2);
+			nodesInSimulation.add(deeco2);
+			
+			// Deploy robot 2
+			deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
 	
+			// Deploy ensembles on node 2
+			deeco2.deployEnsemble(DockingEnsemble.class);
+		} else {
+			// Deploy robot 2
+//			deeco1.deployComponent(Configuration.createRobot2(deeco1.getRuntimeLogger()));
+		}
+
+		if(enableMultipleDEECoNodes){
+			// Create node 3
+			DEECoNode deeco3 = simulation.createNode(3);
+			nodesInSimulation.add(deeco3);
+	
+			// Deploy robot 3
+			deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
+	
+			// Deploy ensembles on node 3
+			deeco3.deployEnsemble(DockingEnsemble.class);
+		} else {
+			// Deploy robot 3
+//			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
+		}
 		
 		// Start the simulation
 		System.out.println("Simulation Starts");

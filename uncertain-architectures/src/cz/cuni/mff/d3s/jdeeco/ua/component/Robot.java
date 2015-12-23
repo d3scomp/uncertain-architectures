@@ -234,9 +234,12 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
+
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		// Plan to clean
 		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
 		targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
+		currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 	}
 	
 	@Process
@@ -294,7 +297,7 @@ public class Robot {
 		Log.i("batteryLevel = " + batteryLevel.getValue());
 		Log.i("position = " + position.getValue());
 		StringBuilder builder = new StringBuilder();
-		for(String dock : availableDocks.keySet()){
+		/*for(String dock : availableDocks.keySet()){
 			builder.append("\tDock:")
 					.append("\n\t\tID = ").append(dock)
 					.append("\n\t\tPosition = ").append(availableDocks.get(dock).position)
@@ -302,7 +305,7 @@ public class Robot {
 					.append("\n");
 		}
 		Log.i("docks:\n" + builder.toString());
-		builder = new StringBuilder();
+		builder = new StringBuilder();*/
 		for(Link l : trajectory){
 			builder.append(" -> ");
 			builder.append(l.getId());

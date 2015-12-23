@@ -51,7 +51,7 @@ public class Run {
 	private static final String CONFIG_FILE_PATH = "config/simulationParameters.txt";
 
 	/** End of the simulation in milliseconds. */
-	static private long SIMULATION_END = 150_000;
+	static private long SIMULATION_END; // Loaded from config file
 
 	static final boolean enableMetaAdaptation = false;
 	static final boolean enableMultipleDEECoNodes = false;
@@ -127,7 +127,7 @@ public class Run {
 			deeco2.deployEnsemble(DockingEnsemble.class);
 		} else {
 			// Deploy robot 2
-//			deeco1.deployComponent(Configuration.createRobot2(deeco1.getRuntimeLogger()));
+			deeco1.deployComponent(Configuration.createRobot2(deeco1.getRuntimeLogger()));
 		}
 
 		if(enableMultipleDEECoNodes){
@@ -142,7 +142,7 @@ public class Run {
 			deeco3.deployEnsemble(DockingEnsemble.class);
 		} else {
 			// Deploy robot 3
-//			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
+			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
 		}
 		
 		// Start the simulation

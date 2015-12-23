@@ -149,7 +149,7 @@ public class Configuration {
 	 * The charging rate of the robot.
 	 * Expressed in percents per second.
 	 */
-	public static final double CHARGING_RATE = 5;//0.05; // %/s, 1 is 100%
+	public static final double CHARGING_RATE = 0.05; // %/s, 1 is 100%
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	

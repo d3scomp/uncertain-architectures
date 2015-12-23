@@ -102,9 +102,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
-				return (/*!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
-						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
-						&& */positionNode != null
+				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
+						/*&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})*/
+						&& positionNode != null
 						&& map.getDirtiness().keySet().contains(positionNode));
 			}
 			
@@ -192,6 +192,14 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		factory.addTransition(DirtApproachMode.class, CleanMode.class, cleanGuard, 1);
 		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, new ModeTransitionLogger(DirtApproachMode.class, CleanMode.class));
 		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, clearPlanEventListener);
+
+		factory.addTransition(DirtApproachMode.class, SearchMode.class, searchGuard, 1);
+		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, new ModeTransitionLogger(DirtApproachMode.class, SearchMode.class));
+		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, clearPlanEventListener);
+		
+		factory.addTransition(DirtApproachMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, new ModeTransitionLogger(DirtApproachMode.class, DockingMode.class));
+		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, clearPlanEventListener);
 		
 		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1);
 		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));

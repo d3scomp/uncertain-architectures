@@ -17,6 +17,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Locale;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
@@ -163,7 +164,7 @@ public class LinkPosition implements Serializable{
 				link.getFrom().getX(), link.getFrom().getY(),
 				link.getTo().getX(), link.getTo().getY(), distance);*/
 		// nodeId notation
-		return String.format("From: %d to %d via %d distance: %.3f\n",
+		return String.format(Locale.ENGLISH, "From: %d to %d via %d distance: %.3f",
 				link.getFrom().getId(), link.getTo().getId(), link.getId(),
 				distance);
 	}

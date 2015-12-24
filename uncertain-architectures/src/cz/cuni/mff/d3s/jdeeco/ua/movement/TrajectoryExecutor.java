@@ -74,26 +74,11 @@ public class TrajectoryExecutor {
 	public void move(List<Link> plan, LinkPosition position, boolean waitOnCollision) {
 		if(map == null) throw new IllegalStateException(String.format(
 				"The \"%s\" field is not initialized.", "map"));
-		
-		if(plan.isEmpty() && position.isEndReached()){
-			// If there is no plan don't move
-			return;
-		}
-		// Compute the distance between origin and destination
-		final double destinationDistance = position.getRemainingDistance();
-		// Compute the maximum distance the robot can travel in a single step
-		final double maxStepDistance = (double) ROBOT_SPEED * (double) MOVE_PROCESS_PERIOD / 1000;
-		// Compute the distance the robot will travel in this step
-		final double stepDistance = Math.min(destinationDistance, maxStepDistance);
-		// Move towards the next node
-		position.move(stepDistance);
+
 		// Check whether the robot already overcame the link
 		if(position.isEndReached()){
 			if(!plan.isEmpty() && position.atNode().equals(plan.get(0).getTo())){
 				plan.remove(0);
-			}
-			if(!position.isLinkLeft()){
-				position.leave();
 			}
 			if(!plan.isEmpty()){
 				// Check collisions
@@ -115,6 +100,20 @@ public class TrajectoryExecutor {
 				}
 			}
 		}
+		
+		// Compute the distance between origin and destination
+		final double destinationDistance = position.getRemainingDistance();
+		// Compute the maximum distance the robot can travel in a single step
+		final double maxStepDistance = (double) ROBOT_SPEED * (double) MOVE_PROCESS_PERIOD / 1000;
+		// Compute the distance the robot will travel in this step
+		final double stepDistance = Math.min(destinationDistance, maxStepDistance);
+		// Move towards the next node
+		position.move(stepDistance);
+
+		if(position.isEndReached() && !position.isLinkLeft()){
+			position.leave();
+		}
+		
 		// Update robots position in the centralized storage
 		map.updateRobotsPosition(robotId, position);
 	}

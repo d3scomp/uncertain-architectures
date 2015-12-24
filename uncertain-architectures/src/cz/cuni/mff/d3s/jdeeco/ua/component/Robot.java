@@ -85,13 +85,13 @@ public class Robot {
 	public String id;
 	
 	/** Battery level. */
-	@CorrelationData(metric=DifferenceMetric.class,boundary=0.02,confidence=0.9)
+	@CorrelationData(metric=DifferenceMetric.class,boundary=0.005,confidence=0.95)
 	public CorrelationMetadataWrapper<Double> batteryLevel;
 			
 	@CorrelationData(metric=DirtinessMapMetric.class,boundary=5,confidence=0.9)
 	public final CorrelationMetadataWrapper<DirtinessMap> map;
 	
-	@CorrelationData(metric=PositionMetric.class,boundary=4,confidence=0.9)
+	@CorrelationData(metric=PositionMetric.class,boundary=3,confidence=0.9)
 	public CorrelationMetadataWrapper<LinkPosition> position;
 		
 	public Map<String, DockData> availableDocks;
@@ -185,21 +185,25 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
+		LinkPosition positionValue = position.value.getValue();
 		boolean waitOnCollision = DockingMode.class.equals(ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
 		// Move
-		mover.move(trajectory.value, position.value.getValue(), waitOnCollision);
+		mover.move(trajectory.value, positionValue, waitOnCollision);
 		
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		//Log.i(String.format("%s %d %s\n", id, currentTime, position.value.getValue()));
 		
-		position.value.setValue(position.value.getValue(), currentTime);
+		position.value.setValue(positionValue, currentTime);
 
 		// Check the tile for dirt
-		Node node = position.value.getValue().atNode();
+		Node node = positionValue.atNode();
 		if(node != null){
-			map.value.getValue().getVisitedNodes().put(node, currentTime);
+			DirtinessMap mapValue = map.value.getValue();
+			mapValue.getVisitedNodes().put(node, currentTime);
 			// Check the dirtiness
-			map.value.getValue().checkDirtiness(node);
+			mapValue.checkDirtiness(node);
+			// Update the timestamp when dirtiness updated
+			map.value.setValue(mapValue, currentTime);
 		}
 		
 	}

@@ -383,4 +383,9 @@ public class DirtinessMap implements Serializable{
 		writer.write(NETWORK.toString());
 		writer.close();
 	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(getDirtinessLevel());
+	}
 }

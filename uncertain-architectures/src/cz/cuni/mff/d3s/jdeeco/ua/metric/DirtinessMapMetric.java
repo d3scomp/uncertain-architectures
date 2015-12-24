@@ -25,7 +25,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  */
 public class DirtinessMapMetric implements Metric {
 
-	private static final long timeWindow = 5000;
+	private static final long timeWindow = 1000;
 	
 	private static final double dirtWindow = 0.1;
 	
@@ -44,7 +44,7 @@ public class DirtinessMapMetric implements Metric {
 				double dirt2 = map2.getDirtiness().containsKey(n)
 						? map2.getDirtiness().get(n)
 						: 0;
-				if(Math.abs(dirt1 - dirt2) <= dirtWindow){
+				if(Math.abs(dirt1 - dirt2) > dirtWindow){
 					dist += differencePenalty;
 				}
 			}

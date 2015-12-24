@@ -150,6 +150,12 @@ public class Configuration {
 	 * Expressed in percents per second.
 	 */
 	public static final double CHARGING_RATE = 0.05; // %/s, 1 is 100%
+	
+	/**
+	 * The time after which the record about available dock becomes obsolete.
+	 * Expressed in milliseconds.
+	 */
+	public static final long AVAILABLE_DOCK_OBSOLETE_THRESHOLD = 3000; // ms
 		
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	

@@ -24,6 +24,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.AVAILABLE_DOCK_OBSOLETE_THRESHOLD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -234,12 +235,9 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
 			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
-
-		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		// Plan to clean
 		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
 		targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
-		currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 	}
 	
 	@Process
@@ -281,7 +279,19 @@ public class Robot {
 		}
 	}
 	
-	// TODO: check dock info obsolete
+	@Process
+	@Mode(CleanMode.class)
+	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
+	public static void removeObsoleteDocks(@In("id") String id,
+			@InOut("availableDocks") ParamHolder<Map<String, DockData>> docks) {
+		for(String dock : docks.value.keySet()){
+			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+			long recordTime = docks.value.get(dock).timestanp;
+			if(currentTime - recordTime > AVAILABLE_DOCK_OBSOLETE_THRESHOLD){
+				docks.value.remove(dock);
+			}
+		}
+	}
 
 	@Process
 	@PeriodicScheduling(period = STATUS_PROCESS_PERIOD)

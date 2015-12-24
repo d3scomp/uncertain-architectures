@@ -185,8 +185,9 @@ public class Robot {
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
+		boolean waitOnCollision = DockingMode.class.equals(ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
 		// Move
-		mover.move(trajectory.value, position.value.getValue());
+		mover.move(trajectory.value, position.value.getValue(), waitOnCollision);
 		
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		//Log.i(String.format("%s %d %s\n", id, currentTime, position.value.getValue()));

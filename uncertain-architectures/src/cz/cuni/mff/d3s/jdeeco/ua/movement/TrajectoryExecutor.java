@@ -71,7 +71,7 @@ public class TrajectoryExecutor {
 	 * 
 	 * @throws IllegalStateException Thrown if the {@link #map} field is not initialized.
 	 */
-	public void move(List<Link> plan, LinkPosition position) {
+	public void move(List<Link> plan, LinkPosition position, boolean waitOnCollision) {
 		if(map == null) throw new IllegalStateException(String.format(
 				"The \"%s\" field is not initialized.", "map"));
 		
@@ -102,9 +102,13 @@ public class TrajectoryExecutor {
 				// Can't go where other goes or meet them between nodes
 				if(isNodeCollision(nextLink.getTo(), others)
 						|| isLinkCollision(nextLink, others)){
-					// Go randomly or wait, clear plan
-					nextLink = getDeflection(position.atNode(), others);
-					plan.clear();
+					if(!waitOnCollision){
+						// Go randomly or wait, clear plan
+						nextLink = getDeflection(position.atNode(), others);
+						plan.clear();
+					} else {
+						nextLink = null;
+					}
 				}
 				if(nextLink != null){
 					position.startFrom(nextLink);

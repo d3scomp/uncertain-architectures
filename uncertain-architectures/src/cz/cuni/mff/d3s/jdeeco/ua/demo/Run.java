@@ -53,7 +53,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private long SIMULATION_END; // Loaded from config file
 
-	static final boolean enableMetaAdaptation = false;
+	static final boolean enableMetaAdaptation = true;
 	static final boolean enableMultipleDEECoNodes = false;
 
 	/**

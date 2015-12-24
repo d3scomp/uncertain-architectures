@@ -29,9 +29,9 @@ public class PositionMetric implements Metric {
 		// Find the shortest path
 		List<Link> path = Dijkstra.getShortestPath(DirtinessMap.getNetwork(),
 				pos1.getLink().getTo(),
-				pos1.getLink().getTo());
+				pos2.getLink().getTo());
 		// Initialize the distance
-		double dist = pos1.getRemainingDistance();
+		double dist = pos1.getRemainingDistance() + pos2.getRemainingDistance();
 		// Compute the distance of the path
 		for(Link l : path){
 			dist += l.getLength();

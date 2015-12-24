@@ -25,7 +25,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  */
 public class DirtinessMapMetric implements Metric {
 
-	private static final long timeWindow = 1000;
+	private static final long timeWindow = 5000;
 	
 	private static final double dirtWindow = 0.1;
 	

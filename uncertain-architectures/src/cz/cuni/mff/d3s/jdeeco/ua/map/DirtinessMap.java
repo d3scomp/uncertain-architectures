@@ -28,9 +28,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
@@ -66,7 +64,11 @@ public class DirtinessMap implements Serializable{
 	 */
 	private static final Map<String, LinkPosition> ROBOT_LOCATIONS = new HashMap<>();
 
-	private static final Set<Node> DOCKING_STATIONS = new HashSet<>();
+	/**
+	 * A set of docking stations placed in the map. The associated boolean indicates,
+	 * whether the docking stations is functional.
+	 */
+	private static final Map<Node, Boolean> DOCKING_STATIONS = new HashMap<>();
 
 	/**
 	 * Global dirtiness. Holds the objective state of the dirtiness in the environment.
@@ -257,7 +259,7 @@ public class DirtinessMap implements Serializable{
 	public static void generateDirt() {
 		if (RANDOM.nextDouble() <= DIRT_GENERATION_RATE) {
 			Node node = randomNode();
-			if(DOCKING_STATIONS.contains(node)){
+			if(DOCKING_STATIONS.keySet().contains(node)){
 				// Don't generate dirt on docking stations
 				return;
 			}
@@ -344,11 +346,29 @@ public class DirtinessMap implements Serializable{
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
 		
-		if(!DOCKING_STATIONS.contains(node)){
-			DOCKING_STATIONS.add(node);
+		if(!DOCKING_STATIONS.containsKey(node)){
+			DOCKING_STATIONS.put(node, true);
 		} else {
 			Log.w(String.format("The dock at %s already placed.", node.toString()));
 		}
+	}
+	
+	public static boolean isDockWorking(Node dockPosition){
+		if(dockPosition == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument is null.", "node"));
+		if(!DOCKING_STATIONS.containsKey(dockPosition)) throw new IllegalArgumentException(
+				String.format("No docking station on %s", dockPosition.toString()));
+		
+		return DOCKING_STATIONS.get(dockPosition);
+	}
+	
+	public static void setDockWorking(Node dockPosition, boolean working){
+		if(dockPosition == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument is null.", "node"));
+		if(!DOCKING_STATIONS.containsKey(dockPosition)) throw new IllegalArgumentException(
+				String.format("No docking station on %s", dockPosition.toString()));
+		
+		DOCKING_STATIONS.put(dockPosition, working);
 	}
 
 	private boolean isCleaningRelevant(double intensity) {

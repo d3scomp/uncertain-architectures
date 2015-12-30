@@ -1,1 +1,1 @@
-duration;100000
+duration;500000

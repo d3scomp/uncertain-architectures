@@ -18,6 +18,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.component;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.IDLE_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
@@ -25,6 +26,8 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.AVAILABLE_DOCK_OBSOLETE_THRESHOLD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ROBOT;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,7 +145,6 @@ public class Robot {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = MOVEMENT_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
 		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
-		// TODO: use battery noise - use actual and believed battery value
 	}
 	
 	@Process
@@ -154,19 +156,36 @@ public class Robot {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = CLEANING_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
 		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
-		// TODO: use battery noise - use actual and believed battery value
+	}
+
+	@Process
+	@ExcludeModes({SearchMode.class, DockingMode.class, DirtApproachMode.class, CleanMode.class, ChargingMode.class})
+	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
+	public static void consumeBatteryIdle(
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
+	) {
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		double delta = IDLE_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
+		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
 	}
 
 	@Process
 	@Mode(ChargingMode.class)
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
-	public static void consumeBatteryCharge(
-			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
+	public static void charge(
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel,
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position
 	) {
-		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-		double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
-		batteryLevel.value.setValue(Math.min(1, batteryLevel.value.getValue() + delta), currentTime);
-		// TODO: use battery noise - use actual and believed battery value
+		Node positionNode = position.getValue().atNode();
+		if(positionNode == null){
+			Log.e("Trying to charge between two nodes.");
+		} else if (DirtinessMap.isDockWorking(positionNode)){
+			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+			double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
+			batteryLevel.value.setValue(Math.min(1, batteryLevel.value.getValue() + delta), currentTime);
+		} else {
+			Log.w("Trying to charge in malfunctioned dock.");
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -195,6 +214,13 @@ public class Robot {
 		
 		position.value.setValue(positionValue, currentTime);
 
+		if(DIRT_DETECTION_FAILURE_ROBOT.equals(id)
+				&& currentTime >= DIRT_DETECTION_FAILURE_TIME){
+			// If the dirt detection sensor failed, don't check the dirtiness
+			map.value.malfunction();
+			return;
+		}
+		
 		// Check the tile for dirt
 		Node node = positionValue.atNode();
 		if(node != null){

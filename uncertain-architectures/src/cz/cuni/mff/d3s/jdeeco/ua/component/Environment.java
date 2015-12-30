@@ -40,9 +40,6 @@ public class Environment {
 	@Local
 	public Random random;
 	
-	/*@Local
-	public Set<DEECoNode> nodes;*/
-	
 
 	/**
 	 * Only constructor.
@@ -58,11 +55,4 @@ public class Environment {
 	public static void generateDirt(@In("random") Random random) {
 		DirtinessMap.generateDirt(random);		
 	}
-	
-	/*@Process
-	@PeriodicScheduling(period = DOCK_CHECK_PERIOD)
-	public static void manageRoles(@In("nodes") Set<DEECoNode> nodes){
-		for(DEECoNode node : nodes){
-		}
-	}*/
 }

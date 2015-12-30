@@ -28,6 +28,8 @@ import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
+import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -89,6 +91,10 @@ public class Dock {
 				&& currentTime >= DOCK_FAILURE_TIME
 				&& DirtinessMap.isDockWorking(dockPosition)){
 			DirtinessMap.setDockWorking(dockPosition, false);
+			// Remove the role if the dock is not working
+			KnowledgeManager kManager = ProcessContext.getCurrentProcess().getComponentInstance().getKnowledgeManager();
+			kManager.updateRoles(null);
+			Log.i("Removing the role of the " + dockId);
 		}
 	}
 

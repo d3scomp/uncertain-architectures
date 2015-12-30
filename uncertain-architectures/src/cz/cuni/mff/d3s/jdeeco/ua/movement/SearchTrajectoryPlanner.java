@@ -15,9 +15,7 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.movement;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.RANDOM;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

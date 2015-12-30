@@ -15,8 +15,6 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
-import java.util.Random;
-
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
@@ -33,22 +31,23 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
  *
  */
 public class Configuration {
-
-	/** Random number generator for the simulation */
-	public static final Random RANDOM = new Random(246811);
 	
 	///////////////////////////////////////////////////////////////////////////
-	// COMPONENTS IDs 
+	// COMPONENTS IDs AND SEEDS
 	///////////////////////////////////////////////////////////////////////////
 
 	public static final String ROBOT1_NAME = "TB1";
+	public static final long ROBOT1_SEED = 9387;
 	public static final String ROBOT2_NAME = "TB2";
+	public static final long ROBOT2_SEED = 437436;
 	public static final String ROBOT3_NAME = "TB3";
+	public static final long ROBOT3_SEED = 453987;
 
 	public static final String DOCK1_NAME = "Dock1";
 	public static final String DOCK2_NAME = "Dock2";
 
 	public static final String ENVIRONMENT_NAME = "Environment";
+	public static final long ENVIRONMENT_SEED = 85326;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
@@ -193,7 +192,7 @@ public class Configuration {
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
 	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT1_NAME, runtimeLogger)
+		return RobotFactory.newRobot(ROBOT1_NAME, ROBOT1_SEED, runtimeLogger)
 			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)
@@ -207,7 +206,7 @@ public class Configuration {
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT2_NAME, runtimeLogger)
+		return RobotFactory.newRobot(ROBOT2_NAME, ROBOT2_SEED, runtimeLogger)
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)
@@ -221,7 +220,7 @@ public class Configuration {
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT3_NAME, runtimeLogger)
+		return RobotFactory.newRobot(ROBOT3_NAME, ROBOT3_SEED, runtimeLogger)
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)

@@ -99,6 +99,8 @@ public class VisualizationSettings {
 	}
 
 	private static void createScriptFile() throws IOException {
+		// ensure the target directory exists
+		RUNTIME_LOG_DIR.mkdirs();
 		FileWriter writer = new FileWriter(SCRIPT_FILE);
 		StringBuilder builder = new StringBuilder();
 

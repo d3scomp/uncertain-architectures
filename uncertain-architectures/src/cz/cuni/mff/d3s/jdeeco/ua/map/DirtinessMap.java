@@ -18,7 +18,6 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_GENERATION_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.RANDOM;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,9 +27,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
@@ -66,7 +64,11 @@ public class DirtinessMap implements Serializable{
 	 */
 	private static final Map<String, LinkPosition> ROBOT_LOCATIONS = new HashMap<>();
 
-	private static final Set<Node> DOCKING_STATIONS = new HashSet<>();
+	/**
+	 * A set of docking stations placed in the map. The associated boolean indicates,
+	 * whether the docking stations is functional.
+	 */
+	private static final Map<Node, Boolean> DOCKING_STATIONS = new HashMap<>();
 
 	/**
 	 * Global dirtiness. Holds the objective state of the dirtiness in the environment.
@@ -254,14 +256,17 @@ public class DirtinessMap implements Serializable{
 		
 	}
 
-	public static void generateDirt() {
-		if (RANDOM.nextDouble() <= DIRT_GENERATION_RATE) {
-			Node node = randomNode();
-			if(DOCKING_STATIONS.contains(node)){
+	public static void generateDirt(Random random) {
+		if(random == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" parameter is null.", "random"));
+		
+		if (random.nextDouble() <= DIRT_GENERATION_RATE) {
+			Node node = randomNode(random);
+			if(DOCKING_STATIONS.keySet().contains(node)){
 				// Don't generate dirt on docking stations
 				return;
 			}
-			double intensityIncrement = ((double) RANDOM.nextInt(9) + 1 ) / 10.0;
+			double intensityIncrement = ((double) random.nextInt(9) + 1 ) / 10.0;
 			double currentIntensity;
 			if(DIRTINESS.containsKey(node)){
 				currentIntensity = DIRTINESS.get(node);
@@ -344,11 +349,29 @@ public class DirtinessMap implements Serializable{
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
 		
-		if(!DOCKING_STATIONS.contains(node)){
-			DOCKING_STATIONS.add(node);
+		if(!DOCKING_STATIONS.containsKey(node)){
+			DOCKING_STATIONS.put(node, true);
 		} else {
 			Log.w(String.format("The dock at %s already placed.", node.toString()));
 		}
+	}
+	
+	public static boolean isDockWorking(Node dockPosition){
+		if(dockPosition == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument is null.", "node"));
+		if(!DOCKING_STATIONS.containsKey(dockPosition)) throw new IllegalArgumentException(
+				String.format("No docking station on %s", dockPosition.toString()));
+		
+		return DOCKING_STATIONS.get(dockPosition);
+	}
+	
+	public static void setDockWorking(Node dockPosition, boolean working){
+		if(dockPosition == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" argument is null.", "node"));
+		if(!DOCKING_STATIONS.containsKey(dockPosition)) throw new IllegalArgumentException(
+				String.format("No docking station on %s", dockPosition.toString()));
+		
+		DOCKING_STATIONS.put(dockPosition, working);
 	}
 
 	private boolean isCleaningRelevant(double intensity) {
@@ -359,8 +382,11 @@ public class DirtinessMap implements Serializable{
 		return true;
 	}
 
-	public static Node randomNode() {
-		int end = RANDOM.nextInt(MAP_WIDTH * MAP_HEIGHT);
+	public static Node randomNode(Random random) {
+		if(random == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" parameter is null.", "random"));
+		
+		int end = random.nextInt(MAP_WIDTH * MAP_HEIGHT);
 		int index = 0;
 		for (Node n : NETWORK.getNodes()) {
 			if (index == end) {
@@ -373,8 +399,11 @@ public class DirtinessMap implements Serializable{
 		return null;
 	}
 	
-	public Node getRandomNode(){
-		return randomNode();
+	public Node getRandomNode(Random random){
+		if(random == null) throw new IllegalArgumentException(String.format(
+				"The \"%s\" parameter is null.", "random"));
+		
+		return randomNode(random);
 	}
 
 	public static void outputToFile(File file) throws FileNotFoundException {

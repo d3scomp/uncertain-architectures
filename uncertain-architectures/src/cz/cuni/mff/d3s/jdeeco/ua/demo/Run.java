@@ -15,6 +15,10 @@
  ******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -53,7 +57,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private long SIMULATION_END; // Loaded from config file
 
-	static final boolean enableMetaAdaptation = true;
+	static final boolean enableMetaAdaptation = false;
 	static final boolean enableMultipleDEECoNodes = false;
 
 	/**
@@ -100,12 +104,13 @@ public class Run {
 		}
 		nodesInSimulation.add(deeco1);
 		
-		deeco1.deployComponent(new Environment("Environment"));
+		Environment environment = new Environment(ENVIRONMENT_NAME, ENVIRONMENT_SEED);
+		deeco1.deployComponent(environment);
 		
 		// Deploy docking stations
-		Dock d1 = new Dock("Dock1", DirtinessMap.randomNode(), deeco1.getRuntimeLogger());
+		Dock d1 = new Dock(DOCK1_NAME, DirtinessMap.randomNode(environment.random), deeco1.getRuntimeLogger());
 		deeco1.deployComponent(d1);
-		Dock d2 = new Dock("Dock2", DirtinessMap.randomNode(), deeco1.getRuntimeLogger());
+		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), deeco1.getRuntimeLogger());
 		deeco1.deployComponent(d2);
 		
 		// Deploy robot 1

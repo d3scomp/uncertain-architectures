@@ -100,7 +100,7 @@ public class NearestTrajectoryPlanner {
 			plan.addAll(plans.first());
 			
 			if(plan.isEmpty()){
-				Log.e("Empty plan has been generated.");
+				Log.w("Empty plan has been generated.");
 				return;
 			}
 		}

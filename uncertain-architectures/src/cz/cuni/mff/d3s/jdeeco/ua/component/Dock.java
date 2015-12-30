@@ -15,13 +15,23 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.component;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_CHECK_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_TO_FAIL;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
+import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
+import cz.cuni.mff.d3s.deeco.annotations.Process;
+import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockRole;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.DockingStationRecord;
@@ -68,6 +78,23 @@ public class Dock {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+
+	@Process
+	@PeriodicScheduling(period = DOCK_CHECK_PERIOD)
+	public static void checkDockingStation(@In("id") String dockId,
+			@In("position") Node dockPosition) {
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		if(DOCK_TO_FAIL.equals(dockId)
+				&& currentTime >= DOCK_FAILURE_TIME
+				&& DirtinessMap.isDockWorking(dockPosition)){
+			DirtinessMap.setDockWorking(dockPosition, false);
+			// Remove the role if the dock is not working
+			KnowledgeManager kManager = ProcessContext.getCurrentProcess().getComponentInstance().getKnowledgeManager();
+			kManager.updateRoles(null);
+			Log.i("Removing the role of the " + dockId);
 		}
 	}
 

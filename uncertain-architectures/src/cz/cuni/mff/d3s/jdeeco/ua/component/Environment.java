@@ -17,7 +17,11 @@ package cz.cuni.mff.d3s.jdeeco.ua.component;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_GENERATION_PERIOD;
 
+import java.util.Random;
+
 import cz.cuni.mff.d3s.deeco.annotations.Component;
+import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -33,18 +37,22 @@ public class Environment {
 	/** Mandatory id field. */
 	public String id;
 	
+	@Local
+	public Random random;
+	
 
 	/**
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Environment(final String id) {
+	public Environment(final String id, long seed) {
 		this.id = id;
+		random = new Random(seed);
 	}
 	
 	@Process
 	@PeriodicScheduling(period = DIRT_GENERATION_PERIOD)
-	public static void generateDirt() {
-		DirtinessMap.generateDirt();		
+	public static void generateDirt(@In("random") Random random) {
+		DirtinessMap.generateDirt(random);		
 	}
 }

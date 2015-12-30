@@ -15,22 +15,26 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.component;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.AVAILABLE_DOCK_OBSOLETE_THRESHOLD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.BATTERY_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ROBOT;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.IDLE_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVEMENT_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MOVE_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.STATUS_PROCESS_PERIOD;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.AVAILABLE_DOCK_OBSOLETE_THRESHOLD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
@@ -114,6 +118,9 @@ public class Robot {
 	@Local
 	public DoubleFilter batteryInaccuracy;
 	
+	@Local
+	public Random random;
+	
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
@@ -122,11 +129,12 @@ public class Robot {
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Robot(final String id) {
+	public Robot(final String id, long seed) {
 		this.id = id;
 		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
 		availableDocks = new HashMap<>();
+		random = new Random(seed);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -142,7 +150,6 @@ public class Robot {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = MOVEMENT_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
 		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
-		// TODO: use battery noise - use actual and believed battery value
 	}
 	
 	@Process
@@ -154,19 +161,36 @@ public class Robot {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		double delta = CLEANING_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
 		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
-		// TODO: use battery noise - use actual and believed battery value
+	}
+
+	@Process
+	@ExcludeModes({SearchMode.class, DockingMode.class, DirtApproachMode.class, CleanMode.class, ChargingMode.class})
+	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
+	public static void consumeBatteryIdle(
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
+	) {
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		double delta = IDLE_ENERGY_COST * (double) BATTERY_PROCESS_PERIOD / 1000;
+		batteryLevel.value.setValue(Math.max(0, batteryLevel.value.getValue() - delta), currentTime);
 	}
 
 	@Process
 	@Mode(ChargingMode.class)
 	@PeriodicScheduling(period = BATTERY_PROCESS_PERIOD)
-	public static void consumeBatteryCharge(
-			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel
+	public static void charge(
+			@InOut("batteryLevel") ParamHolder<CorrelationMetadataWrapper<Double>> batteryLevel,
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position
 	) {
-		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-		double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
-		batteryLevel.value.setValue(Math.min(1, batteryLevel.value.getValue() + delta), currentTime);
-		// TODO: use battery noise - use actual and believed battery value
+		Node positionNode = position.getValue().atNode();
+		if(positionNode == null){
+			Log.e("Trying to charge between two nodes.");
+		} else if (DirtinessMap.isDockWorking(positionNode)){
+			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+			double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
+			batteryLevel.value.setValue(Math.min(1, batteryLevel.value.getValue() + delta), currentTime);
+		} else {
+			Log.w("Trying to charge in malfunctioned dock.");
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -195,6 +219,13 @@ public class Robot {
 		
 		position.value.setValue(positionValue, currentTime);
 
+		if(DIRT_DETECTION_FAILURE_ROBOT.equals(id)
+				&& currentTime >= DIRT_DETECTION_FAILURE_TIME){
+			// If the dirt detection sensor failed, don't check the dirtiness
+			map.value.malfunction();
+			return;
+		}
+		
 		// Check the tile for dirt
 		Node node = positionValue.atNode();
 		if(node != null){
@@ -224,10 +255,11 @@ public class Robot {
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
-			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
+			@In("map") CorrelationMetadataWrapper<DirtinessMap> map,
+			@In("random") Random random) {
 		// Plan to search
 		Set<Node> target = new HashSet<>();
-		target.add(map.getValue().getRandomNode());
+		target.add(map.getValue().getRandomNode(random));
 		targetPlanner.updateTrajectory(target, trajectory.value);
 		//planner.updateTrajectory(trajectory.value);
 	}

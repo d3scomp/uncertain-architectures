@@ -15,8 +15,6 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
-import java.util.Random;
-
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
@@ -33,9 +31,23 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
  *
  */
 public class Configuration {
+	
+	///////////////////////////////////////////////////////////////////////////
+	// COMPONENTS IDs AND SEEDS
+	///////////////////////////////////////////////////////////////////////////
 
-	/** Random number generator for the simulation */
-	public static final Random RANDOM = new Random(246811);
+	public static final String ROBOT1_NAME = "TB1";
+	public static final long ROBOT1_SEED = 9387;
+	public static final String ROBOT2_NAME = "TB2";
+	public static final long ROBOT2_SEED = 437436;
+	public static final String ROBOT3_NAME = "TB3";
+	public static final long ROBOT3_SEED = 453987;
+
+	public static final String DOCK1_NAME = "Dock1";
+	public static final String DOCK2_NAME = "Dock2";
+
+	public static final String ENVIRONMENT_NAME = "Environment";
+	public static final long ENVIRONMENT_SEED = 85326;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
@@ -62,6 +74,20 @@ public class Configuration {
 	public static final int MAP_HEIGHT = 20;
 	
 	public static final double DIRT_GENERATION_RATE = 0.1;
+	
+	
+	///////////////////////////////////////////////////////////////////////////
+	// SIMULATION CONFIGURATION
+	///////////////////////////////////////////////////////////////////////////
+	
+	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
+	
+	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
+	
+	public static final String DOCK_TO_FAIL = DOCK2_NAME;
+	
+	public static final long DOCK_FAILURE_TIME = 200_000;
+	
 	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 
@@ -110,6 +136,12 @@ public class Configuration {
 	public static final long DIRT_GENERATION_PERIOD = 200; // ms
 	
 	/**
+	 * The period of a process that checks whether the docking station works.
+	 * Expressed in milliseconds.
+	 */
+	public static final long DOCK_CHECK_PERIOD = 1000; // ms
+	
+	/**
 	 * The Speed of the robot.
 	 * Expressed in meters per second.
 	 */
@@ -125,19 +157,19 @@ public class Configuration {
 	 * The energy consumption during robot movement.
 	 * Expressed in percents per second.
 	 */
-	public static final double MOVEMENT_ENERGY_COST = 0.001; // %/s, 1 is 100%
+	public static final double MOVEMENT_ENERGY_COST = 0.0015; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption during robot cleaning.
 	 * Expressed in percents per second.
 	 */
-	public static final double CLEANING_ENERGY_COST = 0.002; // %/s, 1 is 100%
+	public static final double CLEANING_ENERGY_COST = 0.003; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption when robot is idle.
 	 * Expressed in percents per second.
 	 */
-	public static final double IDLE_ENERGY_COST = 0.0001; // %/s, 1 is 100%
+	public static final double IDLE_ENERGY_COST = 0.0005; // %/s, 1 is 100%
 	
 	/**
 	 * The amount of dirt that is cleaned in one cycle of cleaning.
@@ -160,7 +192,7 @@ public class Configuration {
 	// ROBOT 1 ////////////////////////////////////////////////////////////////
 	
 	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB1", runtimeLogger)
+		return RobotFactory.newRobot(ROBOT1_NAME, ROBOT1_SEED, runtimeLogger)
 			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)
@@ -174,7 +206,7 @@ public class Configuration {
 	// ROBOT 2 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB2", runtimeLogger)
+		return RobotFactory.newRobot(ROBOT2_NAME, ROBOT2_SEED, runtimeLogger)
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)
@@ -188,7 +220,7 @@ public class Configuration {
 	// ROBOT 3 ////////////////////////////////////////////////////////////////
 
 	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot("TB3", runtimeLogger)
+		return RobotFactory.newRobot(ROBOT3_NAME, ROBOT3_SEED, runtimeLogger)
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)

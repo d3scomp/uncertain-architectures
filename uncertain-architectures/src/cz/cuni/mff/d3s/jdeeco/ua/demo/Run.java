@@ -57,7 +57,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private long SIMULATION_END; // Loaded from config file
 
-	static final boolean enableMetaAdaptation = false;
+	static final boolean enableCorrelation = false;
 	static final boolean enableMultipleDEECoNodes = false;
 
 	/**
@@ -94,8 +94,7 @@ public class Run {
 
 		// Create node 1
 		DEECoNode deeco1;
-		if (enableMetaAdaptation) {
-			// Meta-adaptation enabled
+		if (enableCorrelation) {
 			// create correlation plugin
 			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
 			deeco1 = simulation.createNode(1, correlationPlugin);

@@ -25,7 +25,13 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 
 /**
+ * <p>
  * This class holds the overall configuration of the demo simulation.
+ * </p>
+ * <p>
+ * Parameters that are common to both the simulation and the analysis scripts
+ * (e.g. simulation duration) are found in config/simulationParameters.txt
+ * </p>
  * 
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *

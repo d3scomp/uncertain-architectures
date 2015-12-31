@@ -256,9 +256,17 @@ public class DirtinessMap implements Serializable{
 		
 	}
 
+	/**
+	 * At some rate, it randomly picks a node and increases its dirtiness. Does
+	 * not allow for dirt to appear in nodes that hold docking stations.
+	 * 
+	 * @param random
+	 *            passed by the
+	 *            {@link cz.cuni.mff.d3s.jdeeco.ua.component.Environment#generateDirt(Random)}
+	 */
 	public static void generateDirt(Random random) {
-		if(random == null) throw new IllegalArgumentException(String.format(
-				"The \"%s\" parameter is null.", "random"));
+		if (random == null)
+			throw new IllegalArgumentException(String.format(	"The \"%s\" parameter is null.", "random"));
 		
 		if (random.nextDouble() <= DIRT_GENERATION_RATE) {
 			Node node = randomNode(random);

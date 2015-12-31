@@ -16,8 +16,10 @@
 package cz.cuni.mff.d3s.jdeeco.ua.component;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_CHECK_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_TO_FAIL;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,14 +89,18 @@ public class Dock {
 	public static void checkDockingStation(@In("id") String dockId,
 			@In("position") Node dockPosition) {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-		if(DOCK_TO_FAIL.equals(dockId)
-				&& currentTime >= DOCK_FAILURE_TIME
-				&& DirtinessMap.isDockWorking(dockPosition)){
-			DirtinessMap.setDockWorking(dockPosition, false);
-			// Remove the role if the dock is not working
-			KnowledgeManager kManager = ProcessContext.getCurrentProcess().getComponentInstance().getKnowledgeManager();
-			kManager.updateRoles(null);
-			Log.i("Removing the role of the " + dockId);
+		if (DOCK_FAILURE_ON) {
+			if (DOCK_TO_FAIL.equals(dockId) && currentTime >= DOCK_FAILURE_TIME
+					&& DirtinessMap.isDockWorking(dockPosition)) {
+				DirtinessMap.setDockWorking(dockPosition, false);
+				// Remove the role if the dock is not working
+				if (ROLE_REMOVAL_ON) {
+					KnowledgeManager kManager = ProcessContext.getCurrentProcess().getComponentInstance()
+							.getKnowledgeManager();
+					kManager.updateRoles(null);
+					Log.i("Removing the role of the " + dockId);
+				}
+			}
 		}
 	}
 

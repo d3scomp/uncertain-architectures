@@ -21,6 +21,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CHARGING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_ENERGY_COST;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEANING_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ROBOT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.IDLE_ENERGY_COST;
@@ -219,11 +220,12 @@ public class Robot {
 		
 		position.value.setValue(positionValue, currentTime);
 
-		if(DIRT_DETECTION_FAILURE_ROBOT.equals(id)
-				&& currentTime >= DIRT_DETECTION_FAILURE_TIME){
-			// If the dirt detection sensor failed, don't check the dirtiness
-			map.value.malfunction();
-			return;
+		if (DIRT_DETECTION_FAILURE_ON) {
+			if (DIRT_DETECTION_FAILURE_ROBOT.equals(id) && currentTime >= DIRT_DETECTION_FAILURE_TIME) {
+				// If the dirt detection sensor failed, don't check the dirtiness
+				map.value.malfunction();
+				return;
+			}
 		}
 		
 		// Check the tile for dirt

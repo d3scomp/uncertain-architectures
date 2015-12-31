@@ -15,6 +15,11 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
@@ -37,7 +42,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
  *
  */
 public class Configuration {
-	
+
 	///////////////////////////////////////////////////////////////////////////
 	// COMPONENTS IDs AND SEEDS
 	///////////////////////////////////////////////////////////////////////////
@@ -55,98 +60,78 @@ public class Configuration {
 	public static final String ENVIRONMENT_NAME = "Environment";
 	public static final long ENVIRONMENT_SEED = 85326;
 	
+	/////////////////////////////////////////////////////////////////////////
+	// SIMULATION CONFIGURATION
+	///////////////////////////////////////////////////////////////////////////
+
+	private static final String CONFIG_FILE_PATH = "config/simulationParameters.txt";
+	public static final long SIMULATION_DURATION = Long.parseLong(parseSimulationConfigFile("duration"));
+
+	public static final boolean CORRELATION_ON = false;
+	public static final boolean ROLE_REMOVAL_ON = false;
+	
+	public static final boolean DIRT_DETECTION_FAILURE_ON = false;
+	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
+	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
+
+	public static final boolean DOCK_FAILURE_ON = false;
+	public static final String DOCK_TO_FAIL = DOCK2_NAME;
+	public static final long DOCK_FAILURE_TIME = 200_000;
+	
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * The width of a tile used in the {@link DirtinessMap}.
-	 * Tiles are squares. The dimension is expresses in meters.
+	 * The width of a tile (square) used in the {@link DirtinessMap}.
 	 */
 	public static final double TILE_WIDTH = 1; // m
 
 	/** 
-	 * Width of the map.
-	 * The dimensions are expressed as number of tiles.
-	 * So far the map is represented only as a rectangle.
+	 * Width of the map in number of tiles.
 	 */
 	public static final int MAP_WIDTH = 20;
 
 	/**
-	 * Heigt of the map.
-	 * The dimensions are expressed as number of tiles.
-	 * So far the map is represented only as a rectangle.
+	 * Height of the map in number of tiles.
 	 */
 	public static final int MAP_HEIGHT = 20;
 	
+	/**
+	 * Used in {@link DirtinessMap#generateDirt(java.util.Random)}. Together with
+	 * {@link DIRT_GENERATION_PERIOD} determines how often dirt will be
+	 * generated.
+	 */
 	public static final double DIRT_GENERATION_RATE = 0.1;
-	
-	
-	///////////////////////////////////////////////////////////////////////////
-	// SIMULATION CONFIGURATION
-	///////////////////////////////////////////////////////////////////////////
-	
-	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
-	
-	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
-	
-	public static final String DOCK_TO_FAIL = DOCK2_NAME;
-	
-	public static final long DOCK_FAILURE_TIME = 200_000;
-	
 	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * The period of a process that moves the robot.
-	 * Expressed in milliseconds.
-	 */
+	/////////////////
+	// PERIODS 
+	/////////////////
+
 	public static final long MOVE_PROCESS_PERIOD = 100; // ms
 	
-	/**
-	 * The period of a cleaning process.
-	 * Expressed in milliseconds.
-	 */
 	public static final long CLEAN_PROCESS_PERIOD = 500; // ms
 
-	/**
-	 * The period of a process that determines the robots position.
-	 * Expressed in milliseconds.
-	 */
 	public static final long DETERMINE_POSITION_PERIOD = 1000; // ms
 	
-	/**
-	 * The period of a process that plans the robots trajectory.
-	 * Expressed in milliseconds.
-	 */
 	public static final long PLAN_PROCESS_PERIOD = 1000; // ms
 
-	/**
-	 * The period of a process that measures the robots battery.
-	 * Expressed in milliseconds.
-	 */
 	public static final long BATTERY_PROCESS_PERIOD = 1000; // ms
 	
-	/**
-	 * The period of a process that prints the robots status.
-	 * Expressed in milliseconds.
-	 */
 	public static final long STATUS_PROCESS_PERIOD = 1000; // ms
 	
-	/**
-	 * The period of a process that generates dirtiness.
-	 * Expressed in milliseconds.
-	 */
-	public static final long DIRT_GENERATION_PERIOD = 200; // ms
+	public static final long DIRT_GENERATION_PERIOD = 600; // ms
 	
-	/**
-	 * The period of a process that checks whether the docking station works.
-	 * Expressed in milliseconds.
-	 */
 	public static final long DOCK_CHECK_PERIOD = 1000; // ms
 	
+	/////////////////
+	// EXTRAS 
+	/////////////////
+
 	/**
 	 * The Speed of the robot.
 	 * Expressed in meters per second.
@@ -195,8 +180,10 @@ public class Configuration {
 	 */
 	public static final long AVAILABLE_DOCK_OBSOLETE_THRESHOLD = 3000; // ms
 		
-	// ROBOT 1 ////////////////////////////////////////////////////////////////
-	
+	/////////////////
+	// ROBOT 1 
+	/////////////////
+
 	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
 		return RobotFactory.newRobot(ROBOT1_NAME, ROBOT1_SEED, runtimeLogger)
 			.atPosition(5)
@@ -209,7 +196,9 @@ public class Configuration {
 			.create();
 	}
 
-	// ROBOT 2 ////////////////////////////////////////////////////////////////
+	/////////////////
+	// ROBOT 2 
+	/////////////////
 
 	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
 		return RobotFactory.newRobot(ROBOT2_NAME, ROBOT2_SEED, runtimeLogger)
@@ -223,7 +212,9 @@ public class Configuration {
 			.create();
 	}
 	
-	// ROBOT 3 ////////////////////////////////////////////////////////////////
+	/////////////////
+	// ROBOT 3 
+	/////////////////
 
 	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
 		return RobotFactory.newRobot(ROBOT3_NAME, ROBOT3_SEED, runtimeLogger)
@@ -235,6 +226,37 @@ public class Configuration {
 			.withDockingPlanner(new NearestTrajectoryPlanner())
 			.withTrajectoryExecutor(new TrajectoryExecutor())
 			.create();
+	}
+	
+	/**
+	 * Helper method that parses the simulation parameters from the
+	 * configuration file. These parameters are used both for the simulation
+	 * (Java) and the analysis (Python).
+	 * 
+	 * @return the parsed value as String
+	 */
+	private static String parseSimulationConfigFile(String parameter) {
+		String ret = null;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(CONFIG_FILE_PATH));
+			try {
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					String[] tokens = line.split(";");
+					String name = tokens[0];
+					if (name.equals(parameter)) {
+						ret = tokens[1];
+					}
+				}
+			} catch (IOException e) {
+				Log.e("Error while reading the configuration file.", e);
+			} finally {
+				reader.close();
+			}
+		} catch (IOException e1) {
+			Log.e("Error while processing the configuration file.", e1);
+		}
+		return ret;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

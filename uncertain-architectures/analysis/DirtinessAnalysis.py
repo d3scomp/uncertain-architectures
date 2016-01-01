@@ -6,17 +6,19 @@ Created on Dec 8, 2015
 import xml.etree.ElementTree as etree
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+
 # import pylab
 
 def getDurationFromConfigFile():
-        configFile = open("../config/simulationParameters.txt")
-        for line in configFile.readlines():
-            tokens = line.split(";")
-            name = tokens[0]
-            if name == "duration": 
-                duration = int(tokens[1])
-                Dirtiness.simulationTime = duration 
-                print("The duration of the simulation is set to " + str(duration))
+    configFile = open("../config/simulationParameters.txt")
+    for line in configFile.readlines():
+        tokens = line.split(";")
+        name = tokens[0]
+        if name == "duration": 
+            duration = int(tokens[1])
+            Dirtiness.simulationTime = duration 
+#             print("The duration of the simulation is set to " + str(duration))
 
 class Dirtiness:
     "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finishes when it's clean again"
@@ -49,51 +51,68 @@ class Dirtiness:
         
 if __name__ == '__main__':      
 
-    tree = etree.parse('../logs/runtime/runtimeData.xml')  
-    root = tree.getroot()                    
+    log_dirs = []
+    for dir_name in [x[0] for x in os.walk('logs')]:
+        if (dir_name.startswith('logs\log_')) :
+            log_dirs.append(dir_name)
+    
+    bigPercentiles = []
+    outputFile = open("../results/results.csv", "w")
+    
+    for log_dir in log_dirs : 
         
-    dirtinesses = []
-    dirtinessRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord']")
-    print("Found " + str(len(dirtinessRecords)) + " dirtiness records")
-    
-    getDurationFromConfigFile()
-    
-    for r in dirtinessRecords:
-        node = int(r[1].text)
-        time = int(r.attrib["time"])
-        intensity = float(r[0].text)
-        existingDirtiness = [d for d in dirtinesses if d.node == node and d.endTime==None]
-        if len(existingDirtiness) > 0:
-            if len(existingDirtiness) == 1:
-                existingDirtiness[0].intensityChanged(time, intensity)
+        print("Analysing " + log_dir)
+
+        tree = etree.parse(log_dir+'/runtimeData.xml')  
+        root = tree.getroot()                    
+            
+        dirtinesses = []
+        dirtinessRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord']")
+        print("Found " + str(len(dirtinessRecords)) + " dirtiness records")
+        
+        getDurationFromConfigFile()
+        
+        for r in dirtinessRecords:
+            node = int(r[1].text)
+            time = int(r.attrib["time"])
+            intensity = float(r[0].text)
+            existingDirtiness = [d for d in dirtinesses if d.node == node and d.endTime==None]
+            if len(existingDirtiness) > 0:
+                if len(existingDirtiness) == 1:
+                    existingDirtiness[0].intensityChanged(time, intensity)
+                else :
+                    raise Exception("Found more than one non-completed dirtinesses in node " + node)
             else :
-                raise Exception("Found more than one non-completed dirtinesses in node " + node)
-        else :
-            dirtiness = Dirtiness(node, time, intensity)
-            dirtinesses.append(dirtiness)
-        
-    print("Printing " + str(len(dirtinesses)) + " dirtiness events")
-    for d in dirtinesses:
-        print(d)    
-
-    print("Plotting...")
-
-    durations = [d.duration() for d in dirtinesses]
-    nodes = [d.node for d in dirtinesses]
+                dirtiness = Dirtiness(node, time, intensity)
+                dirtinesses.append(dirtiness)
+            
+        print("Found " + str(len(dirtinesses)) + " dirtiness events")
+    #     for d in dirtinesses:
+    #         print(d)    
     
-    plt.figure(1)
-    plt.plot(nodes,durations, 'bo')
-    plt.ylabel('Duration of dirtinesses')
-    plt.savefig("../results/scatter-plot.pdf")
+        durations = [d.duration() for d in dirtinesses]
+        nodes = [d.node for d in dirtinesses]
         
-    plt.figure(2)
-    plt.boxplot(durations)
-    plt.ylabel('Duration of dirtinesses')
-    plt.savefig("../results/boxplot.pdf")
-#     plt.show()
-
-    median = np.percentile(durations, 50)
-    print("the median of durations is " + str(median))
+    #     plt.figure(1)
+    #     plt.plot(nodes,durations, 'bo')
+    #     plt.ylabel('Duration of dirtinesses')
+    #     plt.savefig("../results/scatter-plot.pdf")
+    #         
+    #     plt.figure(2)
+    #     plt.boxplot(durations)
+    #     plt.ylabel('Duration of dirtinesses')
+    #     plt.savefig("../results/boxplot.pdf")
+    #     plt.show()
     
-    ninetyfifthPercentile = np.percentile(durations, 95)
-    print("The 95th percentile of durations is " + str(ninetyfifthPercentile))
+    #     median = np.percentile(durations, 50)
+    #     print("the median of durations is " + str(median))
+        
+        bigPercentile = np.percentile(durations, 90)
+        print("The 95th percentile of dirtiness event durations is " + str(bigPercentile))
+        bigPercentiles.append(bigPercentile)
+        outputFile.write(str(bigPercentile)+"\n")
+    
+    median = np.percentile(bigPercentiles, 50)
+    outputFile.write("\n")
+    outputFile.write(str(median))
+    outputFile.close()

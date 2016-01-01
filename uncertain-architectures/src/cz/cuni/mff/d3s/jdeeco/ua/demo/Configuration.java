@@ -64,8 +64,7 @@ public class Configuration {
 	// SIMULATION CONFIGURATION
 	///////////////////////////////////////////////////////////////////////////
 
-	private static final String CONFIG_FILE_PATH = "config/simulationParameters.txt";
-	public static final long SIMULATION_DURATION = Long.parseLong(parseSimulationConfigFile("duration"));
+	public static final long SIMULATION_DURATION = 500_000;
 
 	public static final boolean CORRELATION_ON = false;
 	public static final boolean ROLE_REMOVAL_ON = false;
@@ -226,37 +225,6 @@ public class Configuration {
 			.withDockingPlanner(new NearestTrajectoryPlanner())
 			.withTrajectoryExecutor(new TrajectoryExecutor())
 			.create();
-	}
-	
-	/**
-	 * Helper method that parses the simulation parameters from the
-	 * configuration file. These parameters are used both for the simulation
-	 * (Java) and the analysis (Python).
-	 * 
-	 * @return the parsed value as String
-	 */
-	private static String parseSimulationConfigFile(String parameter) {
-		String ret = null;
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(CONFIG_FILE_PATH));
-			try {
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					String[] tokens = line.split(";");
-					String name = tokens[0];
-					if (name.equals(parameter)) {
-						ret = tokens[1];
-					}
-				}
-			} catch (IOException e) {
-				Log.e("Error while reading the configuration file.", e);
-			} finally {
-				reader.close();
-			}
-		} catch (IOException e1) {
-			Log.e("Error while processing the configuration file.", e1);
-		}
-		return ret;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////

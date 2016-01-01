@@ -32,6 +32,7 @@ import cz.cuni.mff.d3s.deeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
+import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogWriters;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
@@ -69,8 +70,6 @@ public class Run {
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException,
 			IOException {
 		Log.i("Preparing simulation");
-		
-//		parseSimulationConfigFile();
 
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);
@@ -87,14 +86,22 @@ public class Run {
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
 
+		String logPath = "STANDARD";
+		RuntimeLogWriters writers;
+		if (args.length==0) {
+			writers = new RuntimeLogWriters();
+		} else {
+			logPath = args[0];
+			writers = new RuntimeLogWriters(logPath);
+		}
 		// Create node 1
 		DEECoNode deeco1;
 		if (CORRELATION_ON) {
 			// create correlation plugin
 			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
-			deeco1 = simulation.createNode(1, correlationPlugin);
+			deeco1 = simulation.createNode(1, writers, correlationPlugin);
 		} else {
-			deeco1 = simulation.createNode(1);
+			deeco1 = simulation.createNode(1, writers);
 		}
 		nodesInSimulation.add(deeco1);
 		
@@ -116,7 +123,7 @@ public class Run {
 		
 		if(enableMultipleDEECoNodes){
 			// Create node 2
-			DEECoNode deeco2 = simulation.createNode(2);
+			DEECoNode deeco2 = simulation.createNode(2, writers);
 			nodesInSimulation.add(deeco2);
 			
 			// Deploy robot 2
@@ -131,7 +138,7 @@ public class Run {
 
 		if(enableMultipleDEECoNodes){
 			// Create node 3
-			DEECoNode deeco3 = simulation.createNode(3);
+			DEECoNode deeco3 = simulation.createNode(3, writers);
 			nodesInSimulation.add(deeco3);
 	
 			// Deploy robot 3
@@ -140,18 +147,16 @@ public class Run {
 			// Deploy ensembles on node 3
 			deeco3.deployEnsemble(DockingEnsemble.class);
 		} else {
-			// Deploy robot 3
+			// Deploy robot 3 
 			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
 		}
 		
 		// Start the simulation
-		System.out.println("Simulation Starts");
+		System.out.println("Simulation Starts - writing to '" + logPath +"'");
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_DURATION);
 		Log.i("Simulation Finished");
-		System.out.println("Simulation Finished");
+		System.out.println("Simulation Finished - writen to '" + logPath +"'");
 	}
-
-
 
 }

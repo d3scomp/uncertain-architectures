@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project uncertain-architectures with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="C:/Users/Ilias/workspaces/research"/>
+    <property name="dir.jarfile" value="${dir.buildfile}/dist"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/demo.jar">
+            <manifest>
+                <attribute name="Main-Class" value="cz.cuni.mff.d3s.jdeeco.ua.demo.Run"/>
+                <attribute name="Class-Path" value=". demo_lib/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar demo_lib/javax.annotation_1.2.0.v201401042248.jar demo_lib/javax.inject_1.0.0.v20091030.jar demo_lib/org.eclipse.osgi_3.10.101.v20150820-1432.jar demo_lib/org.eclipse.osgi.compatibility.state_1.0.100.v20150402-1551.jar demo_lib/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar demo_lib/org.eclipse.core.jobs_3.7.0.v20150330-2103.jar demo_lib/runtime_registry_compatibility.jar demo_lib/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar demo_lib/org.eclipse.equinox.preferences_3.5.300.v20150408-1437.jar demo_lib/org.eclipse.core.contenttype_3.5.0.v20150421-2214.jar demo_lib/org.eclipse.equinox.app_1.3.300.v20150423-1356.jar demo_lib/org.eclipse.emf.ecore_2.11.1.v20150805-0538.jar demo_lib/org.eclipse.emf.common_2.11.0.v20150805-0538.jar demo_lib/org.eclipse.emf.ecore.xmi_2.11.1.v20150805-0538.jar demo_lib/xml-apis-1.3.04.jar demo_lib/org.eclipse.emf.ecore-2.9.0-v20130528-0742.jar demo_lib/org.eclipse.emf.common-2.9.0-v20130528-0742.jar demo_lib/org.eclipse.emf.ecore.xmi-2.9.0-v20130528-0742.jar demo_lib/cloning-1.9.0.jar demo_lib/objenesis-1.2.jar demo_lib/bcprov-jdk15-1.46.jar demo_lib/fst-2.28.jar demo_lib/junit-4.11.jar demo_lib/hamcrest-core-1.3.jar demo_lib/mockito-all-1.9.5.jar demo_lib/system-rules-1.6.0.jar demo_lib/commons-io-2.4.jar demo_lib/junit-addons-1.4.jar demo_lib/xercesImpl-2.6.2.jar demo_lib/xmlParserAPIs-2.6.2.jar demo_lib/cz.cuni.mff.d3s.irm.tool-0.0.2.jar demo_lib/system-rules-1.4.0.jar demo_lib/org.ow2.sat4j.core-2.3.4.jar demo_lib/org.ow2.sat4j.pb-2.3.4.jar demo_lib/org.ow2.sat4j.core-2.3.4-tests.jar demo_lib/javassist-3.19.0-GA.jar"/>
+            </manifest>
+            <fileset dir="${dir.buildfile}/target/classes"/>
+            <fileset dir="C:/Users/Ilias/git/JDEECo/jdeeco-core/target/classes"/>
+            <fileset dir="C:/Users/Ilias/git/JDEECo/jdeeco-network-plugin/target/classes"/>
+            <fileset dir="C:/Users/Ilias/git/uncertain-architectures/cz.cuni.mff.d3s.jdeeco.modes/target/classes"/>
+            <fileset dir="C:/Users/Ilias/git/IRM-SA/irm-sa/target/classes"/>
+            <fileset dir="C:/Users/Ilias/git/JDEECo/jdeeco-core/target/test-classes"/>
+            <fileset dir="C:/Users/Ilias/git/JDEECo/jdeeco-adaptation-plugin/target/classes"/>
+            <fileset dir="C:/Users/Ilias/git/jDEECo-visualizer/target/classes"/>
+        </jar>
+        <delete dir="${dir.jarfile}/demo_lib"/>
+        <mkdir dir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/javax.annotation_1.2.0.v201401042248.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/javax.inject_1.0.0.v20091030.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.osgi.compatibility.state_1.0.100.v20150402-1551.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.core.jobs_3.7.0.v20150330-2103.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.core.runtime.compatibility.registry_3.6.0.v20150318-1505/runtime_registry_compatibility.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.equinox.preferences_3.5.300.v20150408-1437.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.core.contenttype_3.5.0.v20150421-2214.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.equinox.app_1.3.300.v20150423-1356.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.emf.ecore_2.11.1.v20150805-0538.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.emf.common_2.11.0.v20150805-0538.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Program Files/Eclipse/eclipse-dsl-mars-1-win32-x86_64/plugins/org.eclipse.emf.ecore.xmi_2.11.1.v20150805-0538.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/eclipse/emf/org.eclipse.emf.ecore/2.9.0-v20130528-0742/org.eclipse.emf.ecore-2.9.0-v20130528-0742.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/eclipse/emf/org.eclipse.emf.common/2.9.0-v20130528-0742/org.eclipse.emf.common-2.9.0-v20130528-0742.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/eclipse/emf/org.eclipse.emf.ecore.xmi/2.9.0-v20130528-0742/org.eclipse.emf.ecore.xmi-2.9.0-v20130528-0742.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/uk/com/robust-it/cloning/1.9.0/cloning-1.9.0.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/objenesis/objenesis/1.2/objenesis-1.2.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/bouncycastle/bcprov-jdk15/1.46/bcprov-jdk15-1.46.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/de/ruedigermoeller/fst/2.28/fst-2.28.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/junit/junit/4.11/junit-4.11.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/com/github/stefanbirkner/system-rules/1.6.0/system-rules-1.6.0.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/junit-addons/junit-addons/1.4/junit-addons-1.4.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/xerces/xercesImpl/2.6.2/xercesImpl-2.6.2.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/cz/cuni/mff/d3s/jdeeco/cz.cuni.mff.d3s.irm.tool/0.0.2/cz.cuni.mff.d3s.irm.tool-0.0.2.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/com/github/stefanbirkner/system-rules/1.4.0/system-rules-1.4.0.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/ow2/sat4j/org.ow2.sat4j.core/2.3.4/org.ow2.sat4j.core-2.3.4.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/ow2/sat4j/org.ow2.sat4j.pb/2.3.4/org.ow2.sat4j.pb-2.3.4.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/ow2/sat4j/org.ow2.sat4j.core/2.3.4/org.ow2.sat4j.core-2.3.4-tests.jar" todir="${dir.jarfile}/demo_lib"/>
+        <copy file="C:/Users/Ilias/.m2/repository/org/javassist/javassist/3.19.0-GA/javassist-3.19.0-GA.jar" todir="${dir.jarfile}/demo_lib"/>
+    </target>
+</project>

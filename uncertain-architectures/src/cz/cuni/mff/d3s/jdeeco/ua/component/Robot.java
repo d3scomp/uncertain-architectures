@@ -121,7 +121,6 @@ public class Robot {
 	
 	@Local
 	public Random random;
-	
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
@@ -130,12 +129,17 @@ public class Robot {
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Robot(final String id, long seed) {
+	public Robot(final String id, boolean withSeed, long seed) {
 		this.id = id;
 		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
 		availableDocks = new HashMap<>();
-		random = new Random(seed);
+		if (withSeed) {
+			random = new Random(seed);	
+		} else {
+			random = new Random();
+		}
+		
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -291,12 +295,12 @@ public class Robot {
 			Log.e(String.format("%s at %d planning to dock, but no dock available.",
 					id, currentTime));
 		} else {
-			Set<Node> target = new HashSet<>();
+			Set<Node> targets = new HashSet<>();
 			for(String dId : docks.keySet()){
-				target.add(docks.get(dId).position);
+				targets.add(docks.get(dId).position);
 			}
 			trajectory.value.clear();
-			targetPlanner.updateTrajectory(target, trajectory.value);
+			targetPlanner.updateTrajectory(targets, trajectory.value);
 		}
 	}
 

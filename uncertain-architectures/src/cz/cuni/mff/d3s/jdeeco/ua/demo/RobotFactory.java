@@ -41,17 +41,17 @@ public class RobotFactory {
 	private boolean plannerSet = false;
 	private boolean moverSet = false;
 	
-	private RobotFactory(String robotId, long seed, RuntimeLogger runtimeLogger){
-		robot = new Robot(robotId, seed);
+	private RobotFactory(String robotId, boolean withSeed, long seed, RuntimeLogger runtimeLogger){
+		robot = new Robot(robotId, withSeed, seed);
 		this.runtimeLogger = runtimeLogger;
 	}
 	
-	public static RobotFactory newRobot(String robotId, long seed, RuntimeLogger runtimeLogger){
+	public static RobotFactory newRobot(String robotId, boolean withSeed, long seed, RuntimeLogger runtimeLogger){
 		if(robotId == null || robotId.length() == 0) throw new IllegalArgumentException(
 				String.format("The \"%s\" argument cannot be null nor empty string.", "robotId"));
 		if(robotId == null || robotId.length() == 0) throw new IllegalArgumentException(
 				String.format("The \"%s\" argument cannot be null.", "runtimeLogger"));
-		return new RobotFactory(robotId, seed, runtimeLogger);
+		return new RobotFactory(robotId, withSeed, seed, runtimeLogger);
 	}
 	
 	public RobotFactory withBatteryLevel(double initialBatteryLevel){

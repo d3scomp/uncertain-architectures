@@ -39,15 +39,18 @@ public class Environment {
 	
 	@Local
 	public Random random;
-	
 
 	/**
 	 * Only constructor.
 	 * @param id component id
 	 */
-	public Environment(final String id, long seed) {
+	public Environment(final String id, boolean withSeed, long seed) {
 		this.id = id;
-		random = new Random(seed);
+		if (withSeed) {
+			random = new Random(seed);
+		} else {
+			random = new Random();
+		}
 	}
 	
 	@Process

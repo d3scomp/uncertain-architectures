@@ -47,6 +47,8 @@ public class Configuration {
 	// COMPONENTS IDs AND SEEDS
 	///////////////////////////////////////////////////////////////////////////
 
+	public static final boolean WITH_SEED = true;
+
 	public static final String ROBOT1_NAME = "TB1";
 	public static final long ROBOT1_SEED = 9387;
 	public static final String ROBOT2_NAME = "TB2";
@@ -58,7 +60,7 @@ public class Configuration {
 	public static final String DOCK2_NAME = "Dock2";
 
 	public static final String ENVIRONMENT_NAME = "Environment";
-	public static final long ENVIRONMENT_SEED = 85326;
+	public static final long ENVIRONMENT_SEED = 85327;
 	
 	/////////////////////////////////////////////////////////////////////////
 	// SIMULATION CONFIGURATION
@@ -66,6 +68,7 @@ public class Configuration {
 
 	public static final long SIMULATION_DURATION = 500_000;
 
+	public static final double SEARCH_TO_CHARGE_PROBABILITY = 0;
 	public static final boolean CORRELATION_ON = false;
 	public static final boolean ROLE_REMOVAL_ON = false;
 	
@@ -73,7 +76,7 @@ public class Configuration {
 	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
 	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
 
-	public static final boolean DOCK_FAILURE_ON = false;
+	public static final boolean DOCK_FAILURE_ON = true;
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
 	public static final long DOCK_FAILURE_TIME = 200_000;
 	
@@ -147,19 +150,19 @@ public class Configuration {
 	 * The energy consumption during robot movement.
 	 * Expressed in percents per second.
 	 */
-	public static final double MOVEMENT_ENERGY_COST = 0.0015; // %/s, 1 is 100%
+	public static final double MOVEMENT_ENERGY_COST = 0.003; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption during robot cleaning.
 	 * Expressed in percents per second.
 	 */
-	public static final double CLEANING_ENERGY_COST = 0.003; // %/s, 1 is 100%
+	public static final double CLEANING_ENERGY_COST = 0.006; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption when robot is idle.
 	 * Expressed in percents per second.
 	 */
-	public static final double IDLE_ENERGY_COST = 0.0005; // %/s, 1 is 100%
+	public static final double IDLE_ENERGY_COST = 0.001; // %/s, 1 is 100%
 	
 	/**
 	 * The amount of dirt that is cleaned in one cycle of cleaning.
@@ -171,7 +174,7 @@ public class Configuration {
 	 * The charging rate of the robot.
 	 * Expressed in percents per second.
 	 */
-	public static final double CHARGING_RATE = 0.05; // %/s, 1 is 100%
+	public static final double CHARGING_RATE = 0.02; // %/s, 1 is 100%
 	
 	/**
 	 * The time after which the record about available dock becomes obsolete.
@@ -184,7 +187,7 @@ public class Configuration {
 	/////////////////
 
 	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT1_NAME, ROBOT1_SEED, runtimeLogger)
+		return RobotFactory.newRobot(ROBOT1_NAME, WITH_SEED, ROBOT1_SEED, runtimeLogger)
 			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)
@@ -200,7 +203,7 @@ public class Configuration {
 	/////////////////
 
 	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT2_NAME, ROBOT2_SEED, runtimeLogger)
+		return RobotFactory.newRobot(ROBOT2_NAME, WITH_SEED, ROBOT2_SEED, runtimeLogger)
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)
@@ -216,7 +219,7 @@ public class Configuration {
 	/////////////////
 
 	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT3_NAME, ROBOT3_SEED, runtimeLogger)
+		return RobotFactory.newRobot(ROBOT3_NAME, WITH_SEED, ROBOT3_SEED, runtimeLogger)
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
 			.withBatteryLevel(0.3)

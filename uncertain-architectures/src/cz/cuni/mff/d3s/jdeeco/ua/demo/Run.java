@@ -20,6 +20,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 
 import java.io.IOException;
@@ -66,14 +67,13 @@ public class Run {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	public static void main(final String args[])
-			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException,
-			IOException {
+	public static void main(final String args[]) throws DEECoException, AnnotationProcessorException,
+			InstantiationException, IllegalAccessException, IOException {
 		Log.i("Preparing simulation");
 
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);
-		
+
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 
@@ -88,7 +88,7 @@ public class Run {
 
 		String logPath = "STANDARD";
 		RuntimeLogWriters writers;
-		if (args.length==0) {
+		if (args.length == 0) {
 			writers = new RuntimeLogWriters();
 		} else {
 			logPath = args[0];
@@ -104,31 +104,31 @@ public class Run {
 			deeco1 = simulation.createNode(1, writers);
 		}
 		nodesInSimulation.add(deeco1);
-		
-		Environment environment = new Environment(ENVIRONMENT_NAME, ENVIRONMENT_SEED);
+
+		Environment environment = new Environment(ENVIRONMENT_NAME, WITH_SEED, ENVIRONMENT_SEED);
 		deeco1.deployComponent(environment);
-		
+
 		// Deploy docking stations
 		Dock d1 = new Dock(DOCK1_NAME, DirtinessMap.randomNode(environment.random), deeco1.getRuntimeLogger());
 		deeco1.deployComponent(d1);
 		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), deeco1.getRuntimeLogger());
 		deeco1.deployComponent(d2);
-		
+
 		// Deploy robot 1
 		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
 		deeco1.deployComponent(r1);
 
 		// Deploy ensembles on node 1
 		deeco1.deployEnsemble(DockingEnsemble.class);
-		
-		if(enableMultipleDEECoNodes){
+
+		if (enableMultipleDEECoNodes) {
 			// Create node 2
 			DEECoNode deeco2 = simulation.createNode(2, writers);
 			nodesInSimulation.add(deeco2);
-			
+
 			// Deploy robot 2
 			deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
-	
+
 			// Deploy ensembles on node 2
 			deeco2.deployEnsemble(DockingEnsemble.class);
 		} else {
@@ -136,27 +136,27 @@ public class Run {
 			deeco1.deployComponent(Configuration.createRobot2(deeco1.getRuntimeLogger()));
 		}
 
-		if(enableMultipleDEECoNodes){
+		if (enableMultipleDEECoNodes) {
 			// Create node 3
 			DEECoNode deeco3 = simulation.createNode(3, writers);
 			nodesInSimulation.add(deeco3);
-	
+
 			// Deploy robot 3
 			deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
-	
+
 			// Deploy ensembles on node 3
 			deeco3.deployEnsemble(DockingEnsemble.class);
 		} else {
-			// Deploy robot 3 
+			// Deploy robot 3
 			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
 		}
-		
+
 		// Start the simulation
-		System.out.println("Simulation Starts - writing to '" + logPath +"'");
+		System.out.println("Simulation Starts - writing to '" + logPath + "'");
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_DURATION);
 		Log.i("Simulation Finished");
-		System.out.println("Simulation Finished - writen to '" + logPath +"'");
+		System.out.println("Simulation Finished - writen to '" + logPath + "'");
 	}
 
 }

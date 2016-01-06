@@ -55,7 +55,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
 				boolean b = !deadBatteryGuard.isSatisfied(knowledgeValue)
-						&& ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+						&& ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.25;
 				return b;
 			}
 			

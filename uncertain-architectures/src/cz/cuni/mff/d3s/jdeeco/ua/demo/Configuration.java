@@ -15,11 +15,6 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
@@ -47,7 +42,7 @@ public class Configuration {
 	// COMPONENTS IDs AND SEEDS
 	///////////////////////////////////////////////////////////////////////////
 
-	public static final boolean WITH_SEED = true;
+	public static final boolean WITH_SEED = false;
 
 	public static final String ROBOT1_NAME = "TB1";
 	public static final long ROBOT1_SEED = 9387;
@@ -60,7 +55,7 @@ public class Configuration {
 	public static final String DOCK2_NAME = "Dock2";
 
 	public static final String ENVIRONMENT_NAME = "Environment";
-	public static final long ENVIRONMENT_SEED = 85327;
+	public static final long ENVIRONMENT_SEED = 85328;
 	
 	/////////////////////////////////////////////////////////////////////////
 	// SIMULATION CONFIGURATION
@@ -76,7 +71,7 @@ public class Configuration {
 	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
 	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
 
-	public static final boolean DOCK_FAILURE_ON = true;
+	public static final boolean DOCK_FAILURE_ON = false;
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
 	public static final long DOCK_FAILURE_TIME = 200_000;
 	
@@ -150,7 +145,7 @@ public class Configuration {
 	 * The energy consumption during robot movement.
 	 * Expressed in percents per second.
 	 */
-	public static final double MOVEMENT_ENERGY_COST = 0.003; // %/s, 1 is 100%
+	public static final double MOVEMENT_ENERGY_COST = 0.0025; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption during robot cleaning.
@@ -190,7 +185,7 @@ public class Configuration {
 		return RobotFactory.newRobot(ROBOT1_NAME, WITH_SEED, ROBOT1_SEED, runtimeLogger)
 			.atPosition(5)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.3)
+			.withBatteryLevel(0.4)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
 			.withDockingPlanner(new NearestTrajectoryPlanner())
@@ -206,7 +201,7 @@ public class Configuration {
 		return RobotFactory.newRobot(ROBOT2_NAME, WITH_SEED, ROBOT2_SEED, runtimeLogger)
 			.atPosition(10)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.3)
+			.withBatteryLevel(0.4)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
 			.withDockingPlanner(new NearestTrajectoryPlanner())
@@ -222,7 +217,7 @@ public class Configuration {
 		return RobotFactory.newRobot(ROBOT3_NAME, WITH_SEED, ROBOT3_SEED, runtimeLogger)
 			.atPosition(0)
 			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.3)
+			.withBatteryLevel(0.4)
 			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
 			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
 			.withDockingPlanner(new NearestTrajectoryPlanner())

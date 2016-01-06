@@ -15,5 +15,5 @@ for line in resultsFile.readlines():
 
 plt.figure(1)
 plt.boxplot(bigPercentiles)
-plt.ylabel('NinetyfifthPercentiles')
+plt.ylabel('NinetyPercentiles')
 plt.savefig("../results/NinetyfifthPercentiles.pdf")

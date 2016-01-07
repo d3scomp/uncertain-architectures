@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -215,7 +216,7 @@ public class DirtinessMap implements Serializable{
 	 *         specified.
 	 */
 	public Collection<LinkPosition> getOthersPosition(String robotId) {
-		Collection<LinkPosition> positions = ROBOT_LOCATIONS.values();
+		Collection<LinkPosition> positions = new HashSet<>(ROBOT_LOCATIONS.values());
 		if (robotId != null && ROBOT_LOCATIONS.containsKey(robotId)) {
 			LinkPosition excludedPosition = ROBOT_LOCATIONS.get(robotId);
 			positions.remove(excludedPosition);

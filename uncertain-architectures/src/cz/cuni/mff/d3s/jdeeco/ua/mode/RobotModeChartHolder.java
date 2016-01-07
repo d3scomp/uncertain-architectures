@@ -180,6 +180,45 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
+		final ModeGuard startWaitGuard = new ModeGuard() {
+			@Override
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
+				List<Link> trajectory = (List<Link>) knowledgeValues[1];
+				String id = (String) knowledgeValues[2];
+				
+				if(trajectory.size() == 0){
+					return false;
+				}
+				
+				Node nextPosition = trajectory.get(0).getTo();
+				for(LinkPosition otherPosition : map.getOthersPosition(id)){
+					if(nextPosition.equals(otherPosition.atNode())){
+						return true;
+					}
+				}
+				
+				return false;
+			}
+			
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"map", "trajectory", "id"};
+			}
+		};
+
+		final ModeGuard stopWaitGuard = new ModeGuard() {
+			@Override
+			public boolean isSatisfied(Object[] knowledgeValues) {
+				return !startWaitGuard.isSatisfied(knowledgeValues);
+			}
+			
+			@Override
+			public String[] getKnowledgeNames() {
+				return new String[] {"map", "trajectory", "id"};
+			}
+		};
+		
 		ModeChartFactory factory = new ModeChartFactory();
 		
 		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
@@ -217,9 +256,15 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		factory.addTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
 		factory.addTransitionListener(DockingMode.class, ChargingMode.class, new ModeTransitionLogger(DockingMode.class, ChargingMode.class));
 		factory.addTransitionListener(DockingMode.class, ChargingMode.class, clearPlanEventListener);
-		
+				
 		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
 		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, new ModeTransitionLogger(DockingMode.class, DeadBatteryMode.class));
+
+		factory.addTransitionWithGuard(DockingMode.class, WaitingMode.class, startWaitGuard);
+		factory.addTransitionListener(DockingMode.class, WaitingMode.class, new ModeTransitionLogger(DockingMode.class, WaitingMode.class));
+
+		factory.addTransitionWithGuard(WaitingMode.class, DockingMode.class, stopWaitGuard);
+		factory.addTransitionListener(WaitingMode.class, DockingMode.class, new ModeTransitionLogger(WaitingMode.class, DockingMode.class));
 		
 		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedGuard);
 		factory.addTransitionListener(ChargingMode.class, SearchMode.class, new ModeTransitionLogger(ChargingMode.class, SearchMode.class));

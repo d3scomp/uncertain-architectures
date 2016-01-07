@@ -69,6 +69,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.mode.DirtApproachMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.SearchMode;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.WaitingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
@@ -207,7 +208,7 @@ public class Robot {
 	///////////////////////////////////////////////////////////////////////////
 	
 	@Process
-	@ExcludeModes({ChargingMode.class, CleanMode.class, DeadBatteryMode.class})
+	@ExcludeModes({ChargingMode.class, CleanMode.class, DeadBatteryMode.class, WaitingMode.class})
 	@PeriodicScheduling(period = MOVE_PROCESS_PERIOD)
 	public static void move(@In("id") String id,
 			@In("mover") TrajectoryExecutor mover,
@@ -289,12 +290,13 @@ public class Robot {
 	public static void planDock(@In("id") String id,
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
-			@In("availableDocks") Map<String, DockData> docks) {
+			@In("availableDocks") Map<String, DockData> docks,
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		if(docks.isEmpty()){
-			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 			Log.e(String.format("%s at %d planning to dock, but no dock available.",
 					id, currentTime));
-		} else {
+		} else if (position.getValue().isLinkLeft()){
 			Set<Node> targets = new HashSet<>();
 			for(String dId : docks.keySet()){
 				targets.add(docks.get(dId).position);

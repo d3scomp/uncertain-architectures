@@ -145,7 +145,7 @@ public class Configuration {
 	 * The energy consumption during robot movement.
 	 * Expressed in percents per second.
 	 */
-	public static final double MOVEMENT_ENERGY_COST = 0.0025; // %/s, 1 is 100%
+	public static final double MOVEMENT_ENERGY_COST = 0.003; // %/s, 1 is 100%
 
 	/**
 	 * The energy consumption during robot cleaning.

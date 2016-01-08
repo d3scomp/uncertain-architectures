@@ -76,7 +76,7 @@ public class TrajectoryExecutor {
 				"The \"%s\" field is not initialized.", "map"));
 
 		// Check whether the robot already overcame the link
-		if(position.isEndReached()){
+		if(position.isLinkLeft()){
 			if(!plan.isEmpty() && position.atNode().equals(plan.get(0).getTo())){
 				plan.remove(0);
 			}

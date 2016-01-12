@@ -63,15 +63,16 @@ public class Configuration {
 
 	public static final long SIMULATION_DURATION = 500_000;
 
-	public static final double SEARCH_TO_CHARGE_PROBABILITY = 0;
-	public static final boolean CORRELATION_ON = false;
-	public static final boolean ROLE_REMOVAL_ON = false;
+	public static double SEARCH_TO_CHARGE_PROBABILITY = 0;
+	public static boolean CORRELATION_ON = false;
+	public static boolean ROLE_REMOVAL_ON = false;
 	
-	public static final boolean DIRT_DETECTION_FAILURE_ON = false;
+	public static boolean DIRT_DETECTION_FAILURE_ON = false;
+	public static boolean DOCK_FAILURE_ON = false;
+
 	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
 	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
 
-	public static final boolean DOCK_FAILURE_ON = false;
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
 	public static final long DOCK_FAILURE_TIME = 200_000;
 	

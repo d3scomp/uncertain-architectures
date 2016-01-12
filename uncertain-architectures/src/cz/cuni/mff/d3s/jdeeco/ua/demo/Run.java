@@ -93,7 +93,14 @@ public class Run {
 		} else {
 			logPath = args[0];
 			writers = new RuntimeLogWriters(logPath);
+			
+			Configuration.SEARCH_TO_CHARGE_PROBABILITY = Double.parseDouble(args[1]);
+			Configuration.CORRELATION_ON = Boolean.parseBoolean(args[2]);
+			Configuration.ROLE_REMOVAL_ON = Boolean.parseBoolean(args[3]);
+			Configuration.DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[4]);
+			Configuration.DOCK_FAILURE_ON = Boolean.parseBoolean(args[5]);
 		}
+
 		// Create node 1
 		DEECoNode deeco1;
 		if (CORRELATION_ON) {

@@ -4,9 +4,9 @@ Created on Dec 8, 2015
 @author: Ilias
 '''
 import xml.etree.ElementTree as etree
-import matplotlib.pyplot as plt
 import numpy as np
 import os
+import Simulations
 
 class Dirtiness:
     "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finishes when it's clean again"
@@ -22,7 +22,7 @@ class Dirtiness:
         
     def intensityChanged(self, time, newIntensity):
         self.intensitites.append({"time": time,"intensity": newIntensity})
-        if intensity == 0:
+        if newIntensity == 0:
             self.endTime = time
         
     def eventCompleted(self):
@@ -37,27 +37,28 @@ class Dirtiness:
     def __str__(self):
         return "Dirtiness [node: {0:3d} \t duration: {1:7d}  \t start/end time: {2:6d}/{3:6d} \t changes: {4}".format(self.node, self.duration(), self.startTime, self.getEndTime(), self.intensitites)
         
-if __name__ == '__main__':      
-
-    dockFailure = False
-
-    correlation = False
-    roleRemoval = False
-    ExtraTransitions = False
+def analyze(simulationSignature):
     
-    log_dirs = []
-    for dir_name in [x[0] for x in os.walk('logs')]:
-        if (dir_name.startswith('logs\log_')) :
-            log_dirs.append(dir_name)
+    os.makedirs(Simulations.cvs_dir, exist_ok=True)
+    
+    simulation_signature_logs_dir = os.path.join(Simulations.logs_dir,simulationSignature)
+    simulation_signature_cvs_file_path = os.path.join(Simulations.cvs_dir,simulationSignature+".cvs")
+    
+    log_dir_names = []
+    for root, dirs, files in os.walk(simulation_signature_logs_dir):
+        for log_dir_name in dirs:
+            simulation_signature_logs_dir_full_name = os.path.join(simulation_signature_logs_dir,log_dir_name) 
+            log_dir_names.append(simulation_signature_logs_dir_full_name)
     
     bigPercentiles = []
-    outputFile = open("../results/results.csv", "w")
-    
-    for log_dir in log_dirs : 
-        
-        print("Analysing " + log_dir)
 
-        tree = etree.parse(log_dir+'/runtimeData.xml')  
+    outputFile = open(simulation_signature_cvs_file_path, "w")
+    
+    for log_dir in log_dir_names : 
+        
+        print("Analyzing " + log_dir)
+
+        tree = etree.parse(os.path.join(log_dir,'runtimeData.xml'))  
         root = tree.getroot()                    
             
         dirtinesses = []
@@ -79,32 +80,26 @@ if __name__ == '__main__':
                 dirtinesses.append(dirtiness)
             
         print("Found " + str(len(dirtinesses)) + " dirtiness events")
-    #     for d in dirtinesses:
-    #         print(d)    
     
         durations = [d.duration() for d in dirtinesses]
-        nodes = [d.node for d in dirtinesses]
-        
-#         plt.figure(1)
-#         plt.plot(nodes,durations, 'bo')
-#         plt.ylabel('Duration of dirtinesses')
-    #     plt.savefig("../results/scatter-plot.pdf")
-    #         
-#         plt.figure(2)
-#         plt.boxplot(durations)
-#         plt.ylabel('Duration of dirtinesses')
-#         plt.savefig("../results/boxplot.pdf")
-    #     plt.show()
-    
-    #     median = np.percentile(durations, 50)
-    #     print("the median of durations is " + str(median))
         
         bigPercentile = np.percentile(durations, 90)
         print("The 90th percentile of dirtiness event durations is " + str(bigPercentile))
-        bigPercentiles.append(bigPercentile)
         outputFile.write(str(bigPercentile)+"\n")
+        bigPercentiles.append(bigPercentile)
     
     average = np.average(bigPercentiles)
     outputFile.write("\n")
     outputFile.write(str(average))
+    
+    median = np.percentile(bigPercentiles, 50)
+    outputFile.write("\n")
+    outputFile.write(str(median))
+    
     outputFile.close()
+    
+    print("Analysis results written to " + simulationSignature)
+    
+if __name__ == '__main__':   
+    
+    analyze()

@@ -3,28 +3,96 @@ Created on Dec 31, 2015
 
 @author: Ilias
 '''
-import os
+import time
+from DirtinessAnalysis import *
+from BigPercentileAnalysis import *
 from subprocess import *
 
-def simulate():
+results_dir = os.path.join('..','results')
+logs_dir = os.path.join(results_dir,'logs')
+cvs_dir = os.path.join(results_dir,'cvs')
+figures_dir = os.path.join(results_dir,'figures')
+
+loggingPropertiesPath = "src\logging.properties"
+
+simulated = []
+
+def finalizeOldestSimulation():
+    simulation = simulated[0]
+    simulation.wait()
+    simulated.pop(0)
+    
+def simulate(probabilityOfExtraTransition = 0, 
+             correlation = False, 
+             roleRemoval = False, 
+             dirtDetectionFailure = False, 
+             dockFailure = False,
+             iterations = 10,
+             simulation_signature = "sample"):
     root = os.path.dirname(os.path.realpath(__file__))
     classpath = os.path.join(root, '..' , 'dist' ,'*' + os.pathsep + root, '..' + os.pathsep + '.')
-    
-    logPath = "src\logging.properties"
+  
+    cores = 2
     
     print('Spawning simulation processes...')
     # invoke 10 iterations with the same configuration
-    for i in range(1,11):
+    for i in range(1,iterations+1):
+        
+        if (len(simulated) >= cores) :
+            finalizeOldestSimulation()
+ 
         cmd = ['java', 
             '-classpath', classpath,
-            '-Djava.util.logging.config.file=%s' % (logPath.replace('\\', '/')),
+            '-Djava.util.logging.config.file=%s' % (loggingPropertiesPath.replace('\\', '/')),
             'cz.cuni.mff.d3s.jdeeco.ua.demo.Run',
-            'logs/log_' + str(i)]
-        simulation = Popen(cmd)
-        simulation.wait()
+            os.path.join(logs_dir,simulation_signature, 'log_' + str(i)),
+            str(probabilityOfExtraTransition),
+            "true" if (correlation) else "false",
+            "true" if (roleRemoval) else "false",
+            "true" if (dirtDetectionFailure) else "false",
+            "true" if (dockFailure) else "false"]
         
-if __name__ == '__main__': 
+        simulation = Popen(cmd)     
+        simulated.append(simulation)
+    
+    # finalize the rest    
+    while len(simulated) > 0:
+        finalizeOldestSimulation()
+        
+    print("Simulation processes finished.")
+    
+def getSimulationSignature(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations):
+    outputFileName = []
+    outputFileName.append("P" + str(probabilityOfExtraTransition) + "-") 
+    outputFileName.append("C-" if (correlation) else "!C-")
+    outputFileName.append("RR-" if (roleRemoval) else "!RR-")
+    outputFileName.append("DDF-" if (dirtDetectionFailure) else "!DDF-")
+    outputFileName.append("DF-" if (dockFailure) else "!DF-") 
+    outputFileName.append("it" + str(iterations))
+    return ''.join(outputFileName)
 
-    simulate()
-    print("Simulations finished.")
-
+def simulateScenario(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations):
+    
+    start = time.time()
+     
+    simulation_signature = getSimulationSignature(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations)
+    
+    simulate(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations, simulation_signature)
+    analyze(simulation_signature)
+    plot()
+    
+    end = time.time()
+    
+    print("Simulation, analysis, and plotting for scenario with signature %s lasted for %.2f mins" % (simulation_signature, (end-start)/60))
+    
+if __name__ == '__main__':
+    
+    probabilityOfExtraTransition = 0
+    correlation = False
+    roleRemoval = False
+    dirtDetectionFailure = False
+    dockFailure = False
+    iterations = 5
+    
+    simulateScenario(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations)
+    

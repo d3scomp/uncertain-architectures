@@ -6,3 +6,5 @@
 /results
 /dist
 /analysis/logs
+/analysis/target
+/analysis/__pycache__

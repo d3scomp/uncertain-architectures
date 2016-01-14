@@ -34,4 +34,7 @@ class ModeSuccessor {
 		return probability;
 	}
 	
+	public String getTypeName(){
+		return successor.getTypeName();
+	}
 }

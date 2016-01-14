@@ -368,9 +368,10 @@ public class DirtinessMap implements Serializable{
 	public static boolean isDockWorking(Node dockPosition){
 		if(dockPosition == null) throw new IllegalArgumentException(String.format(
 				"The \"%s\" argument is null.", "node"));
-		if(!DOCKING_STATIONS.containsKey(dockPosition)) throw new IllegalArgumentException(
-				String.format("No docking station on %s", dockPosition.toString()));
-		
+		if(!DOCKING_STATIONS.containsKey(dockPosition)) {
+			Log.w(String.format("No docking station on %s", dockPosition.toString()));
+			return false;
+		}
 		return DOCKING_STATIONS.get(dockPosition);
 	}
 	

@@ -109,10 +109,11 @@ class ModeChartImpl extends ModeChart{
 			if(probabilitySum > 1){
 				StringBuilder builder = new StringBuilder();
 				for(ModeSuccessor succ : successors){
-					builder.append("\n").append(succ.getClass())
+					builder.append("\n").append(succ.getTypeName())
 						.append(" probability = ").append(succ.probability);
 				}
 				Log.e("The probabilities of these satisfied mode successors"
+						+ " of " + currentMode.getTypeName()  
 						+ " is greater than 1 and will lead to unconsistent behavior:"
 						+ builder.toString());
 			}

@@ -94,7 +94,7 @@ public class Run {
 			logPath = args[0];
 			writers = new RuntimeLogWriters(logPath);
 			
-			Configuration.SEARCH_TO_CHARGE_PROBABILITY = Double.parseDouble(args[1]);
+			Configuration.PROBABILITY = Double.parseDouble(args[1]);
 			Configuration.CORRELATION_ON = Boolean.parseBoolean(args[2]);
 			Configuration.ROLE_REMOVAL_ON = Boolean.parseBoolean(args[3]);
 			Configuration.DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[4]);
@@ -158,6 +158,9 @@ public class Run {
 			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
 		}
 
+		deeco1.deployComponent(Configuration.createRobot4(deeco1.getRuntimeLogger()));
+		deeco1.deployComponent(Configuration.createRobot5(deeco1.getRuntimeLogger()));
+		
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + logPath + "'");
 		Log.i("Simulation Starts");

@@ -50,6 +50,10 @@ public class Configuration {
 	public static final long ROBOT2_SEED = 437436;
 	public static final String ROBOT3_NAME = "TB3";
 	public static final long ROBOT3_SEED = 453987;
+	public static final String ROBOT4_NAME = "TB4";
+	public static final long ROBOT4_SEED = 847222;
+	public static final String ROBOT5_NAME = "TB5";
+	public static final long ROBOT5_SEED = 453443;
 
 	public static final String DOCK1_NAME = "Dock1";
 	public static final String DOCK2_NAME = "Dock2";
@@ -61,9 +65,9 @@ public class Configuration {
 	// SIMULATION CONFIGURATION
 	///////////////////////////////////////////////////////////////////////////
 
-	public static final long SIMULATION_DURATION = 500_000;
+	public static final long SIMULATION_DURATION = 600_000;
 
-	public static double SEARCH_TO_CHARGE_PROBABILITY = 0;
+	public static double PROBABILITY = 0;
 	public static boolean CORRELATION_ON = false;
 	public static boolean ROLE_REMOVAL_ON = false;
 	
@@ -71,10 +75,10 @@ public class Configuration {
 	public static boolean DOCK_FAILURE_ON = false;
 
 	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
-	public static final long DIRT_DETECTION_FAILURE_TIME = 300_000;
+	public static final long DIRT_DETECTION_FAILURE_TIME = 100_000;
 
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
-	public static final long DOCK_FAILURE_TIME = 200_000;
+	public static final long DOCK_FAILURE_TIME = 50_000;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
@@ -176,7 +180,7 @@ public class Configuration {
 	 * The time after which the record about available dock becomes obsolete.
 	 * Expressed in milliseconds.
 	 */
-	public static final long AVAILABLE_DOCK_OBSOLETE_THRESHOLD = 3000; // ms
+	public static final long AVAILABLE_DOCK_OBSOLETE_THRESHOLD = 2000; // ms
 		
 	/////////////////
 	// ROBOT 1 
@@ -226,5 +230,36 @@ public class Configuration {
 			.create();
 	}
 	
+	/////////////////
+	// ROBOT 4 
+	/////////////////
+
+	public static final Robot createRobot4(RuntimeLogger runtimeLogger){
+		return RobotFactory.newRobot(ROBOT4_NAME, WITH_SEED, ROBOT4_SEED, runtimeLogger)
+			.atPosition(15)
+			.withPositionNoise(new PositionFilter(0.0, 0.1))
+			.withBatteryLevel(0.4)
+			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
+			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
+			.withDockingPlanner(new NearestTrajectoryPlanner())
+			.withTrajectoryExecutor(new TrajectoryExecutor())
+			.create();
+	}
+	
+	/////////////////
+	// ROBOT 5 
+	/////////////////
+
+	public static final Robot createRobot5(RuntimeLogger runtimeLogger){
+		return RobotFactory.newRobot(ROBOT5_NAME, WITH_SEED, ROBOT5_SEED, runtimeLogger)
+			.atPosition(20)
+			.withPositionNoise(new PositionFilter(0.0, 0.1))
+			.withBatteryLevel(0.4)
+			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
+			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
+			.withDockingPlanner(new NearestTrajectoryPlanner())
+			.withTrajectoryExecutor(new TrajectoryExecutor())
+			.create();
+	}
 	///////////////////////////////////////////////////////////////////////////
 }

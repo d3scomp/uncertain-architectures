@@ -63,11 +63,11 @@ def simulate(probabilityOfExtraTransition = 0,
     
 def getSimulationSignature(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations):
     outputFileName = []
+    outputFileName.append("DDF-" if (dirtDetectionFailure) else "!DDF-")
+    outputFileName.append("DF-" if (dockFailure) else "!DF-") 
     outputFileName.append("P" + str(probabilityOfExtraTransition) + "-") 
     outputFileName.append("C-" if (correlation) else "!C-")
     outputFileName.append("RR-" if (roleRemoval) else "!RR-")
-    outputFileName.append("DDF-" if (dirtDetectionFailure) else "!DDF-")
-    outputFileName.append("DF-" if (dockFailure) else "!DF-") 
     outputFileName.append("it" + str(iterations))
     return ''.join(outputFileName)
 

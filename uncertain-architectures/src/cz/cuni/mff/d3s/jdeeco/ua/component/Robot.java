@@ -189,7 +189,7 @@ public class Robot {
 	) {
 		Node positionNode = position.getValue().atNode();
 		if(positionNode == null){
-			Log.e("Trying to charge between two nodes.");
+			Log.w("Trying to charge between two nodes.");
 		} else if (DirtinessMap.isDockWorking(positionNode)){
 			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 			double delta = CHARGING_RATE * (double) BATTERY_PROCESS_PERIOD / 1000;
@@ -325,7 +325,6 @@ public class Robot {
 	}
 	
 	@Process
-	@Mode(CleanMode.class)
 	@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
 	public static void removeObsoleteDocks(@In("id") String id,
 			@InOut("availableDocks") ParamHolder<Map<String, DockData>> docks) {

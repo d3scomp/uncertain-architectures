@@ -12,15 +12,15 @@ import Simulations
 
 class BoxPlot:
     
-    def __init__(self, signature, data):
-        self.signature = signature
+    def __init__(self, label, data):
+        self.label = label
         self.data = data
         
     def getData(self):
         return self.data
     
-    def getSignature(self):
-        return self.signature
+    def getLabel(self):
+        return self.label
     
 def getLabelFromSignature(signature):
     res = []
@@ -29,6 +29,7 @@ def getLabelFromSignature(signature):
     res.append(',')
     res.append(parts[1])
     res.append(',')
+#     res.append(parts[2].split('P')[1])
     res.append(parts[2])
     res.append(',')
     res.append(parts[3])
@@ -64,7 +65,6 @@ def plot():
         plt.figure()
         plt.boxplot(single_scenario_big_percentiles)
         simulation_signature = cvs_file_name.split('.cvs')[0]
-#         label = simulation_signature.split('-')[0] + ',' + simulation_signature.split('-')[1] + ',' + simulation_signature.split('-')[2] + ',' + simulation_signature.split('-')[3] + ',' + simulation_signature.split('-')[4]
         plt.ylabel('NinetyPercentiles of ' + simulation_signature)
         boxplot_file_path = os.path.join(Simulations.figures_dir, simulation_signature+'.pdf')
         plt.savefig(boxplot_file_path)
@@ -73,7 +73,7 @@ def plot():
         boxplots.append(BoxPlot(getLabelFromSignature(simulation_signature), single_scenario_big_percentiles))
     
     plt.figure()
-    bp_dict = plt.boxplot([b.getData() for b in boxplots], labels=[b.getSignature() for b in boxplots])
+    bp_dict = plt.boxplot([b.getData() for b in boxplots], labels=[b.getLabel() for b in boxplots])
     
     # add the value of the medians to the diagram 
     for line in bp_dict['medians']:
@@ -84,7 +84,7 @@ def plot():
                 horizontalalignment='right', verticalalignment='bottom',
                 fontsize=10)
     
-    boxplot_file_path = os.path.join(Simulations.figures_dir, 'all.pdf')
+    boxplot_file_path = os.path.join(Simulations.figures_dir, 'all.png')
     plt.savefig(boxplot_file_path)
     print("Generated boxplot " + boxplot_file_path)
     

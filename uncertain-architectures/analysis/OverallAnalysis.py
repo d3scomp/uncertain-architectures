@@ -5,9 +5,13 @@ Created on Jan 8, 2016
 '''
 from Simulations import *
 
-i = 30
+i = 100
 
 start = time.time()
+
+################################################
+################ Role removal ##################
+################################################
 
 # simulateScenario(
 #     probabilityOfExtraTransition = 0,
@@ -16,7 +20,7 @@ start = time.time()
 #     dirtDetectionFailure = False, 
 #     dockFailure = False,
 #     iterations = i)
-  
+#   
 # simulateScenario(
 #     probabilityOfExtraTransition = 0,
 #     correlation = False,
@@ -24,6 +28,18 @@ start = time.time()
 #     dirtDetectionFailure = False,
 #     dockFailure = True,
 #     iterations = i)
+
+# simulateScenario(
+#     probabilityOfExtraTransition = 0,
+#     correlation = False,
+#     roleRemoval = True,
+#     dirtDetectionFailure = False,
+#     dockFailure = True,
+#     iterations = i)
+
+################################################
+################## Correlation #################
+################################################
 
 # simulateScenario(
 #     probabilityOfExtraTransition = 0,
@@ -33,14 +49,18 @@ start = time.time()
 #     dockFailure = False,
 #     iterations = i)
 
-simulateScenario(
-    probabilityOfExtraTransition = 0,
-    correlation = False,
-    roleRemoval = True,
-    dirtDetectionFailure = False,
-    dockFailure = True,
-    iterations = i)
-  
+# simulateScenario(
+#     probabilityOfExtraTransition = 0,
+#     correlation = True,
+#     roleRemoval = False,
+#     dirtDetectionFailure = True,
+#     dockFailure = False,
+#     iterations = i)
+
+################################################
+################ Probabilities #################
+################################################
+
 # simulateScenario(
 #     probabilityOfExtraTransition = 0.01,
 #     correlation = False,
@@ -48,7 +68,7 @@ simulateScenario(
 #     dirtDetectionFailure = False,
 #     dockFailure = True,
 #     iterations = i)
-#    
+#     
 # simulateScenario(
 #     probabilityOfExtraTransition = 0.005,
 #     correlation = False,
@@ -56,15 +76,15 @@ simulateScenario(
 #     dirtDetectionFailure = False,
 #     dockFailure = True,
 #     iterations = i)
-#  
-simulateScenario(
-    probabilityOfExtraTransition = 0.001,
-    correlation = False,
-    roleRemoval = True,
-    dirtDetectionFailure = False,
-    dockFailure = True,
-    iterations = i)
-#  
+#   
+# simulateScenario(
+#     probabilityOfExtraTransition = 0.001,
+#     correlation = False,
+#     roleRemoval = True,
+#     dirtDetectionFailure = False,
+#     dockFailure = True,
+#     iterations = i)
+#   
 # simulateScenario(
 #     probabilityOfExtraTransition = 0.0005,
 #     correlation = False,
@@ -72,7 +92,7 @@ simulateScenario(
 #     dirtDetectionFailure = False,
 #     dockFailure = True,
 #     iterations = i)
-#  
+  
 # simulateScenario(
 #     probabilityOfExtraTransition = 0.0001,
 #     correlation = False,

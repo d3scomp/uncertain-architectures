@@ -79,7 +79,7 @@ def simulateScenario(probabilityOfExtraTransition, correlation, roleRemoval, dir
     
     simulate(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations, simulation_signature)
     analyze(simulation_signature)
-    plot()
+    plot(probabilityOfExtraTransition > 0)
     
     end = time.time()
     

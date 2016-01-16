@@ -11,7 +11,7 @@ from pylab import *
 import Simulations
 
 class BoxPlot:
-    
+     
     def __init__(self, label, data):
         self.label = label
         self.data = data
@@ -22,24 +22,26 @@ class BoxPlot:
     def getLabel(self):
         return self.label
     
-def getLabelFromSignature(signature):
+def getLabelFromSignature(signature, probabilities_on = True):
     res = []
     parts = signature.split('-')
-    res.append(parts[0])
-    res.append(',')
-    res.append(parts[1])
-    res.append(',')
-#     res.append(parts[2].split('P')[1])
-    res.append(parts[2])
-    res.append(',')
-    res.append(parts[3])
-    res.append(',')
-    res.append(parts[4])
-    res.append(',')
-    res.append(parts[5])
+    if (probabilities_on) :
+        res.append(parts[2].split('P')[1])
+    else :
+        res.append(parts[0])
+        res.append(',')
+        res.append(parts[1])
+        res.append(',')
+        res.append(parts[2])
+        res.append(',')
+        res.append(parts[3])
+        res.append(',')
+        res.append(parts[4])
+        res.append(',')
+        res.append(parts[5])
     return ''.join(res)
 
-def plot():
+def plot(probabilities_on = True):
     
     os.makedirs(Simulations.figures_dir, exist_ok=True)
 
@@ -50,17 +52,20 @@ def plot():
     
     boxplots = []
     
+    numbering=["a.","b.","c."]
+    i=0
+    
     for cvs_file_name in results_file_names : 
         
         cvs_file_full_path = os.path.join(Simulations.cvs_dir, cvs_file_name)
         resultsFile = open(cvs_file_full_path, "r")
         single_scenario_big_percentiles = []
-         
+        
         for line in resultsFile.readlines():
             if line == '\n' : 
                 break;
             bigPercentile = float(line)
-            single_scenario_big_percentiles.append(bigPercentile)
+            single_scenario_big_percentiles.append(bigPercentile / 1000)
             
         plt.figure()
         plt.boxplot(single_scenario_big_percentiles)
@@ -70,17 +75,27 @@ def plot():
         plt.savefig(boxplot_file_path)
         print("Generated boxplot " + boxplot_file_path)
         
-        boxplots.append(BoxPlot(getLabelFromSignature(simulation_signature), single_scenario_big_percentiles))
+        if (probabilities_on) :
+            boxplots.append(BoxPlot(getLabelFromSignature(simulation_signature), single_scenario_big_percentiles))
+        else :
+            label = numbering[i]
+            i = i + 1
+            boxplots.append(BoxPlot(label, single_scenario_big_percentiles))
     
-    plt.figure()
-    bp_dict = plt.boxplot([b.getData() for b in boxplots], labels=[b.getLabel() for b in boxplots])
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    bp_dict = ax.boxplot([b.getData() for b in boxplots], labels=[b.getLabel() for b in boxplots])
+    ax.set_ylabel('Time (sec)')
     
+    if (probabilities_on) :
+        ax.set_xlabel('Probabilities')
+        
     # add the value of the medians to the diagram 
     for line in bp_dict['medians']:
         # get position data for median line
         x,y = line.get_xydata()[1] # top of median line
         # overlay median value
-        annotate('%.0f' % (y/1000), xy=(x - .17, y + 20),
+        annotate('%.0f' % (y), xy=(x - .07, y),
                 horizontalalignment='right', verticalalignment='bottom',
                 fontsize=10)
     

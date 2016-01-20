@@ -41,7 +41,7 @@ def getLabelFromSignature(signature, probabilities_on = True):
         res.append(parts[5])
     return ''.join(res)
 
-def plot(probabilities_on = True):
+def plot(probabilities_on = False):
     
     os.makedirs(Simulations.figures_dir, exist_ok=True)
 

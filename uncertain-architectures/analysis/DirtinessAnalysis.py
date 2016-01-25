@@ -8,10 +8,8 @@ import numpy as np
 import os
 import Simulations
 import multiprocessing
-from multiprocessing import Pool
 from os import listdir
 from os.path import join, isfile
-from PIL._util import isDirectory
 
 class Dirtiness:
     "Holds information about a dirtiness event. The event starts the first time a node gets dirty and finishes when it's clean again"
@@ -44,7 +42,7 @@ class Dirtiness:
       
 def analyzeLog(simulationSignature, log_dir_name):
     
-    outputFilePath = os.path.join(Simulations.cvs_dir,simulationSignature + "_" + log_dir_name + ".cvs")
+    outputFilePath = os.path.join(Simulations.cvs_dir,simulationSignature + "_" + log_dir_name + ".csv")
     outputFile = open(outputFilePath, "w")
 
     log_dir = os.path.join(Simulations.logs_dir, simulationSignature, log_dir_name)
@@ -84,7 +82,7 @@ def analyzeLog(simulationSignature, log_dir_name):
 
 def mergeIntoSingleFile(simulationSignature):
     
-    outputFilePath = os.path.join(Simulations.cvs_dir,simulationSignature + ".cvs")
+    outputFilePath = os.path.join(Simulations.cvs_dir,simulationSignature + ".csv")
     outputFile = open(outputFilePath, "w")
 
     for cvs_file_name in [f for f in listdir(Simulations.cvs_dir) if isfile(join(Simulations.cvs_dir, f))]:
@@ -97,6 +95,9 @@ def mergeIntoSingleFile(simulationSignature):
             for line in resultsFile.readlines():
                 outputFile.write(line)
                 
+            resultsFile.close
+#             os.remove(cvs_file_full_path)
+            
     outputFile.close()
     print("Analysis results merged into " + outputFilePath)
  
@@ -111,7 +112,7 @@ def analyze(cores):
           
     os.makedirs(Simulations.cvs_dir, exist_ok=True)
     
-    for simulationSignature in [f for f in listdir(Simulations.logs_dir) if isDirectory(join(Simulations.logs_dir, f))]:
+    for simulationSignature in [f for f in listdir(Simulations.logs_dir)]:
         print("Analyzing logs of signature: " + simulationSignature)
                         
         for root, dirs, files in os.walk(os.path.join(Simulations.logs_dir,simulationSignature)):

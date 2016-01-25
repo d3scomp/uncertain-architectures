@@ -52,7 +52,7 @@ def plot(probabilities_on = False):
     
     boxplots = []
     
-    numbering=["a.","b.","c."]
+    numbering=["1","2","3"]
     i=0
     
     for cvs_file_name in results_file_names : 
@@ -69,11 +69,11 @@ def plot(probabilities_on = False):
             
         plt.figure()
         plt.boxplot(single_scenario_big_percentiles)
-        simulation_signature = cvs_file_name.split('.cvs')[0]
-        plt.ylabel('NinetyPercentiles of ' + simulation_signature)
-        boxplot_file_path = os.path.join(Simulations.figures_dir, simulation_signature+'.pdf')
-        plt.savefig(boxplot_file_path)
-        print("Generated boxplot " + boxplot_file_path)
+        simulation_signature = cvs_file_name.split('.csv')[0]
+#         plt.ylabel('NinetyPercentiles of ' + simulation_signature)
+#         boxplot_file_path = os.path.join(Simulations.figures_dir, simulation_signature+'.pdf')
+#         plt.savefig(boxplot_file_path)
+#         print("Generated boxplot " + boxplot_file_path)
         
         if (probabilities_on) :
             boxplots.append(BoxPlot(getLabelFromSignature(simulation_signature), single_scenario_big_percentiles))

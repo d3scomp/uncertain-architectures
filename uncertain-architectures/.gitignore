@@ -8,3 +8,4 @@
 /analysis/logs
 /analysis/target
 /analysis/__pycache__
+/.pydevproject

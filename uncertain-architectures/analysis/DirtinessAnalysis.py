@@ -42,7 +42,7 @@ class Dirtiness:
       
 def analyzeLog(simulationSignature, log_dir_name):
     
-    outputFilePath = os.path.join(Simulations.cvs_dir,simulationSignature + "_" + log_dir_name + ".csv")
+    outputFilePath = os.path.join(Simulations.csv_dir,simulationSignature + "_" + log_dir_name + ".csv")
     outputFile = open(outputFilePath, "w")
 
     log_dir = os.path.join(Simulations.logs_dir, simulationSignature, log_dir_name)
@@ -82,21 +82,21 @@ def analyzeLog(simulationSignature, log_dir_name):
 
 def mergeIntoSingleFile(simulationSignature):
     
-    outputFilePath = os.path.join(Simulations.cvs_dir,simulationSignature + ".csv")
+    outputFilePath = os.path.join(Simulations.csv_dir,simulationSignature + ".csv")
     outputFile = open(outputFilePath, "w")
 
-    for cvs_file_name in [f for f in listdir(Simulations.cvs_dir) if isfile(join(Simulations.cvs_dir, f))]:
+    for csv_file_name in [f for f in listdir(Simulations.csv_dir) if isfile(join(Simulations.csv_dir, f))]:
 
-        if (cvs_file_name.startswith(simulationSignature)):
+        if (csv_file_name.startswith(simulationSignature)):
             
-            cvs_file_full_path = os.path.join(Simulations.cvs_dir, cvs_file_name)
-            resultsFile = open(cvs_file_full_path, "r")
+            csv_file_full_path = os.path.join(Simulations.csv_dir, csv_file_name)
+            resultsFile = open(csv_file_full_path, "r")
             
             for line in resultsFile.readlines():
                 outputFile.write(line)
                 
             resultsFile.close
-#             os.remove(cvs_file_full_path)
+#             os.remove(csv_file_full_path)
             
     outputFile.close()
     print("Analysis results merged into " + outputFilePath)
@@ -110,7 +110,7 @@ def finalizeOldestAnalysis():
     
 def analyze(cores):
           
-    os.makedirs(Simulations.cvs_dir, exist_ok=True)
+    os.makedirs(Simulations.csv_dir, exist_ok=True)
     
     for simulationSignature in [f for f in listdir(Simulations.logs_dir)]:
         print("Analyzing logs of signature: " + simulationSignature)

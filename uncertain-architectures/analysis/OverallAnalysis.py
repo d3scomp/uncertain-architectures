@@ -5,7 +5,7 @@ Created on Jan 8, 2016
 '''
 from Simulations import *
 
-i = 100
+i = 2
 
 start = time.time()
 
@@ -13,14 +13,14 @@ start = time.time()
 ################ Role removal ##################
 ################################################
 
-# simulateScenario(
-#     probabilityOfExtraTransition = 0,
-#     correlation = False,
-#     roleRemoval = False,
-#     dirtDetectionFailure = False, 
-#     dockFailure = False,
-#     iterations = i)
-#   
+simulateScenario(
+    probabilityOfExtraTransition = 0,
+    correlation = False,
+    roleRemoval = False,
+    dirtDetectionFailure = False, 
+    dockFailure = False,
+    iterations = i)
+   
 # simulateScenario(
 #     probabilityOfExtraTransition = 0,
 #     correlation = False,

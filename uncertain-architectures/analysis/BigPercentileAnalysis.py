@@ -47,18 +47,18 @@ def plot(probabilities_on = False):
 
     results_file_names = []
     
-    for cvs_file_name in [f for f in listdir(Simulations.cvs_dir) if isfile(join(Simulations.cvs_dir, f))]:
-        results_file_names.append(cvs_file_name)
+    for csv_file_name in [f for f in listdir(Simulations.csv_dir) if isfile(join(Simulations.csv_dir, f))]:
+        results_file_names.append(csv_file_name)
     
     boxplots = []
     
     numbering=["1","2","3"]
     i=0
     
-    for cvs_file_name in results_file_names : 
+    for csv_file_name in results_file_names : 
         
-        cvs_file_full_path = os.path.join(Simulations.cvs_dir, cvs_file_name)
-        resultsFile = open(cvs_file_full_path, "r")
+        csv_file_full_path = os.path.join(Simulations.csv_dir, csv_file_name)
+        resultsFile = open(csv_file_full_path, "r")
         single_scenario_big_percentiles = []
         
         for line in resultsFile.readlines():
@@ -69,7 +69,7 @@ def plot(probabilities_on = False):
             
         plt.figure()
         plt.boxplot(single_scenario_big_percentiles)
-        simulation_signature = cvs_file_name.split('.csv')[0]
+        simulation_signature = csv_file_name.split('.csv')[0]
 #         plt.ylabel('NinetyPercentiles of ' + simulation_signature)
 #         boxplot_file_path = os.path.join(Simulations.figures_dir, simulation_signature+'.pdf')
 #         plt.savefig(boxplot_file_path)

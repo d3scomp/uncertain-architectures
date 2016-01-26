@@ -10,7 +10,7 @@ from subprocess import *
 
 results_dir = os.path.join('..','results')
 logs_dir = os.path.join(results_dir,'logs')
-cvs_dir = os.path.join(results_dir,'cvs')
+csv_dir = os.path.join(results_dir,'csv')
 figures_dir = os.path.join(results_dir,'figures')
 
 loggingPropertiesPath = "src\logging.properties"

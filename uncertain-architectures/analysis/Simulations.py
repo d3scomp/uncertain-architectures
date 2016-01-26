@@ -15,6 +15,8 @@ figures_dir = os.path.join(results_dir,'figures')
 
 loggingPropertiesPath = "src\logging.properties"
 
+cores = 2
+
 simulated = []
 
 def finalizeOldestSimulation():
@@ -31,9 +33,7 @@ def simulate(probabilityOfExtraTransition = 0,
              simulation_signature = "sample"):
     root = os.path.dirname(os.path.realpath(__file__))
     classpath = os.path.join(root, '..' , 'dist' ,'*' + os.pathsep + root, '..' + os.pathsep + '.')
-  
-    cores = 2
-    
+      
     print('Spawning simulation processes...')
     # invoke 10 iterations with the same configuration
     for i in range(1,iterations+1):
@@ -78,7 +78,7 @@ def simulateScenario(probabilityOfExtraTransition, correlation, roleRemoval, dir
     simulation_signature = getSimulationSignature(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations)
     
     simulate(probabilityOfExtraTransition, correlation, roleRemoval, dirtDetectionFailure, dockFailure, iterations, simulation_signature)
-    analyze(simulation_signature)
+    analyze_signature(simulation_signature, cores)
     plot(probabilityOfExtraTransition > 0)
     
     end = time.time()

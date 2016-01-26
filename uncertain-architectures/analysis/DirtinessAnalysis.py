@@ -7,7 +7,7 @@ import xml.etree.ElementTree as etree
 import numpy as np
 import os
 import Simulations
-import multiprocessing
+from multiprocessing import Process
 from os import listdir
 from os.path import join, isfile
 
@@ -108,29 +108,31 @@ def finalizeOldestAnalysis():
     simulation.join()
     simulated.pop(0)
     
-def analyze(cores):
-          
+def analyze_signature(signature, cores):
     os.makedirs(Simulations.csv_dir, exist_ok=True)
     
-    for simulationSignature in [f for f in listdir(Simulations.logs_dir)]:
-        print("Analyzing logs of signature: " + simulationSignature)
-                        
-        for root, dirs, files in os.walk(os.path.join(Simulations.logs_dir,simulationSignature)):
-            for log_dir_name in dirs:
-                
-                if (len(simulated) >= cores) :
-                    finalizeOldestAnalysis()
-
-                p = multiprocessing.Process(target=analyzeLog, args=(simulationSignature, log_dir_name))
-                simulated.append(p)
-                p.start()
-
-        # finalize the rest    
-        while len(simulated) > 0:
-            finalizeOldestAnalysis()
+    print("Analyzing logs of signature: " + signature)
+                    
+    for root, dirs, files in os.walk(os.path.join(Simulations.logs_dir,signature)):
+        for log_dir_name in dirs:
             
-        mergeIntoSingleFile(simulationSignature)
-    
-if __name__ == '__main__':   
-    
+            if (len(simulated) >= cores) :
+                finalizeOldestAnalysis()
+
+            p = Process(target=analyzeLog, args=(signature, log_dir_name))
+            simulated.append(p)
+            p.start()
+
+    # finalize the rest    
+    while len(simulated) > 0:
+        finalizeOldestAnalysis()
+        
+    mergeIntoSingleFile(signature)
+
+def analyze(cores):
+    for simulationSignature in [f for f in listdir(Simulations.logs_dir)]:
+        print(simulationSignature)
+        analyze_signature(simulationSignature, cores)
+        
+if __name__ == '__main__':
     analyze(2)

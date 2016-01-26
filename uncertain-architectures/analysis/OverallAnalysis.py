@@ -5,7 +5,7 @@ Created on Jan 8, 2016
 '''
 from Simulations import *
 
-i = 2
+i = 1
 
 start = time.time()
 

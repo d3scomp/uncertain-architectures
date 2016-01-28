@@ -10,9 +10,15 @@ You first need to checkout the following Github projects:
 * [JDEECoVisualizer](https://github.com/d3scomp/JDEECoVisualizer.git), and switch to the "uncertain-architectures" branch 
 
 Import the following Eclipse projects to a running Eclipse instance (tested with MARS.1):
-* "uncertain-architectures" and "cz.cuni.mff.d3s.jdeeco.modes" from the "uncertain-architectures" Github project
-* "cz.cuni.mff.d3s.jdeeco.core", "cz.cuni.mff.d3s.jdeeco.adaptation", and "cz.cuni.mff.d3s.jdeeco.network" from "JDEECo" Github project
-* "JDEECoVisualizer" from "JDEECoVisualizer" Github project
+* From the "uncertain-architectures" Github project
+  * "uncertain-architectures"
+  * "cz.cuni.mff.d3s.jdeeco.modes"
+* From "JDEECo" Github project
+  * "cz.cuni.mff.d3s.jdeeco.core"
+  * "cz.cuni.mff.d3s.jdeeco.adaptation"
+  * "cz.cuni.mff.d3s.jdeeco.network"
+* From "JDEECoVisualizer" Github project
+  * "JDEECoVisualizer"
 
 Run maven update on all the projects (you need to install the [m2e plugin](https://marketplace.eclipse.org/content/maven-integration-eclipse-luna-and-newer) to use maven within Eclipse).
 

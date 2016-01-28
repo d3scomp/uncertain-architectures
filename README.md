@@ -12,9 +12,9 @@ You first need to checkout the following Github projects:
 Import the following Eclipse projects to a running Eclipse instance (tested with MARS.1):
 * "uncertain-architectures" and "cz.cuni.mff.d3s.jdeeco.modes" from the "uncertain-architectures" Github project
 * "cz.cuni.mff.d3s.jdeeco", "cz.cuni.mff.d3s.jdeeco.core", "cz.cuni.mff.d3s.jdeeco.adaptation", and "cz.cuni.mff.d3s.jdeeco.network" from "JDEECo" Github project
-* "JDEECoVisualizer" from "jDEECoVisualizer" Github project
+* "JDEECoVisualizer" from "JDEECoVisualizer" Github project
 
-Run maven update on all the projects (you need to install the [m2e plugin](https://marketplace.eclipse.org/content/maven-integration-eclipse-luna-and-newer) to use maven in Eclipse).
+Run maven update on all the projects (you need to install the [m2e plugin](https://marketplace.eclipse.org/content/maven-integration-eclipse-luna-and-newer) to use maven within Eclipse).
 
 ### Running the demo
 Locate the files Configuration and Run inside the "cz.cuni.mff.d3s.jdeeco.ua.demo" package of the "uncertain-architectures" Eclipse project.

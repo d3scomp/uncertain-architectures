@@ -1,13 +1,26 @@
-# uncertain-architectures
-This repository contains demo of uncertain architectures.
+# Architecture Homeostatic Mechanisms
 
-## Tutorial
-To run the simulation you need to checkout the [DEECo](https://github.com/d3scomp/JDEECo.git) first, and switch to the branch uncertain-architectures. And checkout [jDEECo Visualizer](https://github.com/d3scomp/JDEECoVisualizer).
+This repository contains the demo accompanying the submission of our paper "Architecture Homeostasis in Software-Intensive Cyber-Physical Systems" to WICSA'16.
 
-Import into Eclipse DEECo projects (jdeeco, adaptation, core, network), visualizer and uncertain-architectures projects.
-After importing you may need to run maven update on all the projects.
+## Usage Guide
+### Compilation 
+You first need to checkout the following Github projects:
+* [uncertain-architectures](https://github.com/d3scomp/uncertain-architectures.git) (the project featured here), and switch to the "master" branch 
+* [JDEECo](https://github.com/d3scomp/JDEECo.git), and switch to the "uncertain-architectures" branch 
+* [JDEECoVisualizer](https://github.com/d3scomp/JDEECoVisualizer.git), and switch to the "uncertain-architectures" branch 
 
-In the uncertain-architectures project in the cz.cuni.mff.d3s.jdeeco.ua.demo package there are the classes Configuration and Run.
-Configuration contains the parameters of the simulation and Run contains the main().
+Import the following Eclipse projects to a running Eclipse instance (tested with MARS.1):
+* "cz.cuni.mff.d3s.jdeeco.modes" and "uncertain-architectures" from the "uncertain-architectures" Github project
+* "cz.cuni.mff.d3s.jdeeco", "cz.cuni.mff.d3s.jdeeco.core", "cz.cuni.mff.d3s.jdeeco.adaptation", and "cz.cuni.mff.d3s.jdeeco.network" from "JDEECo" Github project
+* "JDEECoVisualizer" from "jDEECoVisualizer" Github project
 
-To ease the process of launching simulations with different setting we have devised a set of scripts that are placed in the analysis folder. To use these scripts you will need python version 3 as a Eclipse plugin. In the OverallAnalysis you can uncomment a scenario you want to run and set the number of simulations i and run the script. After the simulations are done an analysis will proceed automatically. The result of the analysis is a plot of times that it takes to clean a dirt after it appears.
+Run maven update on all the projects (you need to install the [m2e plugin](https://marketplace.eclipse.org/content/maven-integration-eclipse-luna-and-newer) to use maven in Eclipse).
+
+### Running the demo
+Locate the files Configuration and Run inside the "cz.cuni.mff.d3s.jdeeco.ua.demo" package of the "uncertain-architectures" Eclipse project.
+Configuration contains the parameters of the simulation and Run contains the main() of the demo.
+
+### Analysis of results
+To ease the process of launching simulations with different settings and analyzing their results we have devised a set of Python scripts (version 3.5).
+They are placed in the analysis folder of the "uncertain-architectures" Eclipse project.
+The "OverallAnalysis" script serves as a starting point. You can uncomment a scenario you want to run, set the number of iterations (runs of a particular configuration), and run the script. Once all simulation runs are finished, the analysis scripts are automatically invoked. The final results are boxplots depicting the 90th percentile of the "cleaning duration" (time between a tile gets dirty until it gets clean) at each run.

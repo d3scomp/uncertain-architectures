@@ -105,7 +105,8 @@ public class Run {
 		DEECoNode deeco1;
 		if (CORRELATION_ON) {
 			// create correlation plugin
-			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation);
+			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
+					.withVerbosity(false).withDumping(false);
 			deeco1 = simulation.createNode(1, writers, correlationPlugin);
 		} else {
 			deeco1 = simulation.createNode(1, writers);

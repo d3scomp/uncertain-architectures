@@ -29,7 +29,6 @@ import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
@@ -37,6 +36,7 @@ import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogWriters;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
+import cz.cuni.mff.d3s.jdeeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;

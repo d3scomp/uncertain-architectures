@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval;
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitnessEval;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitness;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
@@ -32,7 +32,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class DirtinessDurationEval implements NonDetModeSwitchEval {
+public class DirtinessDurationEval implements NonDetModeSwitchFitnessEval {
 
 	private Map<Node, Long> dirtInitTimes = new HashMap<>();
 	
@@ -48,7 +48,7 @@ public class DirtinessDurationEval implements NonDetModeSwitchEval {
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval#getEnergy(long, java.lang.Object[])
 	 */
 	@Override
-	public NonDetModeSwitchPerformance getEnergy(long currentTime, Object[] knowledgeValues) {
+	public NonDetModeSwitchFitness getFitness(long currentTime, Object[] knowledgeValues) {
 		@SuppressWarnings("unchecked")
 		CorrelationMetadataWrapper<DirtinessMap> map = (CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0];
 		
@@ -73,7 +73,7 @@ public class DirtinessDurationEval implements NonDetModeSwitchEval {
 			dirtInitTimes.remove(n);
 		}
 		
-		return new DirtinessDurationEnergy(dirtDurations);
+		return new DirtinessDurationFitness(dirtDurations);
 	}
 
 }

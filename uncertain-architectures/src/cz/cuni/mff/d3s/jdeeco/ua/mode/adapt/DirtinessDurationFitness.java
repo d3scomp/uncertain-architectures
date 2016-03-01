@@ -17,28 +17,35 @@ package cz.cuni.mff.d3s.jdeeco.ua.mode.adapt;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitness;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class DirtinessDurationEnergy implements NonDetModeSwitchPerformance {
+public class DirtinessDurationFitness implements NonDetModeSwitchFitness {
 
-	private List<Long> dirtDurations;
+	private long durationsSum;
+	private int durationsCnt;
 	
-	public DirtinessDurationEnergy(List<Long> dirtDurations) {
-		this.dirtDurations = dirtDurations;
+	public DirtinessDurationFitness(List<Long> dirtDurations) {
+		durationsSum = 0;
+		for(long duration : dirtDurations){
+			durationsSum += duration;
+		}
+		durationsCnt = dirtDurations.size();
 	}
 	
 	/* (non-Javadoc)
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance#combineEnergies(cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance)
 	 */
 	@Override
-	public NonDetModeSwitchPerformance combineEnergies(NonDetModeSwitchPerformance other) {
+	public NonDetModeSwitchFitness combineFitness(NonDetModeSwitchFitness other) {
+		DirtinessDurationFitness otherDurationsFit = (DirtinessDurationFitness)other;
+		durationsSum += otherDurationsFit.durationsSum;
+		durationsCnt += otherDurationsFit.durationsCnt;
 		
-		dirtDurations.addAll(((DirtinessDurationEnergy)other).dirtDurations);
 		return this;
 	}
 
@@ -46,13 +53,9 @@ public class DirtinessDurationEnergy implements NonDetModeSwitchPerformance {
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance#getEnergy()
 	 */
 	@Override
-	public double getEnergy() {
-		long sum = 0;
-		for(long l : dirtDurations){
-			sum += l;
-		}
-		
-		double avg = (double )sum / (double) dirtDurations.size();
+	public double getFitness() {
+				
+		double avg = (double) durationsSum / (double) durationsCnt;
 		
 		// Normalize
 		return avg / Configuration.SIMULATION_DURATION;

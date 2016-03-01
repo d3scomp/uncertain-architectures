@@ -70,6 +70,7 @@ public class Configuration {
 	public static double PROBABILITY = 0;
 	public static boolean CORRELATION_ON = false;
 	public static boolean ROLE_REMOVAL_ON = false;
+	public static boolean NON_DETERMINISM_ON = false;
 	
 	public static boolean DIRT_DETECTION_FAILURE_ON = false;
 	public static boolean DOCK_FAILURE_ON = false;

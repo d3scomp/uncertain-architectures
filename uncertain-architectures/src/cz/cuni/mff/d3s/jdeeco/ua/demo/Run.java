@@ -21,6 +21,10 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_EVAL_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_RECONF_PERIOD;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
@@ -95,11 +99,19 @@ public class Run {
 			logPath = args[0];
 			writers = new RuntimeLogWriters(logPath);
 			
-			Configuration.PROBABILITY = Double.parseDouble(args[1]);
-			Configuration.CORRELATION_ON = Boolean.parseBoolean(args[2]);
-			Configuration.ROLE_REMOVAL_ON = Boolean.parseBoolean(args[3]);
-			Configuration.DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[4]);
-			Configuration.DOCK_FAILURE_ON = Boolean.parseBoolean(args[5]);
+			Configuration.CORRELATION_ON = Boolean.parseBoolean(args[1]);
+			Configuration.ROLE_REMOVAL_ON = Boolean.parseBoolean(args[2]);
+			Configuration.DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[3]);
+			Configuration.DOCK_FAILURE_ON = Boolean.parseBoolean(args[4]);
+			
+			Configuration.NON_DETERMINISM_ON = Boolean.parseBoolean(args[5]);
+			if(Configuration.NON_DETERMINISM_ON){
+				// These arguments expected only if non-determinism is on
+				Configuration.NON_DET_INIT_PROBABILITY = Double.parseDouble(args[6]);
+				Configuration.NON_DET_START_TIME = Long.parseLong(args[7]);
+				Configuration.NON_DET_EVAL_PERIOD = Long.parseLong(args[8]);
+				Configuration.NON_DET_RECONF_PERIOD = Long.parseLong(args[9]);
+			}
 		}
 
 		// Prepare adaptation plugins
@@ -112,7 +124,11 @@ public class Run {
 		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
 			NonDeterministicModeSwitchingPlugin nonDetPlugin =
-					new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class);
+					new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class)
+					.startAt(NON_DET_START_TIME)
+					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
+					.withEvalPeriod(NON_DET_EVAL_PERIOD)
+					.withReconfigPeriod(NON_DET_RECONF_PERIOD);
 			adaptPlugins.add(nonDetPlugin);
 		}
 
@@ -155,7 +171,11 @@ public class Run {
 				DEECoNode deeco;
 				if(NON_DETERMINISM_ON){
 					NonDeterministicModeSwitchingPlugin nonDetPlugin =
-							new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class);
+							new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class)
+							.startAt(NON_DET_START_TIME)
+							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
+							.withEvalPeriod(NON_DET_EVAL_PERIOD)
+							.withReconfigPeriod(NON_DET_RECONF_PERIOD);
 					deeco = simulation.createNode(i, writers, nonDetPlugin);
 				} else {
 					deeco = simulation.createNode(i, writers);

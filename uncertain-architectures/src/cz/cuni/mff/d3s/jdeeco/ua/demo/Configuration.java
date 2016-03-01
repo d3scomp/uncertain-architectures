@@ -67,10 +67,14 @@ public class Configuration {
 
 	public static final long SIMULATION_DURATION = 600_000;
 
-	public static double PROBABILITY = 0;
 	public static boolean CORRELATION_ON = false;
 	public static boolean ROLE_REMOVAL_ON = false;
+	
 	public static boolean NON_DETERMINISM_ON = false;
+	public static double NON_DET_INIT_PROBABILITY = 0;
+	public static long NON_DET_EVAL_PERIOD = 100;
+	public static long NON_DET_RECONF_PERIOD = 1000;
+	public static long NON_DET_START_TIME = 0;
 	
 	public static boolean DIRT_DETECTION_FAILURE_ON = false;
 	public static boolean DOCK_FAILURE_ON = false;

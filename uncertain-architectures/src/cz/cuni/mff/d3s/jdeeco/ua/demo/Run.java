@@ -20,10 +20,10 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +32,7 @@ import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogWriters;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
@@ -45,9 +46,9 @@ import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
-import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.DirtinessDurationEval;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
 /**
@@ -68,8 +69,7 @@ public class Run {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	public static void main(final String args[]) throws DEECoException, AnnotationProcessorException,
-			InstantiationException, IllegalAccessException, IOException {
+	public static void main(final String args[]) throws Exception {
 		Log.i("Preparing simulation");
 
 		VisualizationSettings.createConfigFile();
@@ -102,66 +102,41 @@ public class Run {
 			Configuration.DOCK_FAILURE_ON = Boolean.parseBoolean(args[5]);
 		}
 
-		// Create node 1
-		DEECoNode deeco1;
+		// Prepare adaptation plugins
+		List<DEECoPlugin> adaptPlugins = new ArrayList<>();
 		if (CORRELATION_ON) {
 			// create correlation plugin
-			final CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
+			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
 					.withVerbosity(false).withDumping(false).withGeneratedEnsemblesLogging(false);
-			deeco1 = simulation.createNode(1, writers, correlationPlugin);
-		} else {
-			deeco1 = simulation.createNode(1, writers);
+			adaptPlugins.add(correlationPlugin);
 		}
-		nodesInSimulation.add(deeco1);
+		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
+			NonDeterministicModeSwitchingPlugin nonDetPlugin =
+					new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class);
+			adaptPlugins.add(nonDetPlugin);
+		}
 
+		// Create node -1 (default node)
+		DEECoNode defaultNode;
+		if(adaptPlugins.size() > 0) {
+			defaultNode = simulation.createNode(-1, writers, adaptPlugins.toArray(new DEECoPlugin[]{}));
+		} else {
+			defaultNode = simulation.createNode(-1, writers);
+		}
+		nodesInSimulation.add(defaultNode);
+
+		// Deploy environment
 		Environment environment = new Environment(ENVIRONMENT_NAME, WITH_SEED, ENVIRONMENT_SEED);
-		deeco1.deployComponent(environment);
+		defaultNode.deployComponent(environment);
 
 		// Deploy docking stations
-		Dock d1 = new Dock(DOCK1_NAME, DirtinessMap.randomNode(environment.random), deeco1.getRuntimeLogger());
-		deeco1.deployComponent(d1);
-		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), deeco1.getRuntimeLogger());
-		deeco1.deployComponent(d2);
+		Dock d1 = new Dock(DOCK1_NAME, DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
+		defaultNode.deployComponent(d1);
+		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
+		defaultNode.deployComponent(d2);
 
-		// Deploy robot 1
-		Robot r1 = Configuration.createRobot1(deeco1.getRuntimeLogger());
-		deeco1.deployComponent(r1);
-
-		// Deploy ensembles on node 1
-		deeco1.deployEnsemble(DockingEnsemble.class);
-
-		if (enableMultipleDEECoNodes) {
-			// Create node 2
-			DEECoNode deeco2 = simulation.createNode(2, writers);
-			nodesInSimulation.add(deeco2);
-
-			// Deploy robot 2
-			deeco2.deployComponent(Configuration.createRobot2(deeco2.getRuntimeLogger()));
-
-			// Deploy ensembles on node 2
-			deeco2.deployEnsemble(DockingEnsemble.class);
-		} else {
-			// Deploy robot 2
-			deeco1.deployComponent(Configuration.createRobot2(deeco1.getRuntimeLogger()));
-		}
-
-		if (enableMultipleDEECoNodes) {
-			// Create node 3
-			DEECoNode deeco3 = simulation.createNode(3, writers);
-			nodesInSimulation.add(deeco3);
-
-			// Deploy robot 3
-			deeco3.deployComponent(Configuration.createRobot3(deeco3.getRuntimeLogger()));
-
-			// Deploy ensembles on node 3
-			deeco3.deployEnsemble(DockingEnsemble.class);
-		} else {
-			// Deploy robot 3
-			deeco1.deployComponent(Configuration.createRobot3(deeco1.getRuntimeLogger()));
-		}
-
-		deeco1.deployComponent(Configuration.createRobot4(deeco1.getRuntimeLogger()));
-		deeco1.deployComponent(Configuration.createRobot5(deeco1.getRuntimeLogger()));
+		// Deploy robots
+		deployRobots(new int[]{1, 2, 3}, simulation, defaultNode, nodesInSimulation, writers);
 		
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + logPath + "'");
@@ -169,6 +144,34 @@ public class Run {
 		simulation.start(SIMULATION_DURATION);
 		Log.i("Simulation Finished");
 		System.out.println("Simulation Finished - writen to '" + logPath + "'");
+	}
+	
+	private static void deployRobots(int robots[], DEECoSimulation simulation,
+			DEECoNode defaultNode, List<DEECoNode> nodesInSimulation,
+			RuntimeLogWriters writers) throws Exception {
+		for(int i : robots){
+			if (enableMultipleDEECoNodes) {
+				// Create node
+				DEECoNode deeco;
+				if(NON_DETERMINISM_ON){
+					NonDeterministicModeSwitchingPlugin nonDetPlugin =
+							new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class);
+					deeco = simulation.createNode(i, writers, nonDetPlugin);
+				} else {
+					deeco = simulation.createNode(i, writers);
+				}
+				nodesInSimulation.add(deeco);
+	
+				// Deploy robot
+				deeco.deployComponent(Configuration.createRobot(i, deeco.getRuntimeLogger()));
+	
+				// Deploy ensembles on node
+				deeco.deployEnsemble(DockingEnsemble.class);
+			} else {
+				// Deploy robot
+				defaultNode.deployComponent(Configuration.createRobot(i, defaultNode.getRuntimeLogger()));
+			}
+		}
 	}
 
 }

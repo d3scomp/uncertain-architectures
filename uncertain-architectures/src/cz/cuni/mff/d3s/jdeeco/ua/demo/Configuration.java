@@ -110,7 +110,7 @@ public class Configuration {
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////
-
+	
 	/////////////////
 	// PERIODS 
 	/////////////////
@@ -184,83 +184,70 @@ public class Configuration {
 	public static final long AVAILABLE_DOCK_OBSOLETE_THRESHOLD = 2000; // ms
 		
 	/////////////////
-	// ROBOT 1 
+	// ROBOTS
 	/////////////////
 
-	public static final Robot createRobot1(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT1_NAME, WITH_SEED, ROBOT1_SEED, runtimeLogger)
-			.atPosition(5)
-			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.4)
-			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
-			.withDockingPlanner(new NearestTrajectoryPlanner())
-			.withTrajectoryExecutor(new TrajectoryExecutor())
+	public static final RobotParameters ROBOT_PARAMS[] = 
+			new RobotParameters[]{
+					new RobotParameters(ROBOT1_NAME,
+							ROBOT1_SEED,
+							5, // Start Link Number (Position)
+							new PositionFilter(0.0, 0.1),
+							0.4, // Init Battery Level
+							new DoubleFilter(0.0, 0.01), // Battery noise
+							new SearchTrajectoryPlanner(), // Search planner
+							new NearestTrajectoryPlanner(), // Docking planner
+							new TrajectoryExecutor()),
+					new RobotParameters(ROBOT2_NAME,
+							ROBOT2_SEED,
+							10, // Start Link Number (Position)
+							new PositionFilter(0.0, 0.1),
+							0.4, // Init Battery Level
+							new DoubleFilter(0.0, 0.01), // Battery noise
+							new SearchTrajectoryPlanner(), // Search planner
+							new NearestTrajectoryPlanner(), // Docking planner
+							new TrajectoryExecutor()),
+					new RobotParameters(ROBOT3_NAME,
+							ROBOT3_SEED,
+							0, // Start Link Number (Position)
+							new PositionFilter(0.0, 0.1),
+							0.4, // Init Battery Level
+							new DoubleFilter(0.0, 0.01), // Battery noise
+							new SearchTrajectoryPlanner(), // Search planner
+							new NearestTrajectoryPlanner(), // Docking planner
+							new TrajectoryExecutor()),
+					new RobotParameters(ROBOT4_NAME,
+							ROBOT4_SEED,
+							15, // Start Link Number (Position)
+							new PositionFilter(0.0, 0.1),
+							0.4, // Init Battery Level
+							new DoubleFilter(0.0, 0.01), // Battery noise
+							new SearchTrajectoryPlanner(), // Search planner
+							new NearestTrajectoryPlanner(), // Docking planner
+							new TrajectoryExecutor()),
+					new RobotParameters(ROBOT5_NAME,
+							ROBOT5_SEED,
+							20, // Start Link Number (Position)
+							new PositionFilter(0.0, 0.1),
+							0.4, // Init Battery Level
+							new DoubleFilter(0.0, 0.01), // Battery noise
+							new SearchTrajectoryPlanner(), // Search planner
+							new NearestTrajectoryPlanner(), // Docking planner
+							new TrajectoryExecutor())
+			};
+
+	public static final Robot createRobot(int robotNumber, RuntimeLogger runtimeLogger){
+		RobotParameters params = ROBOT_PARAMS[robotNumber];
+		return RobotFactory.newRobot(params.robotName, WITH_SEED, params.robotSeed, runtimeLogger)
+			.atPosition(params.startLink)
+			.withPositionNoise(params.positionNoise)
+			.withBatteryLevel(params.initBattery)
+			.withBatteryNoise(params.batteryNoise)
+			.withTrajectoryPlanner(params.trajectoryPlanner)
+			.withDockingPlanner(params.dockingPlanner)
+			.withTrajectoryExecutor(params.trajectoryExecutor)
 			.create();
 	}
 
-	/////////////////
-	// ROBOT 2 
-	/////////////////
-
-	public static final Robot createRobot2(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT2_NAME, WITH_SEED, ROBOT2_SEED, runtimeLogger)
-			.atPosition(10)
-			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.4)
-			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
-			.withDockingPlanner(new NearestTrajectoryPlanner())
-			.withTrajectoryExecutor(new TrajectoryExecutor())
-			.create();
-	}
-	
-	/////////////////
-	// ROBOT 3 
-	/////////////////
-
-	public static final Robot createRobot3(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT3_NAME, WITH_SEED, ROBOT3_SEED, runtimeLogger)
-			.atPosition(0)
-			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.4)
-			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
-			.withDockingPlanner(new NearestTrajectoryPlanner())
-			.withTrajectoryExecutor(new TrajectoryExecutor())
-			.create();
-	}
-	
-	/////////////////
-	// ROBOT 4 
-	/////////////////
-
-	public static final Robot createRobot4(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT4_NAME, WITH_SEED, ROBOT4_SEED, runtimeLogger)
-			.atPosition(15)
-			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.4)
-			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
-			.withDockingPlanner(new NearestTrajectoryPlanner())
-			.withTrajectoryExecutor(new TrajectoryExecutor())
-			.create();
-	}
-	
-	/////////////////
-	// ROBOT 5 
-	/////////////////
-
-	public static final Robot createRobot5(RuntimeLogger runtimeLogger){
-		return RobotFactory.newRobot(ROBOT5_NAME, WITH_SEED, ROBOT5_SEED, runtimeLogger)
-			.atPosition(20)
-			.withPositionNoise(new PositionFilter(0.0, 0.1))
-			.withBatteryLevel(0.4)
-			.withBatteryNoise(new DoubleFilter(0.0, 0.01))
-			.withTrajectoryPlanner(new SearchTrajectoryPlanner())
-			.withDockingPlanner(new NearestTrajectoryPlanner())
-			.withTrajectoryExecutor(new TrajectoryExecutor())
-			.create();
-	}
 	///////////////////////////////////////////////////////////////////////////
 }

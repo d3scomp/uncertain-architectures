@@ -43,6 +43,7 @@ import cz.cuni.mff.d3s.deeco.annotations.CorrelationData;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
+import cz.cuni.mff.d3s.deeco.annotations.NonDeterministicModeSwitching;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
@@ -51,6 +52,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.DifferenceMetric;
+import cz.cuni.mff.d3s.jdeeco.adaptation.search.annealing.Annealing;
 import cz.cuni.mff.d3s.jdeeco.annotations.ComponentModeChart;
 import cz.cuni.mff.d3s.jdeeco.annotations.ExcludeModes;
 import cz.cuni.mff.d3s.jdeeco.annotations.Mode;
@@ -70,6 +72,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.mode.DockingMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.RobotModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.SearchMode;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.WaitingMode;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.AnnealingParams;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
@@ -80,6 +83,8 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 @Component
 @ComponentModeChart(RobotModeChartHolder.class)
+@NonDeterministicModeSwitching(searchEngine = Annealing.class,
+	searchParameters = AnnealingParams.class)
 @PlaysRole(DockableRole.class)
 public class Robot {
 

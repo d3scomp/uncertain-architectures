@@ -52,6 +52,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.AnnealingParams;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.DirtinessDurationEval;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
@@ -81,6 +82,7 @@ public class Run {
 
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
+		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search  engine
 
 		// create main application container
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
@@ -90,7 +92,7 @@ public class Run {
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
-		
+
 		String logPath = "STANDARD";
 		RuntimeLogWriters writers;
 		if (args.length == 0) {
@@ -109,8 +111,9 @@ public class Run {
 				// These arguments expected only if non-determinism is on
 				Configuration.NON_DET_INIT_PROBABILITY = Double.parseDouble(args[6]);
 				Configuration.NON_DET_START_TIME = Long.parseLong(args[7]);
-				Configuration.NON_DET_EVAL_PERIOD = Long.parseLong(args[8]);
-				Configuration.NON_DET_RECONF_PERIOD = Long.parseLong(args[9]);
+				Configuration.NON_DET_END_TIME = Long.parseLong(args[8]);
+				Configuration.NON_DET_EVAL_PERIOD = Long.parseLong(args[9]);
+				Configuration.NON_DET_RECONF_PERIOD = Long.parseLong(args[10]);
 			}
 		}
 

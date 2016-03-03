@@ -154,6 +154,7 @@ public class Run {
 		defaultNode.deployComponent(d1);
 		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
 		defaultNode.deployComponent(d2);
+		defaultNode.deployEnsemble(DockingEnsemble.class);
 
 		// Deploy robots
 		deployRobots(new int[]{1, 2, 3}, simulation, defaultNode, nodesInSimulation, writers);

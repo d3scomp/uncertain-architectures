@@ -131,7 +131,8 @@ public class Run {
 					.startAt(NON_DET_START_TIME)
 					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 					.withEvalPeriod(NON_DET_EVAL_PERIOD)
-					.withReconfigPeriod(NON_DET_RECONF_PERIOD);
+					.withReconfigPeriod(NON_DET_RECONF_PERIOD)
+					.withVerbosity(true);
 			adaptPlugins.add(nonDetPlugin);
 		}
 
@@ -178,7 +179,8 @@ public class Run {
 							.startAt(NON_DET_START_TIME)
 							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 							.withEvalPeriod(NON_DET_EVAL_PERIOD)
-							.withReconfigPeriod(NON_DET_RECONF_PERIOD);
+							.withReconfigPeriod(NON_DET_RECONF_PERIOD)
+							.withVerbosity(true);
 					deeco = simulation.createNode(i, writers, nonDetPlugin);
 				} else {
 					deeco = simulation.createNode(i, writers);

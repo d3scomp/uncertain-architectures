@@ -15,12 +15,28 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
-import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class DeadBatteryMode implements DEECoMode {
+public class DeadBatteryMode implements NonDetModeSwitchMode {
+
+	/* (non-Javadoc)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicIn()
+	 */
+	@Override
+	public boolean nonDeterministicIn() {
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicOut()
+	 */
+	@Override
+	public boolean nonDeterministicOut() {
+		return false;
+	}
 
 }

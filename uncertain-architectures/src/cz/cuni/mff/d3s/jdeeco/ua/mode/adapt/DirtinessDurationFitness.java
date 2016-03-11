@@ -54,7 +54,11 @@ public class DirtinessDurationFitness implements NonDetModeSwitchFitness {
 	 */
 	@Override
 	public double getFitness() {
-				
+		
+		if(durationsCnt == 0){
+			return 1;
+		}
+		
 		double avg = (double) durationsSum / (double) durationsCnt;
 		
 		// Normalize

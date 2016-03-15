@@ -72,8 +72,8 @@ public class Configuration {
 	
 	public static boolean NON_DETERMINISM_ON = false;
 	public static double NON_DET_INIT_PROBABILITY = 0;
-	public static long NON_DET_EVAL_PERIOD = 100;
-	public static long NON_DET_RECONF_PERIOD = 1000;
+	//public static long NON_DET_EVAL_PERIOD = 100;
+	//public static long NON_DET_RECONF_PERIOD = 1000;
 	public static long NON_DET_START_TIME = 0;
 	public static long NON_DET_END_TIME = 100_000;
 	

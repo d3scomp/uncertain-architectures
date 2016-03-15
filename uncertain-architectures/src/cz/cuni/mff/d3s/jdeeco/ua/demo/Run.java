@@ -147,7 +147,7 @@ public class Run {
 			// create correlation plugin
 			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
 					.withVerbosity(true).withDumping(false).withGeneratedEnsemblesLogging(false);
-			simulation.addPlugin(correlationPlugin);
+			adaptPlugins.add(correlationPlugin);
 		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
 			NonDeterministicModeSwitchingPlugin nonDetPlugin =

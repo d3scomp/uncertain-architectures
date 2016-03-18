@@ -16,17 +16,16 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CORRELATION_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_END_TIME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
@@ -112,14 +111,15 @@ public class Run {
 			if(NON_DETERMINISM_ON){
 				NON_DET_INIT_PROBABILITY = Double.parseDouble(args[i]);
 				System.out.println(String.format("%s = %s", "NON_DET_INIT_PROBABILITY", NON_DET_INIT_PROBABILITY));
-				i++;
-				NON_DET_START_TIME = Long.parseLong(args[i]);
-				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
-				i++;
-				NON_DET_END_TIME = Long.parseLong(args[i]);
-				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
+//				i++;
+//				NON_DET_START_TIME = Long.parseLong(args[i]);
+//				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
+//				i++;
+//				NON_DET_END_TIME = Long.parseLong(args[i]);
+//				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
 			}
 		}
+		if(true) return;
 		
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);

@@ -5,6 +5,8 @@ Created on Jan 8, 2016
 '''
 from Simulations import *
 
+
+
 if __name__ == '__main__':
 
     i = 1
@@ -16,11 +18,12 @@ if __name__ == '__main__':
     ################################################
     
     simulateScenario(
-        probabilityOfExtraTransition = 0,
         correlation = False,
         roleRemoval = False,
         dirtDetectionFailure = False, 
         dockFailure = False,
+        unspecifiedModeSwitching = False,
+        modeSwitchStartProbability = 0,
         iterations = i)
        
     # simulateScenario(
@@ -59,49 +62,6 @@ if __name__ == '__main__':
     #     dockFailure = False,
     #     iterations = i)
     
-    ################################################
-    ################ Probabilities #################
-    ################################################
-    
-    # simulateScenario(
-    #     probabilityOfExtraTransition = 0.01,
-    #     correlation = False,
-    #     roleRemoval = True,
-    #     dirtDetectionFailure = False,
-    #     dockFailure = True,
-    #     iterations = i)
-    #     
-    # simulateScenario(
-    #     probabilityOfExtraTransition = 0.005,
-    #     correlation = False,
-    #     roleRemoval = True,
-    #     dirtDetectionFailure = False,
-    #     dockFailure = True,
-    #     iterations = i)
-    #   
-    # simulateScenario(
-    #     probabilityOfExtraTransition = 0.001,
-    #     correlation = False,
-    #     roleRemoval = True,
-    #     dirtDetectionFailure = False,
-    #     dockFailure = True,
-    #     iterations = i)
-    #   
-    # simulateScenario(
-    #     probabilityOfExtraTransition = 0.0005,
-    #     correlation = False,
-    #     roleRemoval = True,
-    #     dirtDetectionFailure = False,
-    #     dockFailure = True,
-    #     iterations = i)
-      
-    # simulateScenario(
-    #     probabilityOfExtraTransition = 0.0001,
-    #     correlation = False,
-    #     roleRemoval = True,
-    #     dirtDetectionFailure = False,
-    #     dockFailure = True,
-    #     iterations = i)
     
     end = time.time()
     print("All simulations lasted for %.2f mins" % ((end-start)/60))

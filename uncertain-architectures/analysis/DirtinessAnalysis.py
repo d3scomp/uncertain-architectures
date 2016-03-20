@@ -108,7 +108,7 @@ def finalizeOldestAnalysis():
     simulation.join()
     simulated.pop(0)
     
-def analyze_signature(signature, cores):
+def analyze_signature(signature, CORES):
     os.makedirs(Simulations.csv_dir, exist_ok=True)
     
     print("Analyzing logs of signature: " + signature)
@@ -116,7 +116,7 @@ def analyze_signature(signature, cores):
     for root, dirs, files in os.walk(os.path.join(Simulations.logs_dir,signature)):
         for log_dir_name in dirs:
             
-            if (len(simulated) >= cores) :
+            if (len(simulated) >= CORES) :
                 finalizeOldestAnalysis()
 
             p = Process(target=analyzeLog, args=(signature, log_dir_name))
@@ -129,10 +129,10 @@ def analyze_signature(signature, cores):
         
     mergeIntoSingleFile(signature)
 
-def analyze(cores):
+def analyze(CORES):
     for simulationSignature in [f for f in listdir(Simulations.logs_dir)]:
         print(simulationSignature)
-        analyze_signature(simulationSignature, cores)
+        analyze_signature(simulationSignature, CORES)
         
 if __name__ == '__main__':
     analyze(2)

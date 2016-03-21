@@ -34,13 +34,6 @@ from Configuration import *
 simulated = []
 
 
-class ArgError(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
-
-
 def finalizeOldestSimulation():
     simulation = simulated[0]
     simulation.wait()
@@ -61,6 +54,8 @@ def simulate(scenarioIndex, iterations):
         params.append(os.path.join(LOGS_DIR,
                                    getSignature(scenario, iterations),
                                    'log_' + str(i)))
+        params.append(str(SIMULATION_DURATION))
+        
         if scenario[DDF]:
             params.append("true")
             params.append("true" if (scenario[CS]) else "false")

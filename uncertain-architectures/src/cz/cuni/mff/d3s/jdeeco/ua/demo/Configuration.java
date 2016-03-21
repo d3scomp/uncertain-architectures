@@ -65,7 +65,7 @@ public class Configuration {
 	// SIMULATION CONFIGURATION
 	///////////////////////////////////////////////////////////////////////////
 
-	public static final long SIMULATION_DURATION = 600_000;
+	public static long SIMULATION_DURATION = 600_000;
 
 	public static boolean CORRELATION_ON = false;
 	public static boolean ROLE_REMOVAL_ON = false;

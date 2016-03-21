@@ -1,6 +1,21 @@
 '''
 Created on Jan 8, 2016
 
+Definition of available scenarios to simulate.
+Provides a method to generate a signature of a scenario to distinguish
+folders and files produced by simulating and analyzing the scenario.
+
+Explanations of used shortcuts:
+    DDF - Dirt detection failure
+    CS - Collaborative sensing
+    DF - Dock failure
+    FCI - Faulty component isolation
+    UMS - Unspecified mode switching
+
+An exclamation mark (!) in front of a shortcut means the feature/failure
+is inactive, otherwise it is active.
+The probability following the UMS is the starting UMS probability.
+
 @author: Ilias
 @author: Dominik Skoda
 '''

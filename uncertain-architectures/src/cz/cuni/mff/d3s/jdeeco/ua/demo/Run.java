@@ -89,6 +89,10 @@ public class Run {
 			writers = new RuntimeLogWriters(logPath);
 			
 			int i = 1;
+			SIMULATION_DURATION = Integer.parseInt(args[i]);
+			System.out.println(String.format("%s = %d", "SIMULATION_DURATION", SIMULATION_DURATION));
+			i++;			
+			
 			DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[i]);
 			System.out.println(String.format("%s = %s", "DIRT_DETECTION_FAILURE_ON", DIRT_DETECTION_FAILURE_ON));
 			i++;
@@ -119,7 +123,6 @@ public class Run {
 //				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
 			}
 		}
-		if(true) return;
 		
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);

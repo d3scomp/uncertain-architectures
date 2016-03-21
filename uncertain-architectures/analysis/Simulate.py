@@ -1,24 +1,34 @@
 '''
 Created on Dec 31, 2015
 
+This script is to ease the invocation of multiple simulation iterations,
+taking advantage of multi-core processors.
+
+Usage:
+    python Simulate.py scenario [iterations]
+
+Arguments:
+    scenario - index of the required scenario
+    iterations - number of simulations to perform (optional)
+
+Description:
+    Default number of simulations to perform is 1.
+    The available scenarios to simulate can be found by running:
+        python Scenarios.py
+
+@see: Configuration.py
+@see: Scenarios.py
+
 @author: Ilias
-@author Dominik Skoda
+@author: Dominik Skoda
 '''
+
 import os
 import sys
 import time
 from subprocess import *
 from Scenarios import *
-
-RESULTS_DIR = os.path.join('..','results')
-LOGS_DIR = os.path.join(RESULTS_DIR,'logs')
-CSV_DIR = os.path.join(RESULTS_DIR,'csv')
-FIGURES_DIR = os.path.join(RESULTS_DIR,'figures')
-DEFAULT_ITERATIONS_CNT = 1
-
-loggingPropertiesPath = "src\logging.properties"
-
-CORES = 2
+from Configuration import *
 
 
 simulated = []

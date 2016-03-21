@@ -2,7 +2,7 @@
 Created on Jan 8, 2016
 
 @author: Ilias
-@author Dominik Skoda
+@author: Dominik Skoda
 '''
 
 #################################################

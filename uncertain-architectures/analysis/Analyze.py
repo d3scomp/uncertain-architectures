@@ -2,6 +2,7 @@
 Created on Dec 8, 2015
 
 @author: Ilias
+@author: Dominik Skoda
 '''
 import xml.etree.ElementTree as etree
 import numpy as np

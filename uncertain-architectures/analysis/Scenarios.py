@@ -47,6 +47,7 @@ scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True, PROBABILITY:0
 
 
 def getSignature(scenario, iterations = 0):
+    ''' Compiles the signature of the given scenario. '''
     outputFileName = []
     if scenario[DDF]:
         outputFileName.append("DDF-")
@@ -67,8 +68,9 @@ def getSignature(scenario, iterations = 0):
     return ''.join(outputFileName)
 
 
-def getScenarioSignature(scenario, iterations = 0):
-    return getSignature(scenarios[scenario], iterations)
+def getScenarioSignature(scenarioIndex, iterations = 0):
+    ''' Compiles the signature of the given scenario. '''
+    return getSignature(scenarios[scenarioIndex], iterations)
 
 
 def listScenarios():

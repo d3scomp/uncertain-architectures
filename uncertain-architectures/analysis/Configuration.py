@@ -49,7 +49,7 @@ LOGGING_PROPERTIES_PATH = "src\logging.properties"
 ''' The location of logging properties file. '''
 
 RUNTIME_LOG_FILE = "runtimeData.xml"
-''' The name of the file containing runtime logs produced by a simulation '''
+''' The name of the file containing runtime logs produced by a simulation. '''
 
 ###############################################################################
 
@@ -62,7 +62,7 @@ DEFAULT_ITERATIONS_CNT = 1
 ''' The default number of simulations count. '''
 
 SIMULATION_DURATION = 600000
-''' The length of each simulation in milliseconds '''
+''' The length of each simulation in milliseconds. '''
 
 ###############################################################################
 
@@ -72,7 +72,12 @@ SIMULATION_DURATION = 600000
 ###############################################################################
 
 PERCENTILE = 90
-''' The percentile to use for analysis '''
+''' The percentile to use for analysis. '''
 
+TIME_DIVISOR = 1000
+''' A number to be used to divide the times to plot. '''
+
+PLOT_LABELS = False
+''' Indicates whether the produced plot should contain signature labels. '''
 
 ###############################################################################

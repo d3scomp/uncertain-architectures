@@ -71,9 +71,9 @@ def analyzeLog(simulationSignature, logDirName):
     print("Found " + str(len(dirtinessRecords)) + " dirtiness records")
     
     for r in dirtinessRecords:
-        node = int(r[1].text) # TODO index
+        node = int(r.find('node').text)
         time = int(r.attrib["time"])
-        intensity = float(r[0].text) # TODO index
+        intensity = float(r.find('intensity').text)
         existingDirtiness = [d for d in dirtinesses if d.node == node and d.endTime == None]
         if len(existingDirtiness) > 0:
             if len(existingDirtiness) == 1:
@@ -99,28 +99,6 @@ def analyzeLog(simulationSignature, logDirName):
     print("Analysis results written to " + outputFilePath)
 
 
-def mergeIntoSingleFile(simulationSignature): # TODO: move to plot script
-    
-    outputFilePath = os.path.join(CSV_DIR, simulationSignature + ".csv")
-    outputFile = open(outputFilePath, "w")
-
-    for csv_file_name in [f for f in os.listdir(CSV_DIR) if os.isfile(os.join(CSV_DIR, f))]:
-
-        if (csv_file_name.startswith(simulationSignature)):
-            
-            csv_file_full_path = os.path.join(CSV_DIR, csv_file_name)
-            resultsFile = open(csv_file_full_path, "r")
-            
-            for line in resultsFile.readlines():
-                outputFile.write(line)
-                
-            resultsFile.close
-#             os.remove(csv_file_full_path)
-            
-    outputFile.close()
-    print("Analysis results merged into " + outputFilePath)
- 
-    
 def analyzeSignature(signature):
     logsDir = os.path.join(LOGS_DIR, signature)
     

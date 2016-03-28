@@ -15,10 +15,16 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode.adapt;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitness;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
+import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
+import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
@@ -26,43 +32,89 @@ import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
  */
 public class DirtinessDurationFitness implements NonDetModeSwitchFitness {
 
-	private long durationsSum;
-	private int durationsCnt;
+	/**
+	 * Initial times of uncompleted dirtiness events.
+	 * Initial time is when the dirt appears. The dirtiness event
+	 * is completed when the dirt is cleaned.
+	 */
+	private Map<Node, Long> dirtInitTimes = new HashMap<>();
+
+	/**
+	 * Summary of time durations of completed dirtiness events.
+	 */
+	private long durationsSum = 0;
 	
-	public DirtinessDurationFitness(List<Long> dirtDurations) {
-		durationsSum = 0;
-		for(long duration : dirtDurations){
-			durationsSum += duration;
-		}
-		durationsCnt = dirtDurations.size();
-	}
+	/**
+	 * Number of completed dirtiness events.
+	 */
+	private int durationsCnt = 0;
+	
 	
 	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance#combineEnergies(cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval#getKnowledgeNames()
 	 */
 	@Override
-	public NonDetModeSwitchFitness combineFitness(NonDetModeSwitchFitness other) {
-		DirtinessDurationFitness otherDurationsFit = (DirtinessDurationFitness)other;
-		durationsSum += otherDurationsFit.durationsSum;
-		durationsCnt += otherDurationsFit.durationsCnt;
-		
-		return this;
+	public String[] getKnowledgeNames() {
+		return new String[]{"map"};
 	}
 
 	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchPerformance#getEnergy()
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval#getEnergy(long, java.lang.Object[])
 	 */
 	@Override
-	public double getFitness() {
+	public double getFitness(long currentTime, Object[] knowledgeValues) {
+		@SuppressWarnings("unchecked")
+		CorrelationMetadataWrapper<DirtinessMap> map = (CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0];
 		
-		if(durationsCnt == 0){
-			return 1;
+		// Add dirt init times for dirt that is not yet present
+		final Set<Node> dirtyTiles = map.getValue().getDirtiness().keySet();
+		for(Node n : dirtyTiles){
+			if(!dirtInitTimes.keySet().contains(n)){
+				dirtInitTimes.put(n,  currentTime);
+			}
 		}
 		
-		double avg = (double) durationsSum / (double) durationsCnt;
+		// Uncompleted events
+		long ucDurationSum = 0;
+		int ucDurationCnt = 0;
+		
+		// Take dirt duration times for dirt that is cleaned
+		Set<Node> removeNodes = new HashSet<>();
+		for(Node n : dirtInitTimes.keySet()){
+			if(!dirtyTiles.contains(n)){
+				durationsSum += (currentTime - dirtInitTimes.get(n));
+				durationsCnt++;
+				removeNodes.add(n);
+			} else {
+				ucDurationSum += (currentTime - dirtInitTimes.get(n));
+				ucDurationCnt++;
+			}
+		}
+		for(Node n : removeNodes){
+			dirtInitTimes.remove(n);
+		}
+		
+		// Compute the fitness
+		if(ucDurationCnt == 0 && durationsCnt == 0){
+			return 1; // Default value
+		}
+		
+		double avg = (double) (durationsSum + ucDurationSum)
+				/ (double) (durationsCnt + ucDurationCnt);
 		
 		// Normalize
 		return avg / Configuration.SIMULATION_DURATION;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitnessEval#restart()
+	 */
+	@Override
+	public void restart() {
+		dirtInitTimes.clear();
+		durationsSum = 0;
+		durationsCnt = 0;
 	}
 
 }

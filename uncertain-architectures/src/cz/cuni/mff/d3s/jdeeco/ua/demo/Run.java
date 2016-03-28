@@ -55,7 +55,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.AnnealingParams;
-import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.DirtinessDurationEval;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.DirtinessDurationFitness;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
 /**
@@ -154,7 +154,7 @@ public class Run {
 		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
 			NonDeterministicModeSwitchingPlugin nonDetPlugin =
-					new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class)
+					new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class)
 					.startAt(NON_DET_START_TIME)
 					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 					.withVerbosity(true);
@@ -201,7 +201,7 @@ public class Run {
 				DEECoNode deeco;
 				if(NON_DETERMINISM_ON){
 					NonDeterministicModeSwitchingPlugin nonDetPlugin =
-							new NonDeterministicModeSwitchingPlugin(DirtinessDurationEval.class)
+							new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class)
 							.startAt(NON_DET_START_TIME)
 							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 							.withVerbosity(true);

@@ -34,5 +34,13 @@ public class CleanMode implements NonDetModeSwitchMode {
 	public boolean nonDeterministicOut() {
 		return true;
 	}
+	
+	/* (non-Javadoc)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#isFitnessComputed()
+	 */
+	@Override
+	public boolean isFitnessComputed() {
+		return true;
+	}
 
 }

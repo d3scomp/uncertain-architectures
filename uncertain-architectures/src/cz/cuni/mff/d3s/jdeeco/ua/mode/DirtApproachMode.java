@@ -35,4 +35,11 @@ public class DirtApproachMode implements NonDetModeSwitchMode {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#isFitnessComputed()
+	 */
+	@Override
+	public boolean isFitnessComputed() {
+		return true;
+	}
 }

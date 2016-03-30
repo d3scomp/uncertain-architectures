@@ -106,6 +106,8 @@ public class Robot {
 	public CorrelationMetadataWrapper<LinkPosition> position;
 		
 	public Map<String, DockData> availableDocks;
+	
+	public Map<String, Node> othersPlans;
 
 	@Local
 	public final List<Link> trajectory;
@@ -140,6 +142,7 @@ public class Robot {
 		map = new CorrelationMetadataWrapper<>(new DirtinessMap(id), "map");
 		trajectory = new ArrayList<>();
 		availableDocks = new HashMap<>();
+		othersPlans = new HashMap<>();
 		if (withSeed) {
 			random = new Random(seed);	
 		} else {
@@ -283,9 +286,16 @@ public class Robot {
 			@In("targetPlanner") NearestTrajectoryPlanner targetPlanner,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
-			@In("map") CorrelationMetadataWrapper<DirtinessMap> map) {
+			@In("map") CorrelationMetadataWrapper<DirtinessMap> map,
+			@In("othersPlans") Map<String, Node> othersPlans) {
+		Map<Node, Double> dirtiness = new HashMap<>(map.getValue().getDirtiness());
+		// Avoid tiles targeted by others
+		for(Node tile : othersPlans.values()){
+			if(dirtiness.containsKey(tile)){
+				dirtiness.remove(tile);
+			}
+		}
 		// Plan to clean
-		Map<Node, Double> dirtiness = map.getValue().getDirtiness(); 
 		targetPlanner.updateTrajectory(dirtiness.keySet(), trajectory.value);
 	}
 	

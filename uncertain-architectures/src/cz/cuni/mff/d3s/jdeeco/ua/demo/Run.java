@@ -24,7 +24,9 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_PROBABILITY_STEP;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_END_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
@@ -43,6 +45,7 @@ import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchAnnealState;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDeterministicModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
@@ -52,6 +55,7 @@ import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
+import cz.cuni.mff.d3s.jdeeco.ua.ensemble.CleaningPlanEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.AnnealingParams;
@@ -115,12 +119,20 @@ public class Run {
 			if(NON_DETERMINISM_ON){
 				NON_DET_INIT_PROBABILITY = Double.parseDouble(args[i]);
 				System.out.println(String.format("%s = %s", "NON_DET_INIT_PROBABILITY", NON_DET_INIT_PROBABILITY));
-//				i++;
-//				NON_DET_START_TIME = Long.parseLong(args[i]);
-//				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
-//				i++;
-//				NON_DET_END_TIME = Long.parseLong(args[i]);
-//				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
+				i++;
+				NON_DET_PROBABILITY_STEP = Double.parseDouble(args[i]);
+				NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
+				System.out.println(String.format("%s = %s", "NON_DET_PROBABILITY_STEP", NON_DET_PROBABILITY_STEP));
+				i++;
+				if(args.length > i) {
+					NON_DET_START_TIME = Long.parseLong(args[i]);
+					i++;
+				}
+				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
+				if(args.length > i) {
+					NON_DET_END_TIME = Long.parseLong(args[i]);
+				}
+				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
 			}
 		}
 		
@@ -180,6 +192,7 @@ public class Run {
 		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
 		defaultNode.deployComponent(d2);
 		defaultNode.deployEnsemble(DockingEnsemble.class);
+		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
 
 		// Deploy robots
 		deployRobots(new int[]{1, 2, 3}, simulation, defaultNode, nodesInSimulation, writers);
@@ -216,6 +229,7 @@ public class Run {
 	
 				// Deploy ensembles on node
 				deeco.deployEnsemble(DockingEnsemble.class);
+				deeco.deployEnsemble(CleaningPlanEnsemble.class);
 			} else {
 				// Deploy robot
 				defaultNode.deployComponent(Configuration.createRobot(i, defaultNode.getRuntimeLogger()));

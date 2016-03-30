@@ -69,6 +69,9 @@ def simulate(scenarioIndex, iterations):
         if scenario[UMS]:
             params.append("true")
             params.append(str(scenario[PROBABILITY]))
+            params.append(str(scenario[PROBABILITY_STEP]))
+            params.append(str(scenario[UMS_START]))
+            params.append(str(scenario[UMS_END]))
         else:
             params.append("false")
             

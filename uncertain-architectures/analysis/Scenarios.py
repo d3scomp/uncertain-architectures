@@ -19,6 +19,7 @@ The probability following the UMS is the starting UMS probability.
 @author: Ilias
 @author: Dominik Skoda
 '''
+from Configuration import SIMULATION_DURATION
 
 #################################################
 # SCENARIOS
@@ -31,6 +32,9 @@ DF = "DF" # Dock failure
 FCI = "FCI" # Faulty component isolation
 UMS = "UMS" # Unspecified mode switching
 PROBABILITY = "Probability" # Starting probability for UMS
+PROBABILITY_STEP = "step" # Probability step for UMS
+UMS_START = "start_time" # The UMS start time
+UMS_END = "end_time" # The UMS end time
 
 # Scenarios
 scenarios = []
@@ -39,33 +43,48 @@ scenarios.append({DDF:True, CS:False, DF:False, UMS:False})
 scenarios.append({DDF:True, CS:True, DF:False, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI: False, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
-scenarios.append({DDF:False, DF:False, UMS:True, PROBABILITY:0.0001})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.0001,
+                  PROBABILITY_STEP:0.00005,
+                  UMS_START:0,
+                  UMS_END:SIMULATION_DURATION})
 scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False})
-scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True, PROBABILITY:0.0001})
+scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
+                  PROBABILITY:0.0001,
+                  PROBABILITY_STEP:0.00005,
+                  UMS_START:0,
+                  UMS_END:SIMULATION_DURATION})
 
 #################################################
 
 
-def getSignature(scenario, iterations = 0):
+def getSignature(scenario, iterations = 0, detailed = False):
     ''' Compiles the signature of the given scenario. '''
-    outputFileName = []
+    outputSignature = []
     if scenario[DDF]:
-        outputFileName.append("DDF-")
-        outputFileName.append("CS-" if (scenario[CS]) else "!CS-")
+        outputSignature.append("DDF-")
+        outputSignature.append("CS-" if (scenario[CS]) else "!CS-")
     else:
-        outputFileName.append("!DDF-")
+        outputSignature.append("!DDF-")
     if scenario[DF]:
-        outputFileName.append("DF-") 
-        outputFileName.append("FCI-" if (scenario[FCI]) else "!FCI-")
+        outputSignature.append("DF-") 
+        outputSignature.append("FCI-" if (scenario[FCI]) else "!FCI-")
     else:
-        outputFileName.append("!DF-")
+        outputSignature.append("!DF-")
     if scenario[UMS]:
-        outputFileName.append(("UMS-" + str(scenario[PROBABILITY])))
+        outputSignature.append("UMS")
+        if detailed:
+            outputSignature.append("-P" + str(scenario[PROBABILITY]))
+            outputSignature.append("-S" + str(scenario[PROBABILITY_STEP]))
+            outputSignature.append("-B" + str(scenario[UMS_START]))
+            outputSignature.append("-E" + str(scenario[UMS_END]))
+        else:
+            outputSignature.append("-" + str(scenarios.index(scenario)))
     else:
-        outputFileName.append("!UMS")
+        outputSignature.append("!UMS")
     if iterations > 0:
-        outputFileName.append("-it-" + str(iterations))
-    return ''.join(outputFileName)
+        outputSignature.append("-it-" + str(iterations))
+    return ''.join(outputSignature)
 
 
 def getScenarioSignature(scenarioIndex, iterations = 0):
@@ -80,13 +99,18 @@ def listScenarios():
     print("DF - Dock failure")
     print("FCI - Faulty component isolation")
     print("UMS - Unspecified mode switching")
+    print("P - Starting probability for UMS")
+    print("S - Probability step for UMS")
+    print("B - The UMS start time (beginning)")
+    print("E - The UMS end time")
     print("\nAn exclamation mark (!) in front of a shortcut "
           "means the feature/failure is inactive, "
-          "otherwise it is active.\nThe probability following "
-          "the UMS is the starting UMS probability.")
+          "otherwise it is active.\nA number following "
+          "the UMS is the scenario index that contains the "
+          "detailed UMS configuration.")
     print("\nAvailable Scenarios:")
     for i, scenario in enumerate(scenarios):
-        print("{}) {}".format(i, getSignature(scenario)))
+        print("{}) {}".format(i, getSignature(scenario, detailed = True)))
     print("\n")
 
 

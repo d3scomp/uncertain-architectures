@@ -131,6 +131,8 @@ public class Run {
 				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
 				if(args.length > i) {
 					NON_DET_END_TIME = Long.parseLong(args[i]);
+				} else {
+					NON_DET_END_TIME = SIMULATION_DURATION;
 				}
 				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
 			}

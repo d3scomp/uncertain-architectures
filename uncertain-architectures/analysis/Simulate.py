@@ -76,7 +76,8 @@ def simulate(scenarioIndex, iterations):
             params.append("false")
             
         # Compose invocation command
-        cmd = ['mvn.cmd', 'exec:java', '-f..','-Dexec.args=' + ' '.join(params)]
+        mvn = 'mvn.cmd' if sys.platform == 'win32' else 'mvn'
+        cmd = [mvn, 'exec:java', '-f..','-Dexec.args=' + ' '.join(params)]
         
         print(cmd)
         print("Iteration {}".format(i))

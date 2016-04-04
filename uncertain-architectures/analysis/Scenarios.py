@@ -54,6 +54,26 @@ scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   PROBABILITY_STEP:0.00005,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.000001,
+                  PROBABILITY_STEP:0.0000005,
+                  UMS_START:0,
+                  UMS_END:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.00001,
+                  PROBABILITY_STEP:0.000005,
+                  UMS_START:0,
+                  UMS_END:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.001,
+                  PROBABILITY_STEP:0.0005,
+                  UMS_START:0,
+                  UMS_END:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.01,
+                  PROBABILITY_STEP:0.005,
+                  UMS_START:0,
+                  UMS_END:SIMULATION_DURATION})
 
 #################################################
 

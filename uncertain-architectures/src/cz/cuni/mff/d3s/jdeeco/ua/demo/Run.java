@@ -197,7 +197,7 @@ public class Run {
 		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
 
 		// Deploy robots
-		deployRobots(new int[]{1, 2, 3}, simulation, defaultNode, nodesInSimulation, writers);
+		deployRobots(new int[]{0, 1, 2}, simulation, defaultNode, nodesInSimulation, writers);
 		
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + logPath + "'");

@@ -8,6 +8,8 @@ This script takes values computed by Analyze.py script and creates a box plot.
 '''
 
 import os
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.text as mpltext
 from pylab import *

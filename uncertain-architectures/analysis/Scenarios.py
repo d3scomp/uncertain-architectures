@@ -43,7 +43,7 @@ scenarios.append({DDF:True, CS:False, DF:False, UMS:False})
 scenarios.append({DDF:True, CS:True, DF:False, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI: False, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.0001,
                   PROBABILITY_STEP:0.00005,
                   UMS_START:0,
@@ -55,85 +55,85 @@ scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
 # Different UMS starting probability and step
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.00001,
                   PROBABILITY_STEP:0.000005,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.001,
                   PROBABILITY_STEP:0.0005,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.01,
                   PROBABILITY_STEP:0.005,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
 # End in 300000
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:0,
                   UMS_END:300000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.00001,
                   PROBABILITY_STEP:0.000005,
                   UMS_START:0,
                   UMS_END:300000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.001,
                   PROBABILITY_STEP:0.0005,
                   UMS_START:0,
                   UMS_END:300000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.01,
                   PROBABILITY_STEP:0.005,
                   UMS_START:0,
                   UMS_END:300000})
 # End in 150000
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:0,
                   UMS_END:150000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.00001,
                   PROBABILITY_STEP:0.000005,
                   UMS_START:0,
                   UMS_END:150000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.001,
                   PROBABILITY_STEP:0.0005,
                   UMS_START:0,
                   UMS_END:150000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.01,
                   PROBABILITY_STEP:0.005,
                   UMS_START:0,
                   UMS_END:150000})
 # Start in 100000 End in 300000
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:100000,
                   UMS_END:300000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.00001,
                   PROBABILITY_STEP:0.000005,
                   UMS_START:100000,
                   UMS_END:300000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.001,
                   PROBABILITY_STEP:0.0005,
                   UMS_START:100000,
                   UMS_END:300000})
-scenarios.append({DDF:False, DF:False, UMS:True,
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.01,
                   PROBABILITY_STEP:0.005,
                   UMS_START:100000,

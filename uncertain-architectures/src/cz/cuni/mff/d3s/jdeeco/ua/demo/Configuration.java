@@ -15,6 +15,8 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+import java.util.Random;
+
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
@@ -190,6 +192,8 @@ public class Configuration {
 	/////////////////
 	// ROBOTS
 	/////////////////
+	
+	private static Random randBattery = new Random();
 
 	public static final RobotParameters ROBOT_PARAMS[] = 
 			new RobotParameters[]{
@@ -197,7 +201,7 @@ public class Configuration {
 							ROBOT1_SEED,
 							5, // Start Link Number (Position)
 							new PositionFilter(0.0, 0.1),
-							0.4, // Init Battery Level
+							0.3 + randBattery.nextDouble()*0.5, // Init Battery Level
 							new DoubleFilter(0.0, 0.01), // Battery noise
 							new SearchTrajectoryPlanner(), // Search planner
 							new NearestTrajectoryPlanner(), // Docking planner
@@ -206,7 +210,7 @@ public class Configuration {
 							ROBOT2_SEED,
 							10, // Start Link Number (Position)
 							new PositionFilter(0.0, 0.1),
-							0.4, // Init Battery Level
+							0.3 + randBattery.nextDouble()*0.5, // Init Battery Level
 							new DoubleFilter(0.0, 0.01), // Battery noise
 							new SearchTrajectoryPlanner(), // Search planner
 							new NearestTrajectoryPlanner(), // Docking planner
@@ -215,7 +219,7 @@ public class Configuration {
 							ROBOT3_SEED,
 							0, // Start Link Number (Position)
 							new PositionFilter(0.0, 0.1),
-							0.4, // Init Battery Level
+							0.3 + randBattery.nextDouble()*0.5, // Init Battery Level
 							new DoubleFilter(0.0, 0.01), // Battery noise
 							new SearchTrajectoryPlanner(), // Search planner
 							new NearestTrajectoryPlanner(), // Docking planner
@@ -224,7 +228,7 @@ public class Configuration {
 							ROBOT4_SEED,
 							15, // Start Link Number (Position)
 							new PositionFilter(0.0, 0.1),
-							0.4, // Init Battery Level
+							0.3 + randBattery.nextDouble()*0.5, // Init Battery Level
 							new DoubleFilter(0.0, 0.01), // Battery noise
 							new SearchTrajectoryPlanner(), // Search planner
 							new NearestTrajectoryPlanner(), // Docking planner
@@ -233,7 +237,7 @@ public class Configuration {
 							ROBOT5_SEED,
 							20, // Start Link Number (Position)
 							new PositionFilter(0.0, 0.1),
-							0.4, // Init Battery Level
+							0.3 + randBattery.nextDouble()*0.5, // Init Battery Level
 							new DoubleFilter(0.0, 0.01), // Battery noise
 							new SearchTrajectoryPlanner(), // Search planner
 							new NearestTrajectoryPlanner(), // Docking planner

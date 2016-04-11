@@ -136,27 +136,32 @@ def printHelp():
           "\n\t\tpython Scenarios.py")
 
 
-def extractScenarioArg(args):
+def extractScenarioArgs(args):
     # Check argument count (1st argument is this script name)
-    if len(args) != 3:
+    if len(args) < 3:
         raise ArgError("Invalid arguments")
     try:
-        scenario = int(args[1])
-        if len(scenarios) <= scenario:
-            raise ArgError("Invalid arguments")
-        if(scenario < 0):
-            raise ArgError("Invalid arguments")
-        return scenario
+        scenarioArgs = [];
+        # 1st arg is script name, last is number of iterations
+        for i in range(1, len(args) - 1):
+            s = int(args[i])
+            if len(scenarios) <= s:
+                raise ArgError("Invalid arguments")
+            if(s < 0):
+                raise ArgError("Invalid arguments")
+            scenarioArgs.append(s)
+        return scenarioArgs
     except ValueError:
         raise ArgError(ValueError)
 
 
 def extractIterationsArg(args):
     # Check argument count (1st argument is this script name)
-    if len(args) != 3:
+    argsLen = len(args) 
+    if argsLen < 3:
         raise ArgError("Invalid arguments")
     try:
-        cnt = int(args[2])
+        cnt = int(args[argsLen - 1])
         if(cnt < 1):
             raise ArgError("Invalid arguments")
         return cnt
@@ -166,14 +171,15 @@ def extractIterationsArg(args):
 
 if __name__ == '__main__':
     try:
-        scenario = extractScenarioArg(sys.argv)
+        scenarioArgs = extractScenarioArgs(sys.argv)
         iterations = extractIterationsArg(sys.argv)
-        signature = getScenarioSignature(scenario, iterations)
-        print("Analyzing scenario {} with signature {}"
-              .format(scenario, signature))
         
         start = time.time()
-        analyzeSignature(signature)
+        for scenario in scenarioArgs:
+            signature = getScenarioSignature(scenario, iterations)
+            print("Analyzing scenario {} with signature {}"
+                  .format(scenario, signature))
+            analyzeSignature(signature)
         end = time.time()
         
         print("Analysis lasted for {:.2f} mins".format((end-start)/60))

@@ -52,9 +52,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		final ModeGuard batteryDrainedGuard = new ModeGuard() {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
-				boolean b = !deadBatteryGuard.isSatisfied(knowledgeValue)
-						&& ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
-				return b;
+				boolean batteryDead = deadBatteryGuard.isSatisfied(knowledgeValue);
+				boolean batteryLow = ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+				return !batteryDead && batteryLow;
 			}
 			
 			@Override
@@ -147,8 +147,10 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
-				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[1]})
-						&& map.getDirtiness().keySet().size() == 0);
+				
+				boolean batteryDead = batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[1]});
+				boolean moreDirt = map.getDirtiness().keySet().size() > 0;
+				return !batteryDead && !moreDirt;
 			}
 			
 			@Override
@@ -164,10 +166,12 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				
-				return (!(positionNode != null
+				boolean atDirt = positionNode != null
 						&& map.getDirtiness().containsKey(positionNode)
-						&& map.getDirtiness().get(positionNode) > 0))
-						&& map.getDirtiness().keySet().size() > 0;
+						&& map.getDirtiness().get(positionNode) > 0;
+				boolean moreDirt = map.getDirtiness().keySet().size() > 0;
+				
+				return !atDirt && moreDirt;
 			}
 			
 			@Override
@@ -231,192 +235,6 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		ModeChartFactory factory = new ModeChartFactory();
-		
-		/* ----------------------------------------- */
-		/* ---       1st alternative          ------ */
-		/* ----------------------------------------- */
-
-//		factory.addTransitionWithGuard(CleanMode.class, SearchMode.class, searchGuard);
-//		factory.addTransitionListener(CleanMode.class, SearchMode.class, new ModeTransitionLogger(CleanMode.class, SearchMode.class));
-//		
-//		factory.addTransitionWithGuard(CleanMode.class, DirtApproachMode.class, keepCleaningGuard);
-//		factory.addTransitionListener(CleanMode.class, DirtApproachMode.class, new ModeTransitionLogger(CleanMode.class, DirtApproachMode.class));
-//		
-//		factory.addTransition(SearchMode.class, DirtApproachMode.class, approachGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, new ModeTransitionLogger(SearchMode.class, DirtApproachMode.class));
-//		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(DirtApproachMode.class, CleanMode.class, cleanGuard, 1);
-//		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, new ModeTransitionLogger(DirtApproachMode.class, CleanMode.class));
-//		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, clearPlanEventListener);
-//
-//		factory.addTransition(DirtApproachMode.class, SearchMode.class, searchGuard, 1);
-//		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, new ModeTransitionLogger(DirtApproachMode.class, SearchMode.class));
-//		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(DirtApproachMode.class, DockingMode.class, batteryDrainedGuard, 1);
-//		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, new ModeTransitionLogger(DirtApproachMode.class, DockingMode.class));
-//		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));
-//		factory.addTransitionListener(SearchMode.class, DockingMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, new ModeTransitionLogger(SearchMode.class, DeadBatteryMode.class));
-//		
-//		factory.addTransitionWithGuard(DockingMode.class, ChargingMode.class, dockReachedGuard);
-//		factory.addTransitionListener(DockingMode.class, ChargingMode.class, new ModeTransitionLogger(DockingMode.class, ChargingMode.class));
-//		factory.addTransitionListener(DockingMode.class, ChargingMode.class, clearPlanEventListener);
-//				
-//		factory.addTransitionWithGuard(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard);
-//		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, new ModeTransitionLogger(DockingMode.class, DeadBatteryMode.class));
-//
-//		factory.addTransitionWithGuard(DockingMode.class, WaitingMode.class, startWaitGuard);
-//		factory.addTransitionListener(DockingMode.class, WaitingMode.class, new ModeTransitionLogger(DockingMode.class, WaitingMode.class));
-//
-//		factory.addTransitionWithGuard(WaitingMode.class, DockingMode.class, stopWaitGuard);
-//		factory.addTransitionListener(WaitingMode.class, DockingMode.class, new ModeTransitionLogger(WaitingMode.class, DockingMode.class));
-//		
-//		factory.addTransitionWithGuard(ChargingMode.class, SearchMode.class, batteryChargedOrChargingInUnavailableDockGuard);
-//		factory.addTransitionListener(ChargingMode.class, SearchMode.class, new ModeTransitionLogger(ChargingMode.class, SearchMode.class));
-//		
-//		factory.addTransition(SearchMode.class, DockingMode.class, new TrueGuard(), PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));
-
-		/* ----------------------------------------- */
-		/* ---       2nd alternative          ------ */
-		/* ----------------------------------------- */
-		
-//		factory.addTransition(CleanMode.class, SearchMode.class, searchGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(CleanMode.class, SearchMode.class, new ModeTransitionLogger(CleanMode.class, SearchMode.class));
-//		
-//		factory.addTransition(CleanMode.class, DirtApproachMode.class, keepCleaningGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(CleanMode.class, DirtApproachMode.class, new ModeTransitionLogger(CleanMode.class, DirtApproachMode.class));
-//		
-//		factory.addTransition(SearchMode.class, DirtApproachMode.class, approachGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, new ModeTransitionLogger(SearchMode.class, DirtApproachMode.class));
-//		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(DirtApproachMode.class, CleanMode.class, cleanGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, new ModeTransitionLogger(DirtApproachMode.class, CleanMode.class));
-//		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, clearPlanEventListener);
-//
-//		factory.addTransition(DirtApproachMode.class, SearchMode.class, searchGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, new ModeTransitionLogger(DirtApproachMode.class, SearchMode.class));
-//		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(DirtApproachMode.class, DockingMode.class, batteryDrainedGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, new ModeTransitionLogger(DirtApproachMode.class, DockingMode.class));
-//		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(SearchMode.class, DockingMode.class, batteryDrainedGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));
-//		factory.addTransitionListener(SearchMode.class, DockingMode.class, clearPlanEventListener);
-//		
-//		factory.addTransition(SearchMode.class, DeadBatteryMode.class, deadBatteryGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(SearchMode.class, DeadBatteryMode.class, new ModeTransitionLogger(SearchMode.class, DeadBatteryMode.class));
-//		
-//		factory.addTransition(DockingMode.class, ChargingMode.class, dockReachedGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(DockingMode.class, ChargingMode.class, new ModeTransitionLogger(DockingMode.class, ChargingMode.class));
-//		factory.addTransitionListener(DockingMode.class, ChargingMode.class, clearPlanEventListener);
-//				
-//		factory.addTransition(DockingMode.class, DeadBatteryMode.class, deadBatteryGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(DockingMode.class, DeadBatteryMode.class, new ModeTransitionLogger(DockingMode.class, DeadBatteryMode.class));
-//
-//		factory.addTransition(DockingMode.class, WaitingMode.class, startWaitGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(DockingMode.class, WaitingMode.class, new ModeTransitionLogger(DockingMode.class, WaitingMode.class));
-//
-//		factory.addTransition(WaitingMode.class, DockingMode.class, stopWaitGuard, 1-PROBABILITY);
-//		factory.addTransitionListener(WaitingMode.class, DockingMode.class, new ModeTransitionLogger(WaitingMode.class, DockingMode.class));
-//		
-//		factory.addTransition(ChargingMode.class, SearchMode.class, batteryChargedOrChargingInUnavailableDockGuard,1-PROBABILITY);
-//		factory.addTransitionListener(ChargingMode.class, SearchMode.class, new ModeTransitionLogger(ChargingMode.class, SearchMode.class));
-//		
-//		/* ------------ SearchMode ------------------*/
-//		factory.addTransition(SearchMode.class, DirtApproachMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, new ModeTransitionLogger(SearchMode.class, DirtApproachMode.class));
-//
-//		factory.addTransition(SearchMode.class, CleanMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(SearchMode.class, CleanMode.class, new ModeTransitionLogger(SearchMode.class, CleanMode.class));
-//
-//		factory.addTransition(SearchMode.class, DockingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(SearchMode.class, DockingMode.class, new ModeTransitionLogger(SearchMode.class, DockingMode.class));
-//
-//		factory.addTransition(SearchMode.class, ChargingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(SearchMode.class, ChargingMode.class, new ModeTransitionLogger(SearchMode.class, ChargingMode.class));
-//
-//		/* ------------ DirtApproachMode ------------------*/
-//		factory.addTransition(DirtApproachMode.class, SearchMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DirtApproachMode.class, SearchMode.class, new ModeTransitionLogger(DirtApproachMode.class, SearchMode.class));
-//		
-//		factory.addTransition(DirtApproachMode.class, DockingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DirtApproachMode.class, DockingMode.class, new ModeTransitionLogger(DirtApproachMode.class, DockingMode.class));
-//
-//		factory.addTransition(DirtApproachMode.class, CleanMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DirtApproachMode.class, CleanMode.class, new ModeTransitionLogger(DirtApproachMode.class, CleanMode.class));
-//
-//		factory.addTransition(DirtApproachMode.class, ChargingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DirtApproachMode.class, ChargingMode.class, new ModeTransitionLogger(DirtApproachMode.class, ChargingMode.class));
-//		
-//		/* ------------ CleanMode ------------------*/
-//		factory.addTransition(CleanMode.class, SearchMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(CleanMode.class, SearchMode.class, new ModeTransitionLogger(CleanMode.class, SearchMode.class));
-//		
-//		factory.addTransition(CleanMode.class, DockingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(CleanMode.class, DockingMode.class, new ModeTransitionLogger(CleanMode.class, DockingMode.class));
-//
-//		factory.addTransition(CleanMode.class, DirtApproachMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(CleanMode.class, DirtApproachMode.class, new ModeTransitionLogger(CleanMode.class, DirtApproachMode.class));
-//
-//		factory.addTransition(CleanMode.class, ChargingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(CleanMode.class, ChargingMode.class, new ModeTransitionLogger(CleanMode.class, ChargingMode.class));
-//		
-//		/* ------------ DockingMode ------------------*/
-//		factory.addTransition(DockingMode.class, SearchMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DockingMode.class, SearchMode.class, new ModeTransitionLogger(DockingMode.class, SearchMode.class));
-//		
-//		factory.addTransition(DockingMode.class, DirtApproachMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DockingMode.class, DirtApproachMode.class, new ModeTransitionLogger(DockingMode.class, DirtApproachMode.class));
-//
-//		factory.addTransition(DockingMode.class, CleanMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DockingMode.class, CleanMode.class, new ModeTransitionLogger(DockingMode.class, CleanMode.class));
-//
-//		factory.addTransition(DockingMode.class, ChargingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(DockingMode.class, ChargingMode.class, new ModeTransitionLogger(DockingMode.class, ChargingMode.class));
-//
-//		/* ------------ ChargingMode ------------------*/
-//		factory.addTransition(ChargingMode.class, SearchMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(ChargingMode.class, SearchMode.class, new ModeTransitionLogger(ChargingMode.class, SearchMode.class));
-//		
-//		factory.addTransition(ChargingMode.class, DockingMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(ChargingMode.class, DockingMode.class, new ModeTransitionLogger(ChargingMode.class, DockingMode.class));
-//
-//		factory.addTransition(ChargingMode.class, DirtApproachMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(ChargingMode.class, DirtApproachMode.class, new ModeTransitionLogger(ChargingMode.class, DirtApproachMode.class));
-//
-//		factory.addTransition(ChargingMode.class, CleanMode.class, new TrueGuard(), PROBABILITY/4);
-//		factory.addTransitionListener(ChargingMode.class, CleanMode.class, new ModeTransitionLogger(ChargingMode.class, CleanMode.class));
-//		
-//		/* ------------ WaitingMode ------------------*/
-//		factory.addTransition(WaitingMode.class, SearchMode.class, new TrueGuard(), PROBABILITY/5);
-//		factory.addTransitionListener(WaitingMode.class, SearchMode.class, new ModeTransitionLogger(WaitingMode.class, SearchMode.class));
-//		
-//		factory.addTransition(WaitingMode.class, DockingMode.class, new TrueGuard(), PROBABILITY/5);
-//		factory.addTransitionListener(WaitingMode.class, DockingMode.class, new ModeTransitionLogger(WaitingMode.class, DockingMode.class));
-//
-//		factory.addTransition(WaitingMode.class, DirtApproachMode.class, new TrueGuard(), PROBABILITY/5);
-//		factory.addTransitionListener(WaitingMode.class, DirtApproachMode.class, new ModeTransitionLogger(WaitingMode.class, DirtApproachMode.class));
-//
-//		factory.addTransition(WaitingMode.class, CleanMode.class, new TrueGuard(), PROBABILITY/5);
-//		factory.addTransitionListener(WaitingMode.class, CleanMode.class, new ModeTransitionLogger(WaitingMode.class, CleanMode.class));
-//		
-//		factory.addTransition(WaitingMode.class, ChargingMode.class, new TrueGuard(), PROBABILITY/5);
-//		factory.addTransitionListener(WaitingMode.class, ChargingMode.class, new ModeTransitionLogger(WaitingMode.class, ChargingMode.class));
-		
-		/* ----------------------------------------- */
-		/* ---       3rd alternative          ------ */
-		/* ----------------------------------------- */
 		
 		factory.addTransition(CleanMode.class, SearchMode.class, searchGuard, 1);
 		factory.addTransitionListener(CleanMode.class, SearchMode.class, new ModeTransitionLogger(CleanMode.class, SearchMode.class));

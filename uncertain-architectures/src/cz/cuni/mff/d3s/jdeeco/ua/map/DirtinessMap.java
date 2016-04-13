@@ -304,7 +304,7 @@ public class DirtinessMap implements Serializable{
 		return dirt;
 	}
 
-	public double cleanDirtiness(Node node, double portion) {
+	public double cleanDirtiness(Node node, double portion, boolean updateLocalMap) {
 		if (node == null)
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
@@ -321,12 +321,17 @@ public class DirtinessMap implements Serializable{
 					intensity = 0;
 				}
 				DIRTINESS.put(node, intensity);
-				dirtiness.put(node, intensity);
 
 				logDirtiness(node, intensity);
 				
-				if(intensity < DIRT_EPSILON){
-					dirtiness.remove(node);
+				if(updateLocalMap){
+					if(intensity < DIRT_EPSILON){
+						if(dirtiness.containsKey(node)){
+							dirtiness.remove(node);
+						}
+					} else {
+						dirtiness.put(node, intensity);
+					}
 				}
 			}
 			return intensity;

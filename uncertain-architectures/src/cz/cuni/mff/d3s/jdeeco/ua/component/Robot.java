@@ -333,8 +333,13 @@ public class Robot {
 		Node node = position.getValue().atNode();
 		if(node != null && map.value.getValue().getDirtiness().containsKey(node)){
 			double intensity = map.value.getValue().getDirtiness().get(node);
+			long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+			boolean updateLocalMap = !(DIRT_DETECTION_FAILURE_ON
+					&& DIRT_DETECTION_FAILURE_ROBOT.equals(id)
+					&& currentTime >= DIRT_DETECTION_FAILURE_TIME);
 			if(intensity > 0.0){
-				map.value.getValue().cleanDirtiness(node, CLEANING_RATE);
+				Log.i(String.format("%s update map %s", id, updateLocalMap));
+				map.value.getValue().cleanDirtiness(node, CLEANING_RATE, updateLocalMap);
 			}
 		}
 	}

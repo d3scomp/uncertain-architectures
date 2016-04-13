@@ -111,7 +111,7 @@ public class Configuration {
 	 * {@link DIRT_GENERATION_PERIOD} determines how often dirt will be
 	 * generated.
 	 */
-	public static final double DIRT_GENERATION_RATE = 0.1;
+	public static final double DIRT_GENERATION_RATE = 0.5;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 

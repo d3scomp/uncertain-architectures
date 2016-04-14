@@ -149,7 +149,7 @@ scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
 def getSignature(scenario, iterations = 0, detailed = False):
     ''' Compiles the signature of the given scenario. '''
     outputSignature = []
-    outputSignature.append("{:02}) ".format(scenarios.index(scenario)))
+    outputSignature.append("{:02})-".format(scenarios.index(scenario)))
     if scenario[DDF]:
         outputSignature.append("DDF-")
         if detailed:

@@ -23,16 +23,17 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_END_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_PROBABILITY_STEP;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_END_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
@@ -86,6 +87,8 @@ public class Run {
 		// Process arguments
 		String logPath = "STANDARD";
 		RuntimeLogWriters writers;
+		int robotCnt = 3;
+		
 		if (args.length == 0) {
 			writers = new RuntimeLogWriters();
 		} else {
@@ -95,7 +98,15 @@ public class Run {
 			int i = 1;
 			SIMULATION_DURATION = Integer.parseInt(args[i]);
 			System.out.println(String.format("%s = %d", "SIMULATION_DURATION", SIMULATION_DURATION));
-			i++;			
+			i++;
+			
+			robotCnt = Integer.parseInt(args[i]);
+			if(robotCnt < 1 || robotCnt > Configuration.ROBOT_PARAMS.length){
+				System.out.println(String.format("Invalid number of robots: %d", robotCnt));
+				return;
+			}
+			System.out.println(String.format("Number of robots = %d", robotCnt));
+			i++;
 			
 			DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[i]);
 			System.out.println(String.format("%s = %s", "DIRT_DETECTION_FAILURE_ON", DIRT_DETECTION_FAILURE_ON));
@@ -197,7 +208,7 @@ public class Run {
 		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
 
 		// Deploy robots
-		deployRobots(new int[]{0, 1, 2, 3 ,4}, simulation, defaultNode, nodesInSimulation, writers);
+		deployRobots(IntStream.range(0, robotCnt).toArray(), simulation, defaultNode, nodesInSimulation, writers);
 		
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + logPath + "'");

@@ -40,7 +40,7 @@ def finalizeOldestSimulation():
     simulated.pop(0)
 
 
-def simulate(scenarioIndex, iterations):
+def simulate(scenarioIndex, botCnt, iterations):
     scenario = scenarios[scenarioIndex]
           
     print('Spawning simulation processes...')
@@ -55,6 +55,7 @@ def simulate(scenarioIndex, iterations):
                                    getSignature(scenario, iterations),
                                    'log_' + str(i)))
         params.append(str(SIMULATION_DURATION))
+        params.append(str(botCnt))
         
         if scenario[DDF]:
             params.append("true")
@@ -106,7 +107,7 @@ def printHelp():
 
 def extractScenarioArg(args):
     # Check argument count (1st argument is this script name)
-    if len(args) != 2 and len(args) != 3:
+    if len(args) != 4:
         raise ArgError("Invalid arguments")
     try:
         scenario = int(args[1])
@@ -117,14 +118,21 @@ def extractScenarioArg(args):
         return scenario
     except ValueError:
         raise ArgError(ValueError)
+    
+    
+def extractBotCntArg(args):
+    try:
+        cnt = int(args[2])
+        if cnt < 1:
+            raise ArgError("Invalid arguments")
+        return cnt
+    except ValueError:
+        raise ArgError(ValueError)
 
 
 def extractIterationsArg(args):
-    # Check argument count (1st argument is this script name)
-    if len(args) != 3:
-        return DEFAULT_ITERATIONS_CNT
     try:
-        cnt = int(args[2])
+        cnt = int(args[3])
         if(cnt < 1):
             raise ArgError("Invalid arguments")
         return cnt
@@ -135,13 +143,14 @@ def extractIterationsArg(args):
 if __name__ == '__main__':
     try:
         scenario = extractScenarioArg(sys.argv)
+        botCnt = extractBotCntArg(sys.argv)
         iterations = extractIterationsArg(sys.argv)
         
         print("Simulating scenario {} with signature {} {}-times."
               .format(scenario, getScenarioSignature(scenario), iterations))
         
         start = time.time()
-        simulate(scenario, iterations)
+        simulate(scenario, botCnt, iterations)
         end = time.time()
         
         print("All simulations lasted for {:.2f} mins".format((end-start)/60))

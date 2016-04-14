@@ -58,9 +58,6 @@ RUNTIME_LOG_FILE = "runtimeData.xml"
 # SIMULATION CONFIGURATION
 ###############################################################################
 
-DEFAULT_ITERATIONS_CNT = 1
-''' The default number of simulations count. '''
-
 SIMULATION_DURATION = 600000
 ''' The length of each simulation in milliseconds. '''
 

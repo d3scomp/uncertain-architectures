@@ -61,6 +61,12 @@ RUNTIME_LOG_FILE = "runtimeData.xml"
 SIMULATION_DURATION = 600000
 ''' The length of each simulation in milliseconds. '''
 
+DDF_DEFAULT_TIME = 100000
+''' The default time of dirt detection failure in milliseconds. '''
+
+DF_DEFAULT_TIME = 50000
+''' The default time of dock failure in milliseconds. '''
+
 ###############################################################################
 
 

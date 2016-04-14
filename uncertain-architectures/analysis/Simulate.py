@@ -59,11 +59,19 @@ def simulate(scenarioIndex, botCnt, iterations):
         
         if scenario[DDF]:
             params.append("true")
+            if DDF_TIME in scenario:
+                params.append(str(scenario[DDF_TIME]))
+            else:    
+                params.append(str(DDF_DEFAULT_TIME))
             params.append("true" if (scenario[CS]) else "false")
         else:
             params.append("false")
         if scenario[DF]:
             params.append("true")
+            if DF_TIME in scenario:
+                params.append(str(scenario[DF_TIME]))
+            else:    
+                params.append(str(DF_DEFAULT_TIME))
             params.append("true" if (scenario[FCI]) else "false")
         else:
             params.append("false")
@@ -95,9 +103,10 @@ def simulate(scenarioIndex, botCnt, iterations):
 
 def printHelp():
     print("\nUsage:")
-    print("\tpython Simulate.py scenario [iterations]")
+    print("\tpython Simulate.py scenario botCnt iterations")
     print("\nArguments:")
     print("\tscenario - index of the required scenario")
+    print("\tbotCnt - number of robots to simulate")
     print("\titerations - number of simulations to perform (optional)")
     print("\nDescription:")
     print("\tDefault number of simulations to perform is 1."

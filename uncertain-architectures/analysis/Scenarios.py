@@ -20,6 +20,8 @@ The probability following the UMS is the starting UMS probability.
 @author: Dominik Skoda
 '''
 from Configuration import SIMULATION_DURATION
+from Configuration import DDF_DEFAULT_TIME
+from Configuration import DF_DEFAULT_TIME
 
 #################################################
 # SCENARIOS
@@ -27,14 +29,16 @@ from Configuration import SIMULATION_DURATION
 
 # Parameters
 DDF = "DDF" # Dirt detection failure
+DDF_TIME = "DDF_time"
 CS = "CS" # Collaborative sensing
 DF = "DF" # Dock failure
+DF_TIME = "DF_time"
 FCI = "FCI" # Faulty component isolation
 UMS = "UMS" # Unspecified mode switching
 PROBABILITY = "Probability" # Starting probability for UMS
 PROBABILITY_STEP = "step" # Probability step for UMS
-UMS_START = "start_time" # The UMS start time
-UMS_END = "end_time" # The UMS end time
+UMS_START = "UMS_start_time" # The UMS start time
+UMS_END = "UMS_end_time" # The UMS end time
 
 # Scenarios
 scenarios = []
@@ -145,13 +149,26 @@ scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
 def getSignature(scenario, iterations = 0, detailed = False):
     ''' Compiles the signature of the given scenario. '''
     outputSignature = []
+    outputSignature.append("{:02}) ".format(scenarios.index(scenario)))
     if scenario[DDF]:
         outputSignature.append("DDF-")
+        if detailed:
+            if DDF_TIME in scenario:
+                outputSignature.append(str(scenario[DDF_TIME]))
+            else:    
+                outputSignature.append(str(DDF_DEFAULT_TIME))
+            outputSignature.append("-")
         outputSignature.append("CS-" if (scenario[CS]) else "!CS-")
     else:
         outputSignature.append("!DDF-")
     if scenario[DF]:
-        outputSignature.append("DF-") 
+        outputSignature.append("DF-")
+        if detailed:
+            if DF_TIME in scenario:
+                outputSignature.append(str(scenario[DF_TIME]))
+            else:    
+                outputSignature.append(str(DF_DEFAULT_TIME))
+            outputSignature.append("-")
         outputSignature.append("FCI-" if (scenario[FCI]) else "!FCI-")
     else:
         outputSignature.append("!DF-")
@@ -193,8 +210,8 @@ def listScenarios():
           "the UMS is the scenario index that contains the "
           "detailed UMS configuration.")
     print("\nAvailable Scenarios:")
-    for i, scenario in enumerate(scenarios):
-        print("{}) {}".format(i, getSignature(scenario, detailed = True)))
+    for scenario in scenarios:
+        print(getSignature(scenario, detailed = True))
     print("\n")
 
 

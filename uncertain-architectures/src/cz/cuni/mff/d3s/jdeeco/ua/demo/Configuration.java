@@ -82,10 +82,10 @@ public class Configuration {
 	public static boolean DOCK_FAILURE_ON = false;
 
 	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
-	public static final long DIRT_DETECTION_FAILURE_TIME = 100_000;
+	public static long DIRT_DETECTION_FAILURE_TIME = 100_000;
 
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
-	public static final long DOCK_FAILURE_TIME = 50_000;
+	public static long DOCK_FAILURE_TIME = 50_000;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 

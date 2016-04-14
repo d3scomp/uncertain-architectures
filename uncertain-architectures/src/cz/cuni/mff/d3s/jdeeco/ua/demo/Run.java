@@ -17,9 +17,11 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CORRELATION_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
@@ -112,6 +114,10 @@ public class Run {
 			System.out.println(String.format("%s = %s", "DIRT_DETECTION_FAILURE_ON", DIRT_DETECTION_FAILURE_ON));
 			i++;
 			if(DIRT_DETECTION_FAILURE_ON){
+				DIRT_DETECTION_FAILURE_TIME = Long.parseLong(args[i]);
+				System.out.println(String.format("%s = %s", "DIRT_DETECTION_FAILURE_TIME", DIRT_DETECTION_FAILURE_TIME));
+				i++;
+				
 				CORRELATION_ON = Boolean.parseBoolean(args[i]);
 				System.out.println(String.format("%s = %s", "CORRELATION_ON", CORRELATION_ON));
 				i++;
@@ -120,6 +126,10 @@ public class Run {
 			System.out.println(String.format("%s = %s", "DOCK_FAILURE_ON", DOCK_FAILURE_ON));
 			i++;
 			if(DOCK_FAILURE_ON){
+				DOCK_FAILURE_TIME = Long.parseLong(args[i]);
+				System.out.println(String.format("%s = %s", "DOCK_FAILURE_TIME", DOCK_FAILURE_TIME));
+				i++;
+				
 				ROLE_REMOVAL_ON = Boolean.parseBoolean(args[i]);
 				System.out.println(String.format("%s = %s", "ROLE_REMOVAL_ON", ROLE_REMOVAL_ON));
 				i++;

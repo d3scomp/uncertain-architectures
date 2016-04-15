@@ -184,7 +184,7 @@ public class Run {
 		if (CORRELATION_ON) {
 			// create correlation plugin
 			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
-					.withVerbosity(true).withDumping(false).withGeneratedEnsemblesLogging(false);
+					.withVerbosity(false).withDumping(false).withGeneratedEnsemblesLogging(false);
 			adaptPlugins.add(correlationPlugin);
 		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){

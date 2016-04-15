@@ -152,7 +152,8 @@ def extractIterationsArg(args):
 
 if __name__ == '__main__':
     print("Creating jar with dependencies...")
-    call(['mvn', '-f..', 'package'], shell=True)
+    shellRequired = True if sys.platform == 'win32' else False
+    call(['mvn', '-f..', 'package'], shell=shellRequired)
     print("jar prepared.")
     
     try:

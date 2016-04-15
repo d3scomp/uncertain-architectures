@@ -85,8 +85,9 @@ def simulate(scenarioIndex, botCnt, iterations):
             params.append("false")
             
         # Compose invocation command
-        mvn = 'mvn.cmd' if sys.platform == 'win32' else 'mvn'
-        cmd = [mvn, 'exec:java', '-f..','-Dexec.args=' + ' '.join(params)]
+        #mvn = 'mvn.cmd' if sys.platform == 'win32' else 'mvn'
+        #cmd = [mvn, 'exec:java', '-f..','-Dexec.args=' + ' '.join(params)]
+        cmd = ['java', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
         
         print(cmd)
         print("Iteration {}".format(i))
@@ -150,6 +151,10 @@ def extractIterationsArg(args):
 
 
 if __name__ == '__main__':
+    print("Creating jar with dependencies...")
+    call(['mvn', '-f..', 'package'], shell=True)
+    print("jar prepared.")
+    
     try:
         scenario = extractScenarioArg(sys.argv)
         botCnt = extractBotCntArg(sys.argv)

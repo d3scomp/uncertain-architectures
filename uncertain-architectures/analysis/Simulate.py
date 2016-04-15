@@ -88,6 +88,7 @@ def simulate(scenarioIndex, botCnt, iterations):
         #mvn = 'mvn.cmd' if sys.platform == 'win32' else 'mvn'
         #cmd = [mvn, 'exec:java', '-f..','-Dexec.args=' + ' '.join(params)]
         cmd = ['java', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
+        cmd.extend(params)
         
         print(cmd)
         print("Iteration {}".format(i))

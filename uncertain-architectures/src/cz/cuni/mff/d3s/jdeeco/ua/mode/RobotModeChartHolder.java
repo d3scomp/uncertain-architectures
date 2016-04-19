@@ -148,9 +148,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				
-				boolean batteryDead = batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[1]});
+				boolean lowPower = batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[1]});
 				boolean moreDirt = map.getDirtiness().keySet().size() > 0;
-				return !batteryDead && !moreDirt;
+				return !lowPower && !moreDirt;
 			}
 			
 			@Override
@@ -166,17 +166,18 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				
+				boolean lowPower = batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]});
 				boolean atDirt = positionNode != null
 						&& map.getDirtiness().containsKey(positionNode)
 						&& map.getDirtiness().get(positionNode) > 0;
 				boolean moreDirt = map.getDirtiness().keySet().size() > 0;
 				
-				return !atDirt && moreDirt;
+				return !lowPower && !atDirt && moreDirt;
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"map", "position"};
+				return new String[] {"map", "position", "batteryLevel"};
 			}
 		};
 		
@@ -241,6 +242,9 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		factory.addTransition(CleanMode.class, DirtApproachMode.class, keepCleaningGuard, 1);
 		factory.addTransitionListener(CleanMode.class, DirtApproachMode.class, new ModeTransitionLogger(CleanMode.class, DirtApproachMode.class));
+
+		factory.addTransition(CleanMode.class, DockingMode.class, batteryDrainedGuard, 1);
+		factory.addTransitionListener(CleanMode.class, DockingMode.class, new ModeTransitionLogger(CleanMode.class, DockingMode.class));
 		
 		factory.addTransition(SearchMode.class, DirtApproachMode.class, approachGuard, 1);
 		factory.addTransitionListener(SearchMode.class, DirtApproachMode.class, new ModeTransitionLogger(SearchMode.class, DirtApproachMode.class));

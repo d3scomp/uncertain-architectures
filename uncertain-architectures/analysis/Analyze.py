@@ -19,6 +19,8 @@ from Scenarios import *
 from Configuration import *
 
 
+COUNT_ARG = "count"
+
 analyzed = []
 
 
@@ -58,7 +60,7 @@ def finalizeOldestAnalysis():
     analyzed.pop(0)
 
 
-def analyzeLog(simulationSignature, logDirName):
+def analyzeLog(simulationSignature, logDirName, count = False):
     
     logDir = os.path.join(LOGS_DIR, simulationSignature, logDirName)
     print("Analyzing " + logDir)
@@ -86,20 +88,25 @@ def analyzeLog(simulationSignature, logDirName):
         
     print("Found " + str(len(dirtinesses)) + " dirtiness events")
 
-    durations = [d.duration() for d in dirtinesses]
-    
-    bigPercentile = np.percentile(durations, PERCENTILE)
-    print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(bigPercentile)))
+    if count:
+        # Dirtiness counts
+        result = len([d for d in dirtinesses if d.eventCompleted()])
+        print("{} Dirtiness cleaned".format(str(result)))
+    else:        
+        # Dirtiness durations
+        durations = [d.duration() for d in dirtinesses]    
+        result = np.percentile(durations, PERCENTILE)
+        print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result)))
     
     outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + ".csv")
     outputFile = open(outputFilePath, "w")
-    outputFile.write(str(bigPercentile)+"\n")
+    outputFile.write(str(result)+"\n")
     outputFile.close()
     
     print("Analysis results written to " + outputFilePath)
 
 
-def analyzeSignature(signature):
+def analyzeSignature(signature, count = False):
     logsDir = os.path.join(LOGS_DIR, signature)
     
     if not os.path.isdir(logsDir):
@@ -114,7 +121,7 @@ def analyzeSignature(signature):
             if (len(analyzed) >= CORES) :
                 finalizeOldestAnalysis()
 
-            analysis = Process(target = analyzeLog, args = (signature, logDirName))
+            analysis = Process(target = analyzeLog, args = (signature, logDirName, count))
             analyzed.append(analysis)
             analysis.start()
 
@@ -171,6 +178,12 @@ def extractIterationsArg(args):
 
 if __name__ == '__main__':
     try:
+        if COUNT_ARG in sys.argv:
+            count = True
+            sys.argv.remove(COUNT_ARG)
+        else:
+            count = False
+            
         scenarioArgs = extractScenarioArgs(sys.argv)
         iterations = extractIterationsArg(sys.argv)
         
@@ -179,7 +192,7 @@ if __name__ == '__main__':
             signature = getScenarioSignature(scenario, iterations)
             print("Analyzing scenario {} with signature {}"
                   .format(scenario, signature))
-            analyzeSignature(signature)
+            analyzeSignature(signature, count)
         end = time.time()
         
         print("Analysis lasted for {:.2f} mins".format((end-start)/60))

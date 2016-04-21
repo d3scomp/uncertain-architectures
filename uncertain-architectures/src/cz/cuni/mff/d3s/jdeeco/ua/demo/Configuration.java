@@ -145,7 +145,7 @@ public class Configuration {
 	 * The Speed of the robot.
 	 * Expressed in meters per second.
 	 */
-	public static final int ROBOT_SPEED = 1; // m/s
+	public static final int ROBOT_SPEED = 2; // m/s
 
 	/**
 	 * The limit beyond which two positions are considered the same.
@@ -175,7 +175,7 @@ public class Configuration {
 	 * The amount of dirt that is cleaned in one cycle of cleaning.
 	 * Expressed in percents per {@link #CLEAN_PROCESS_PERIOD}
 	 */
-	public static final double CLEANING_RATE = 0.1;
+	public static final double CLEANING_RATE = 0.2;
 	
 	/**
 	 * The charging rate of the robot.

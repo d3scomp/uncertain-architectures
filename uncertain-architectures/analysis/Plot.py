@@ -17,6 +17,9 @@ from Scenarios import *
 from Configuration import *
 
 
+COUNT_ARG = "count"
+
+
 class StringLabel(object):
     def __init__(self, text, color):
         self.my_text = text
@@ -58,7 +61,7 @@ def getCsvFiles(scenarioIndices):
     return relevantFiles
 
 
-def extractValues(analysisResultFiles):
+def extractValues(analysisResultFiles, count = False):
     values = []
     for i, files in enumerate(analysisResultFiles):
         values.append([])
@@ -66,7 +69,10 @@ def extractValues(analysisResultFiles):
             f = open(os.path.join(CSV_DIR, file), "r")
             line = f.readline()
             f.close()
-            values[i].append(float(line) / TIME_DIVISOR)
+            if count:
+                values[i].append(float(line))
+            else:
+                values[i].append(float(line) / TIME_DIVISOR)
     
     return values
 
@@ -125,14 +131,20 @@ def extractArgs(args):
     return scenarioIndices
 
 
-if __name__ == '__main__':   
+if __name__ == '__main__': 
     try:
+        if COUNT_ARG in sys.argv:
+            count = True
+            sys.argv.remove(COUNT_ARG)
+        else:
+            count = False
+            
         scenarioIndices = extractArgs(sys.argv)
         signature = '-'.join(map(str, scenarioIndices))
         print("Plotting scenarios {} ...".format(signature))
         
         analysisResultFiles = getCsvFiles(scenarioIndices)
-        values = extractValues(analysisResultFiles)
+        values = extractValues(analysisResultFiles, count)
         plot(values, scenarioIndices)
         
         print("Plot placed to {}.png".format(os.path.join(FIGURES_DIR, signature)))

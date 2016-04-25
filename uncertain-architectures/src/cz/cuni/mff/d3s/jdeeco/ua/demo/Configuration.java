@@ -69,6 +69,8 @@ public class Configuration {
 
 	public static long SIMULATION_DURATION = 600_000;
 
+	public static int DIRT_DETECTION_RADIUS = 2;
+	
 	public static boolean CORRELATION_ON = false;
 	public static boolean ROLE_REMOVAL_ON = false;
 	
@@ -111,7 +113,7 @@ public class Configuration {
 	 * {@link DIRT_GENERATION_PERIOD} determines how often dirt will be
 	 * generated.
 	 */
-	public static final double DIRT_GENERATION_RATE = 0.3;
+	public static final double DIRT_GENERATION_RATE = 0.5;
 	
 	///////////////////////////////////////////////////////////////////////////
 	// ROBOT CONFIGURATION 

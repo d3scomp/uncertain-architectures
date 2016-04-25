@@ -18,6 +18,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.map;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_GENERATION_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_RADIUS;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
@@ -237,24 +239,42 @@ public class DirtinessMap implements Serializable{
 			throw new IllegalArgumentException(String.format(
 					"The \"%s\" argument cannot be null.", "node"));
 		
-		// Check the given tile
-		if (DIRTINESS.containsKey(node) && DIRTINESS.get(node) > 0) {
-			double intensity = DIRTINESS.get(node);
-			dirtiness.put(node, intensity);
-		} else if(dirtiness.containsKey(node)){
-			dirtiness.remove(node);
+		Set<Node> frontier = new HashSet<>();
+		Set<Node> newFrontier = new HashSet<>();
+		Set<Node> nodesToCheck = new HashSet<>();
+		
+		// Add the given tile
+		nodesToCheck.add(node);
+		newFrontier.add(node);
+		
+		// Add tiles within the detection radius
+		for(int i = 0; i < DIRT_DETECTION_RADIUS; i++){
+			// Swap old and new frontier
+			Set<Node> swapNodes = frontier;
+			frontier = newFrontier;
+			newFrontier = swapNodes;
+			newFrontier.clear();
+			
+			// Move frontier one node further and add the nodes to nodes to check
+			for(Node f : frontier){
+				for(Node n : NETWORK.getSuccessors(f)){
+					if(!nodesToCheck.contains(n)){
+						nodesToCheck.add(n);
+						newFrontier.add(n);
+					}
+				}
+			}
 		}
 		
-		// Check the surrounding tiles
-		for(Node n : NETWORK.getSuccessors(node)){
-			if (DIRTINESS.containsKey(n) && DIRTINESS.get(n) > 0) {
+		// Check the tiles
+		for(Node n : nodesToCheck){
+			if (DIRTINESS.containsKey(n) && DIRTINESS.get(n) > 0){
 				double intensity = DIRTINESS.get(n);
 				dirtiness.put(n, intensity);
 			} else if(dirtiness.containsKey(n)){
 				dirtiness.remove(n);
 			}
 		}
-		
 	}
 
 	/**

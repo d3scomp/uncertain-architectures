@@ -99,7 +99,7 @@ public class Robot {
 	@CorrelationData(metric=DifferenceMetric.class,boundary=0.005,confidence=0.95)
 	public CorrelationMetadataWrapper<Double> batteryLevel;
 			
-	@CorrelationData(metric=DirtinessMapMetric.class,boundary=5,confidence=0.9)
+	@CorrelationData(metric=DirtinessMapMetric.class,boundary=3,confidence=0.9)
 	public final CorrelationMetadataWrapper<DirtinessMap> map;
 	
 	@CorrelationData(metric=PositionMetric.class,boundary=3,confidence=0.9)

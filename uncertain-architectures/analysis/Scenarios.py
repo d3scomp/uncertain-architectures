@@ -56,10 +56,10 @@ scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   UMS_START:100000,
                   UMS_END:300000})
 scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
-                  PROBABILITY:0.0001,
-                  PROBABILITY_STEP:0.00005,
-                  UMS_START:0,
-                  UMS_END:SIMULATION_DURATION})
+                  PROBABILITY:0.001,
+                  PROBABILITY_STEP:0.0005,
+                  UMS_START:100000,
+                  UMS_END:300000})
 
 # All fails, no meta-adaptation
 scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False})

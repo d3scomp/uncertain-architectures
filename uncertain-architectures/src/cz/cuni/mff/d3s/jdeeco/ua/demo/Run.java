@@ -192,7 +192,7 @@ public class Run {
 					new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class)
 					.startAt(NON_DET_START_TIME)
 					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
-					.withVerbosity(true);
+					.withVerbosity(false);
 			adaptPlugins.add(nonDetPlugin);
 		}
 
@@ -240,7 +240,7 @@ public class Run {
 							new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class)
 							.startAt(NON_DET_START_TIME)
 							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
-							.withVerbosity(true);
+							.withVerbosity(false);
 					deeco = simulation.createNode(i, writers, nonDetPlugin);
 				} else {
 					deeco = simulation.createNode(i, writers);

@@ -42,22 +42,28 @@ UMS_END = "UMS_end_time" # The UMS end time
 
 # Scenarios
 scenarios = []
+# 3 Bot
 scenarios.append({DDF:False, DF:False, UMS:False})
 scenarios.append({DDF:True, CS:False, DF:False, UMS:False})
 scenarios.append({DDF:True, CS:True, DF:False, UMS:False})
-scenarios.append({DDF:False, DF:True, FCI: False, UMS:False})
+scenarios.append({DDF:False, DF:True, FCI:False, UMS:False})
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
+# 5 Bot
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
-                  PROBABILITY:0.0001,
-                  PROBABILITY_STEP:0.00005,
-                  UMS_START:0,
-                  UMS_END:SIMULATION_DURATION})
-scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False})
+                  PROBABILITY:0.001,
+                  PROBABILITY_STEP:0.0005,
+                  UMS_START:100000,
+                  UMS_END:300000})
 scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   PROBABILITY:0.0001,
                   PROBABILITY_STEP:0.00005,
                   UMS_START:0,
                   UMS_END:SIMULATION_DURATION})
+
+# All fails, no meta-adaptation
+scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False})
+
 # Different UMS starting probability and step
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,

@@ -49,7 +49,7 @@ scenarios.append({DDF:True, CS:True, DF:False, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI:False, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
 # 5 Bot
-scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
+scenarios.append({DDF:False, DF:True, DF_TIME:0, FCI:True, UMS:False})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.001,
                   PROBABILITY_STEP:0.0005,

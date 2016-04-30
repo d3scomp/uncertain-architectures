@@ -171,7 +171,7 @@ public class Configuration {
 	 * The energy consumption when robot is idle.
 	 * Expressed in percents per second.
 	 */
-	public static final double IDLE_ENERGY_COST = 0.001; // %/s, 1 is 100%
+	public static final double IDLE_ENERGY_COST = 0.0005; // %/s, 1 is 100%
 	
 	/**
 	 * The amount of dirt that is cleaned in one cycle of cleaning.
@@ -183,7 +183,7 @@ public class Configuration {
 	 * The charging rate of the robot.
 	 * Expressed in percents per second.
 	 */
-	public static final double CHARGING_RATE = 0.05; // %/s, 1 is 100%
+	public static final double CHARGING_RATE = 0.015; // %/s, 1 is 100%
 	
 	/**
 	 * The time after which the record about available dock becomes obsolete.

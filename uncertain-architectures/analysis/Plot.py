@@ -93,6 +93,9 @@ def plot(allValues, scenarioIndices):
                 verticalalignment = 'bottom',
                 fontsize = 10)
     
+    plt.xlabel("Scenario number")
+    plt.ylabel("Average time to clean a dirty tile [s]")
+    
     if PLOT_LABELS:
         signatures = []
         labels = []

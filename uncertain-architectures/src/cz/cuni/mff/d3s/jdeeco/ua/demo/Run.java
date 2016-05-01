@@ -176,7 +176,7 @@ public class Run {
 		simulation.addPlugin(new PositionPlugin(0, 0));
 
 		if(CORRELATION_ON || NON_DETERMINISM_ON){
-			simulation.addPlugin(AdaptationPlugin.class);
+			simulation.addPlugin(new AdaptationPlugin().withPeriod(10000));
 		}
 		
 		// Prepare adaptation plugins

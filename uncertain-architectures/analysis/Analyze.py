@@ -20,6 +20,7 @@ from Configuration import *
 
 
 COUNT_ARG = "count"
+PERF_START = "start"
 
 analyzed = []
 
@@ -53,6 +54,18 @@ class Dirtiness:
         return "Dirtiness [node: {0:3d}\tduration: {1:7d}\tstart/end time: {2:6d}/{3:6d}\tchanges: {4}".format(
                 self.node, self.duration(), self.startTime, self.getEndTime(), self.intensitites)
 
+class ProbabilityRecord:
+    """ Holds information about a non-deterministic probability event."""
+    
+    def __init__(self, time, probability, component):
+        self.time = time
+        self.probability = probability
+        self.component = component
+        
+    def __str__(self):
+        return "EMS probability for {} at {} is {}".format(
+                self.component, self.time, self.probability)
+        
 
 def finalizeOldestAnalysis():
     analysis = analyzed[0]
@@ -60,8 +73,7 @@ def finalizeOldestAnalysis():
     analyzed.pop(0)
 
 
-def analyzeLog(simulationSignature, logDirName, count = False):
-    
+def analyzeLog(simulationSignature, logDirName, start, count = False):
     logDir = os.path.join(LOGS_DIR, simulationSignature, logDirName)
     print("Analyzing " + logDir)
     
@@ -70,6 +82,7 @@ def analyzeLog(simulationSignature, logDirName, count = False):
         
     dirtinesses = []
     dirtinessRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.ua.visualization.DirtinessRecord']")
+    
     print("Found " + str(len(dirtinessRecords)) + " dirtiness records")
     
     for r in dirtinessRecords:
@@ -92,21 +105,57 @@ def analyzeLog(simulationSignature, logDirName, count = False):
         # Dirtiness counts
         result = len([d for d in dirtinesses if d.eventCompleted()])
         print("{} Dirtiness cleaned".format(str(result)))
+        
+        outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + "_phase1" + ".csv")
+        outputFile = open(outputFilePath, "w")
+        outputFile.write(str(result)+"\n")
+        outputFile.close()
     else:        
         # Dirtiness durations
-        durations = [d.duration() for d in dirtinesses]    
-        result = np.percentile(durations, PERCENTILE)
-        print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result)))
+        durations_phase1 = [d.duration() for d in dirtinesses if d.startTime < start]
+        durations_phase2 = [d.duration() for d in dirtinesses if d.startTime >= start]
+        result_phase1 = np.percentile(durations_phase1, PERCENTILE) if len(durations_phase1) > 0 else 0
+        result_phase2 = np.percentile(durations_phase2, PERCENTILE) if len(durations_phase2) > 0 else 0
+        print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase1)))
+        print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase2)))
     
-    outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + ".csv")
-    outputFile = open(outputFilePath, "w")
-    outputFile.write(str(result)+"\n")
-    outputFile.close()
+        outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + "_phase1" + ".csv")
+        outputFile = open(outputFilePath, "w")
+        outputFile.write(str(result_phase1)+"\n")
+        outputFile.close()
+        
+        outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + "_phase2" + ".csv")
+        outputFile = open(outputFilePath, "w")
+        outputFile.write(str(result_phase2)+"\n")
+        outputFile.close()
+        
+        probabilities = {}
+        probabilityRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDeterministicLevelRecord']")
+        print("probabilityRecords: {}".format(len(probabilityRecords)))
+        for r in probabilityRecords:
+            component = r.find('component').text
+            probability = float(r.find("probability").text)
+            time = int(r.attrib["time"])
+            probabilityRecord = ProbabilityRecord(time, probability, component)
+            if component in probabilities:
+                oldRecord = probabilities[component]
+                if oldRecord.time < time:
+                    probabilities.pop(component)
+                    probabilities[component] = probabilityRecord
+            else:
+                probabilities[component] = probabilityRecord
+                
+        outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + "_probabilities" + ".csv")
+        outputFile = open(outputFilePath, "w")
+        for component in probabilities.keys():
+            outputFile.write(str(probabilities[component])+"\n")
+        outputFile.close()       
+            
     
     print("Analysis results written to " + outputFilePath)
 
 
-def analyzeSignature(signature, count = False):
+def analyzeSignature(signature, start, count = False):
     logsDir = os.path.join(LOGS_DIR, signature)
     
     if not os.path.isdir(logsDir):
@@ -121,7 +170,7 @@ def analyzeSignature(signature, count = False):
             if (len(analyzed) >= CORES) :
                 finalizeOldestAnalysis()
 
-            analysis = Process(target = analyzeLog, args = (signature, logDirName, count))
+            analysis = Process(target = analyzeLog, args = (signature, logDirName, start, count))
             analyzed.append(analysis)
             analysis.start()
 
@@ -184,6 +233,13 @@ if __name__ == '__main__':
         else:
             count = False
             
+        if PERF_START in sys.argv:
+            s_index = sys.argv.index(PERF_START)
+            phase_sep = int(sys.argv[s_index+1])
+            sys.argv = sys.argv[:s_index] + sys.argv[s_index+2:]
+        else:
+            phase_sep = 0
+                    
         scenarioArgs = extractScenarioArgs(sys.argv)
         iterations = extractIterationsArg(sys.argv)
         
@@ -192,7 +248,7 @@ if __name__ == '__main__':
             signature = getScenarioSignature(scenario, iterations)
             print("Analyzing scenario {} with signature {}"
                   .format(scenario, signature))
-            analyzeSignature(signature, count)
+            analyzeSignature(signature, phase_sep, count)
         end = time.time()
         
         print("Analysis lasted for {:.2f} mins".format((end-start)/60))

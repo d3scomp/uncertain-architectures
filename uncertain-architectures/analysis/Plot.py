@@ -18,6 +18,8 @@ from Configuration import *
 
 
 COUNT_ARG = "count"
+PHASE_ARG = "phase"
+PROB_ARG = "prob"
 
 
 class StringLabel(object):
@@ -40,7 +42,7 @@ class StringLabelHandler(object):
         return patch
 
 
-def getCsvFiles(scenarioIndices):
+def getCsvFiles(scenarioIndices, phase):
     csvFiles = []
     for file in os.listdir(CSV_DIR):
         if file.endswith(".csv"):
@@ -50,7 +52,8 @@ def getCsvFiles(scenarioIndices):
     for i, si in enumerate(scenarioIndices):
         scenarioResultsFound = False
         for file in csvFiles:
-            if file.startswith(getScenarioSignature(si)):
+            if file.startswith(getScenarioSignature(si)) and phase in file:
+                print(file)
                 if not scenarioResultsFound:
                     scenarioResultsFound = True
                     relevantFiles.append([])
@@ -73,6 +76,22 @@ def extractValues(analysisResultFiles, count = False):
                 values[i].append(float(line))
             else:
                 values[i].append(float(line) / TIME_DIVISOR)
+    
+    return values
+
+
+def extractProbValues(analysisResultFiles):
+    values = []
+    for i, files in enumerate(analysisResultFiles):
+        values.append([])
+        for file in files:
+            f = open(os.path.join(CSV_DIR, file), "r")
+            for line in f:
+                l = line.split("is")
+                if len(l) == 2:
+                    p = l[1]
+                    values[i].append(float(p)) # TODO: extract probability
+            f.close()
     
     return values
 
@@ -142,12 +161,29 @@ if __name__ == '__main__':
         else:
             count = False
             
+        if PROB_ARG in sys.argv:
+            prob = True
+            sys.argv.remove(PROB_ARG)
+        else:
+            prob = False
+            
+        if PHASE_ARG in sys.argv:
+            p_index = sys.argv.index(PHASE_ARG)
+            phase = int(sys.argv[p_index+1])
+            sys.argv = sys.argv[:p_index] + sys.argv[p_index+2:]
+        else:
+            phase = 2
+            
         scenarioIndices = extractArgs(sys.argv)
         signature = '-'.join(map(str, scenarioIndices))
         print("Plotting scenarios {} ...".format(signature))
         
-        analysisResultFiles = getCsvFiles(scenarioIndices)
-        values = extractValues(analysisResultFiles, count)
+        if prob:
+            analysisResultFiles = getCsvFiles(scenarioIndices, "probabilities")
+            values = extractProbValues(analysisResultFiles)
+        else:
+            analysisResultFiles = getCsvFiles(scenarioIndices, "phase{}".format(phase))
+            values = extractValues(analysisResultFiles, count)
         plot(values, scenarioIndices)
         
         print("Plot placed to {}.png".format(os.path.join(FIGURES_DIR, signature)))

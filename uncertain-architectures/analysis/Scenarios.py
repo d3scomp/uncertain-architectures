@@ -52,6 +52,7 @@ scenarios.append({DDF:True, CS:True, DF:False, UMS:False, ROBOT_CNT:3, DURATION:
 scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
 # 5 Bot
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:5, DURATION:SIMULATION_DURATION})
 scenarios.append({DDF:False, DF:True, DF_TIME:0, FCI:True, UMS:False, ROBOT_CNT:5,
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,

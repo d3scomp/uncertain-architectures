@@ -235,7 +235,7 @@ if __name__ == '__main__':
         print("Plotting scenarios {} ...".format(signature))
         
         if prob:
-            analysisResultFiles = getProbCsvFiles(scenarioIndices, prob=True)
+            analysisResultFiles = getProbCsvFiles(scenarioIndices)
             values = extractProbValues(analysisResultFiles)
         else:
             analysisResultFiles = getPhaseCsvFiles(scenarioIndices)

@@ -40,22 +40,22 @@ def finalizeOldestSimulation():
     simulated.pop(0)
 
 
-def simulate(scenarioIndex, botCnt, iterations):
+def simulate(scenarioIndex):
     scenario = scenarios[scenarioIndex]
           
     print('Spawning simulation processes...')
     # invoke number of iterations with the same configuration
-    for i in range(1,iterations+1):
+    for i in range(1,SIMULATION_ITERATIONS+1):
         if (len(simulated) >= CORES) :
             finalizeOldestSimulation()
         
         # Prepare parameters
         params = []
         params.append(os.path.join(LOGS_DIR,
-                                   getSignature(scenario, iterations),
+                                   getSignature(scenario),
                                    'log_' + str(i)))
         params.append(str(SIMULATION_DURATION))
-        params.append(str(botCnt))
+        params.append(str(scenario[ROBOT_CNT]))
         
         if scenario[DDF]:
             params.append("true")
@@ -105,20 +105,17 @@ def simulate(scenarioIndex, botCnt, iterations):
 
 def printHelp():
     print("\nUsage:")
-    print("\tpython Simulate.py scenario botCnt iterations")
+    print("\tpython Simulate.py scenario")
     print("\nArguments:")
     print("\tscenario - index of the required scenario")
-    print("\tbotCnt - number of robots to simulate")
-    print("\titerations - number of simulations to perform (optional)")
     print("\nDescription:")
-    print("\tDefault number of simulations to perform is 1."
-          "\n\tThe available scenarios to simulate can be found by running:"
+    print("\tThe available scenarios to simulate can be found by running:"
           "\n\t\tpython Scenarios.py")
 
 
 def extractScenarioArg(args):
     # Check argument count (1st argument is this script name)
-    if len(args) != 4:
+    if len(args) != 2:
         raise ArgError("Invalid arguments")
     try:
         scenario = int(args[1])
@@ -130,26 +127,6 @@ def extractScenarioArg(args):
     except ValueError:
         raise ArgError(ValueError)
     
-    
-def extractBotCntArg(args):
-    try:
-        cnt = int(args[2])
-        if cnt < 1:
-            raise ArgError("Invalid arguments")
-        return cnt
-    except ValueError:
-        raise ArgError(ValueError)
-
-
-def extractIterationsArg(args):
-    try:
-        cnt = int(args[3])
-        if(cnt < 1):
-            raise ArgError("Invalid arguments")
-        return cnt
-    except ValueError:
-        raise ArgError(ValueError)
-
 
 if __name__ == '__main__':
     print("Creating jar with dependencies...")
@@ -159,18 +136,16 @@ if __name__ == '__main__':
     
     try:
         scenario = extractScenarioArg(sys.argv)
-        botCnt = extractBotCntArg(sys.argv)
-        iterations = extractIterationsArg(sys.argv)
         
-        print("Simulating scenario {} with signature {} {}-times."
-              .format(scenario, getScenarioSignature(scenario), iterations))
+        print("Simulating scenario {} with signature {}"
+              .format(scenario, getScenarioSignature(scenario)))
         
         start = time.time()
-        simulate(scenario, botCnt, iterations)
+        simulate(scenario)
         end = time.time()
         
         print("All simulations lasted for {:.2f} mins".format((end-start)/60))
         print("Results placed to {}"
-              .format(getScenarioSignature(scenario, iterations)))
+              .format(getScenarioSignature(scenario)))
     except ArgError:
         printHelp()

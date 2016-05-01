@@ -19,7 +19,8 @@ The probability following the UMS is the starting UMS probability.
 @author: Ilias
 @author: Dominik Skoda
 '''
-from Configuration import SIMULATION_DURATION
+from Configuration import SIMULATION_DURATION, LEARNING_PHASE_END,\
+    LEARNING_PHASE_START
 from Configuration import DDF_DEFAULT_TIME
 from Configuration import DF_DEFAULT_TIME
 
@@ -39,27 +40,34 @@ PROBABILITY = "Probability" # Starting probability for UMS
 PROBABILITY_STEP = "step" # Probability step for UMS
 UMS_START = "UMS_start_time" # The UMS start time
 UMS_END = "UMS_end_time" # The UMS end time
+ROBOT_CNT = "robot_cnt" # The robot count
+DURATION = "duration" # The Simulation Duration
 
 # Scenarios
 scenarios = []
 # 3 Bot
-scenarios.append({DDF:False, DF:False, UMS:False})
-scenarios.append({DDF:True, CS:False, DF:False, UMS:False})
-scenarios.append({DDF:True, CS:True, DF:False, UMS:False})
-scenarios.append({DDF:False, DF:True, FCI:False, UMS:False})
-scenarios.append({DDF:False, DF:True, FCI:True, UMS:False})
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:True, CS:False, DF:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:True, CS:True, DF:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
 # 5 Bot
-scenarios.append({DDF:False, DF:True, DF_TIME:0, FCI:True, UMS:False})
+scenarios.append({DDF:False, DF:True, DF_TIME:0, FCI:True, UMS:False, ROBOT_CNT:5,
+                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
-                  UMS_START:100000,
-                  UMS_END:300000})
+                  UMS_START:LEARNING_PHASE_START,
+                  UMS_END:LEARNING_PHASE_END,
+                  ROBOT_CNT:5,
+                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
-                  UMS_START:100000,
-                  UMS_END:300000})
+                  UMS_START:LEARNING_PHASE_START,
+                  UMS_END:LEARNING_PHASE_END,
+                  ROBOT_CNT:5,
+                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 
 # All fails, no meta-adaptation
 scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False})

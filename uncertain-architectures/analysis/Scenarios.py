@@ -70,7 +70,8 @@ scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 
 # All fails, no meta-adaptation
-scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False})
+scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False,
+                  ROBOT_CNT:5, DURATION:SIMULATION_DURATION})
 
 #################################################
 

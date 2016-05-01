@@ -61,6 +61,10 @@ scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
                   UMS_END:LEARNING_PHASE_END,
                   ROBOT_CNT:5,
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
+# All fails, no meta-adaptation
+scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False,
+                  ROBOT_CNT:5, DURATION:SIMULATION_DURATION})
+# All fails, all meta-adaptation
 scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
@@ -69,9 +73,6 @@ scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   ROBOT_CNT:5,
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 
-# All fails, no meta-adaptation
-scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False,
-                  ROBOT_CNT:5, DURATION:SIMULATION_DURATION})
 
 #################################################
 

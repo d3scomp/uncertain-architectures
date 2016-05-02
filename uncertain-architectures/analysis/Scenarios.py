@@ -78,6 +78,32 @@ scenarios.append({DDF:True, CS:True, DF:True, FCI:True, UMS:True,
                   ROBOT_CNT:4, DOCK_CNT:2, 
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 
+# To test different probabilities of EMS
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.00001,
+                  PROBABILITY_STEP:0.000005,
+                  UMS_START:LEARNING_PHASE_START,
+                  UMS_END:LEARNING_PHASE_END,
+                  ROBOT_CNT:4,
+                  DOCK_CNT:1, 
+                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.0001,
+                  PROBABILITY_STEP:0.00005,
+                  UMS_START:LEARNING_PHASE_START,
+                  UMS_END:LEARNING_PHASE_END,
+                  ROBOT_CNT:4,
+                  DOCK_CNT:1, 
+                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
+scenarios.append({DDF:False, DF:False, UMS:True,
+                  PROBABILITY:0.001,
+                  PROBABILITY_STEP:0.0005,
+                  UMS_START:LEARNING_PHASE_START,
+                  UMS_END:LEARNING_PHASE_END,
+                  ROBOT_CNT:4,
+                  DOCK_CNT:1, 
+                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
+
 
 #################################################
 

@@ -54,7 +54,7 @@ def simulate(scenarioIndex):
         params.append(os.path.join(LOGS_DIR,
                                    getSignature(scenario),
                                    'log_' + str(i)))
-        params.append(str(SIMULATION_DURATION))
+        params.append(str(scenario[DURATION]))
         params.append(str(scenario[ROBOT_CNT]))
         params.append(str(scenario[DOCK_CNT]))
         

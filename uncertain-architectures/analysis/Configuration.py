@@ -21,7 +21,7 @@ class ArgError(Exception):
 # HW RESOURCES
 ###############################################################################
 
-CORES = 2
+CORES = 25
 ''' The number of processor cores to utilize. The number of simulations
     to run in parallel. '''
     

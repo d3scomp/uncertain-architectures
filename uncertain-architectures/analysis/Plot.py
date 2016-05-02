@@ -142,7 +142,7 @@ def plot(allValues, scenarioIndices):
                 fontsize = 10)
     
     plt.xlabel("Scenario number")
-    plt.ylabel("90th percentile of \"time to clean a dirty tile\" [s]")
+    plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
     
     # X ticks
     indices = []

@@ -18,8 +18,7 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CORRELATION_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK1_NAME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK2_NAME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_NAMES;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
@@ -90,6 +89,7 @@ public class Run {
 		String logPath = "STANDARD";
 		RuntimeLogWriters writers;
 		int robotCnt = 3;
+		int dockCnt = 3;
 		
 		if (args.length == 0) {
 			writers = new RuntimeLogWriters();
@@ -108,6 +108,14 @@ public class Run {
 				return;
 			}
 			System.out.println(String.format("Number of robots = %d", robotCnt));
+			i++;
+			
+			dockCnt = Integer.parseInt(args[i]);
+			if(dockCnt < 1 || dockCnt > Configuration.DOCK_NAMES.length){
+				System.out.println(String.format("Invalid number of docks: %d", dockCnt));
+				return;
+			}
+			System.out.println(String.format("Number of docks = %d", dockCnt));
 			i++;
 			
 			DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[i]);
@@ -210,10 +218,10 @@ public class Run {
 		defaultNode.deployComponent(environment);
 
 		// Deploy docking stations
-		Dock d1 = new Dock(DOCK1_NAME, DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
-		defaultNode.deployComponent(d1);
-		Dock d2 = new Dock(DOCK2_NAME, DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
-		defaultNode.deployComponent(d2);
+		for(int i : IntStream.range(0, dockCnt).toArray()){
+			Dock d = new Dock(DOCK_NAMES[i], DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
+			defaultNode.deployComponent(d);
+		}
 		defaultNode.deployEnsemble(DockingEnsemble.class);
 		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
 

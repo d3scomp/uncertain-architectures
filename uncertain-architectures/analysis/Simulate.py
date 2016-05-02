@@ -56,6 +56,7 @@ def simulate(scenarioIndex):
                                    'log_' + str(i)))
         params.append(str(SIMULATION_DURATION))
         params.append(str(scenario[ROBOT_CNT]))
+        params.append(str(scenario[DOCK_CNT]))
         
         if scenario[DDF]:
             params.append("true")

@@ -41,37 +41,39 @@ PROBABILITY_STEP = "step" # Probability step for UMS
 UMS_START = "UMS_start_time" # The UMS start time
 UMS_END = "UMS_end_time" # The UMS end time
 ROBOT_CNT = "robot_cnt" # The robot count
+DOCK_CNT = "dock_cnt" # The dock count
 DURATION = "duration" # The Simulation Duration
 
 # Scenarios
 scenarios = []
 # 3 Bot
-scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:True, CS:False, DF:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:True, CS:True, DF:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:True, CS:False, DF:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:True, CS:True, DF:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
 # 5 Bot
-scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:5, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:True, DF_TIME:0, FCI:True, UMS:False, ROBOT_CNT:5,
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:5, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:5, DOCK_CNT:1, 
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
-scenarios.append({DDF:False, DF:True, FCI:True, UMS:True,
+scenarios.append({DDF:False, DF:False, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:LEARNING_PHASE_START,
                   UMS_END:LEARNING_PHASE_END,
                   ROBOT_CNT:5,
+                  DOCK_CNT:1, 
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 # All fails, no meta-adaptation
 scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False,
-                  ROBOT_CNT:5, DURATION:SIMULATION_DURATION})
+                  ROBOT_CNT:5, DOCK_CNT:2, DURATION:SIMULATION_DURATION})
 # All fails, all meta-adaptation
 scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:LEARNING_PHASE_START,
                   UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:5,
+                  ROBOT_CNT:5, DOCK_CNT:2, 
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 
 

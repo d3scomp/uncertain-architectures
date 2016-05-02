@@ -59,6 +59,8 @@ public class Configuration {
 
 	public static final String DOCK1_NAME = "Dock1";
 	public static final String DOCK2_NAME = "Dock2";
+	public static final String DOCK3_NAME = "Dock3";
+	public static final String[] DOCK_NAMES = new String[]{DOCK1_NAME, DOCK2_NAME, DOCK3_NAME};
 
 	public static final String ENVIRONMENT_NAME = "Environment";
 	public static final long ENVIRONMENT_SEED = 85328;

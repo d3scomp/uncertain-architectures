@@ -46,34 +46,36 @@ DURATION = "duration" # The Simulation Duration
 
 # Scenarios
 scenarios = []
-# 3 Bot
-scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:True, CS:False, DF:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:True, CS:True, DF:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:3, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
-# 5 Bot
-scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:5, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
-scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:5, DOCK_CNT:1, 
-                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
+# Baseline
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+# Dirt detection failure
+scenarios.append({DDF:True, CS:False, DF:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:True, CS:True, DF:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+# Dock failure
+scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:4, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+# Baseline
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:3, DURATION:SIMULATION_DURATION})
+# Too many robots for docking stations
+scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:1, DURATION:SIMULATION_DURATION})
 scenarios.append({DDF:False, DF:False, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:LEARNING_PHASE_START,
                   UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:5,
+                  ROBOT_CNT:4,
                   DOCK_CNT:1, 
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 # All fails, no meta-adaptation
-scenarios.append({DDF:True, CS:False, DF:True, FCI: False, UMS:False,
-                  ROBOT_CNT:5, DOCK_CNT:2, DURATION:SIMULATION_DURATION})
+scenarios.append({DDF:True, CS:False, DF:True, FCI:False, UMS:False,
+                  ROBOT_CNT:4, DOCK_CNT:2, DURATION:SIMULATION_DURATION})
 # All fails, all meta-adaptation
-scenarios.append({DDF:True, CS:True, DF:True, FCI: True, UMS:True,
+scenarios.append({DDF:True, CS:True, DF:True, FCI:True, UMS:True,
                   PROBABILITY:0.000001,
                   PROBABILITY_STEP:0.0000005,
                   UMS_START:LEARNING_PHASE_START,
                   UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:5, DOCK_CNT:2, 
+                  ROBOT_CNT:4, DOCK_CNT:2, 
                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END)})
 
 

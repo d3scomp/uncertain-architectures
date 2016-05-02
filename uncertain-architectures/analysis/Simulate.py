@@ -106,7 +106,7 @@ def simulate(scenarioIndex):
 
 def printHelp():
     print("\nUsage:")
-    print("\tpython Simulate.py scenario")
+    print("\tpython Simulate.py scenario1 [scenario2 [...]]")
     print("\nArguments:")
     print("\tscenario - index of the required scenario")
     print("\nDescription:")
@@ -114,19 +114,19 @@ def printHelp():
           "\n\t\tpython Scenarios.py")
 
 
-def extractScenarioArg(args):
+def extractScenarioArgs(args):
     # Check argument count (1st argument is this script name)
-    if len(args) != 2:
-        raise ArgError("Invalid arguments")
-    try:
-        scenario = int(args[1])
-        if len(scenarios) <= scenario:
-            raise ArgError("Invalid arguments")
-        if(scenario < 0):
-            raise ArgError("Invalid arguments")
-        return scenario
-    except ValueError:
-        raise ArgError(ValueError)
+    if len(args) < 2:
+        raise ArgError("At least one scenario argument is required")
+    
+    scenarioIndices = []
+    for i in range(1, len(args)):
+        scenarioIndex = int(args[i])
+        if len(scenarios) <= scenarioIndex or 0 > scenarioIndex:
+            raise ArgError("Scenario index value {} is out of range.".format(scenarioIndex))
+        scenarioIndices.append(scenarioIndex)
+        
+    return scenarioIndices
     
 
 if __name__ == '__main__':
@@ -136,17 +136,16 @@ if __name__ == '__main__':
     print("jar prepared.")
     
     try:
-        scenario = extractScenarioArg(sys.argv)
-        
-        print("Simulating scenario {} with signature {}"
-              .format(scenario, getScenarioSignature(scenario)))
+        si = extractScenarioArgs(sys.argv)
         
         start = time.time()
-        simulate(scenario)
+        for i in si:
+            print("Simulating scenario {} with signature {}"
+                  .format(i, getScenarioSignature(i)))
+            simulate(i)
+            print("Results placed to {}".format(getScenarioSignature(i)))
         end = time.time()
         
         print("All simulations lasted for {:.2f} mins".format((end-start)/60))
-        print("Results placed to {}"
-              .format(getScenarioSignature(scenario)))
     except ArgError:
         printHelp()

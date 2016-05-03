@@ -71,7 +71,7 @@ def mergeDicts(inputDict, outputDict):
         incrementDictValue(outputDict, item, inputDict[item])
 
 
-def analyzeLog(simulationSignature, logDirName, phase_sep):
+def analyzeLog(simulationSignature, logDirName):
     logDir = os.path.join(LOGS_DIR, simulationSignature, logDirName)
     print("Analyzing " + logDir)
     
@@ -109,7 +109,7 @@ def countTransitions(transitions):
     return count
 
 
-def analyzeSignature(signature, phase_sep):
+def analyzeSignature(signature):
     logsDir = os.path.join(LOGS_DIR, signature)
     
     if not os.path.isdir(logsDir):
@@ -123,7 +123,7 @@ def analyzeSignature(signature, phase_sep):
     #for root, dirs, files in os.walk(logsDir):
     for _, dirs, _ in os.walk(logsDir):
         for logDirName in dirs:
-            res = analyzeLog(signature, logDirName, phase_sep)
+            res = analyzeLog(signature, logDirName)
             mergeDicts(res[0], transitions)
             mergeDicts(res[1], nonDetTransitions)
 
@@ -167,7 +167,7 @@ if __name__ == '__main__':
         for scenario in scenarioArgs:
             signature = getScenarioSignature(scenario)
             print("\n\nAnalyzing scenario {} with signature {}\n".format(scenario, signature))
-            analyzeSignature(signature, scenarioArgs[scenario])
+            analyzeSignature(signature)
         
     except ArgError:
         printHelp()

@@ -12,10 +12,10 @@ You first need to checkout the following Github projects:
 Import the following Eclipse projects to a running Eclipse instance (tested with MARS.1):
 * From the "uncertain-architectures" Github project
   * "uncertain-architectures"
-  * "cz.cuni.mff.d3s.jdeeco.modes"
 * From "JDEECo" Github project
   * "cz.cuni.mff.d3s.jdeeco.core"
   * "cz.cuni.mff.d3s.jdeeco.adaptation"
+  * "cz.cuni.mff.d3s.jdeeco.modes"
   * "cz.cuni.mff.d3s.jdeeco.network"
 * From "JDEECoVisualizer" Github project
   * "JDEECoVisualizer"
@@ -32,4 +32,6 @@ To visualize a completed run, locate the "cz.filipekt.jdcv.Visualizer" class in 
 ### Batch invocation and analysis of results
 To ease the process of launching simulations with different settings and analyzing their results we have devised a set of Python scripts (version 3.5).
 They are placed in the analysis folder of the "uncertain-architectures" Eclipse project.
-The "OverallAnalysis" script serves as a starting point. You can uncomment a scenario you want to run, set the number of iterations (runs of a particular configuration), and run the script. Once all simulation runs are finished, the analysis scripts are automatically invoked. The final results are boxplots depicting the 90th percentile of the "cleaning duration" (time between a tile gets dirty until it gets clean) at each run.
+The "Configuration" script contain the overall config for the simulation run, such as number of processor cores to use etc.
+The "Scenarios" script contains the definition of available scenarios. You can see the list by running the script without parameters.
+The "Simulate" script serves as a starting point. Run the script with the number of the selected scenario to simulate it. Once all simulation runs are finished, the "Analyze" script can be used to extract the values to be plotted, run the script with the number of the desired scenario. The final results are boxplots depicting the 90th percentile of the "cleaning duration" (time between a tile gets dirty until it gets clean) at each run. Create the plot by running "Plot" script with the scenario numbers passed as arguments (don't forget to scan the simulation results with the "Analyze" script first).

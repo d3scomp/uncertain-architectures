@@ -21,7 +21,7 @@ class ArgError(Exception):
 # HW RESOURCES
 ###############################################################################
 
-CORES = 2
+CORES = 25
 ''' The number of processor cores to utilize. The number of simulations
     to run in parallel. '''
     
@@ -76,7 +76,7 @@ DDF_DEFAULT_TIME = 100000
 DF_DEFAULT_TIME = 50000
 ''' The default time of dock failure in milliseconds. '''
 
-SIMULATION_ITERATIONS = 2
+SIMULATION_ITERATIONS = 100
 ''' The number of simulation iterations '''
 
 ###############################################################################

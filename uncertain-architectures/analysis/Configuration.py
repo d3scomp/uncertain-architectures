@@ -21,7 +21,7 @@ class ArgError(Exception):
 # HW RESOURCES
 ###############################################################################
 
-CORES = 25
+CORES = 2
 ''' The number of processor cores to utilize. The number of simulations
     to run in parallel. '''
     
@@ -58,6 +58,9 @@ RUNTIME_LOG_FILE = "runtimeData.xml"
 # SIMULATION CONFIGURATION
 ###############################################################################
 
+SIMULATION_WARM_UP = 50000
+''' The time, in milliseconds, the simulation needs to warm up. '''
+
 SIMULATION_DURATION = 600000
 ''' The length of each simulation in milliseconds. '''
 
@@ -73,7 +76,7 @@ DDF_DEFAULT_TIME = 100000
 DF_DEFAULT_TIME = 50000
 ''' The default time of dock failure in milliseconds. '''
 
-SIMULATION_ITERATIONS = 100
+SIMULATION_ITERATIONS = 2
 ''' The number of simulation iterations '''
 
 ###############################################################################

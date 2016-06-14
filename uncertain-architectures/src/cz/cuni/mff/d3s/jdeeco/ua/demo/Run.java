@@ -29,6 +29,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABIL
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_PROBABILITY_STEP;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
@@ -98,6 +99,10 @@ public class Run {
 			writers = new RuntimeLogWriters(logPath);
 			
 			int i = 1;
+			WARM_UP_TIME = Long.parseLong(args[i]);
+			System.out.println(String.format("%s = %s", "WARM_UP_TIME", WARM_UP_TIME));
+			i++;
+			
 			SIMULATION_DURATION = Integer.parseInt(args[i]);
 			System.out.println(String.format("%s = %d", "SIMULATION_DURATION", SIMULATION_DURATION));
 			i++;
@@ -160,18 +165,21 @@ public class Run {
 				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
 				if(args.length > i) {
 					NON_DET_END_TIME = Long.parseLong(args[i]);
+					i++;
 				} else {
 					NON_DET_END_TIME = SIMULATION_DURATION;
 				}
 				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
 			}
+
 		}
+		
 		
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);
 
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
-		final SimulationTimer simulationTimer = new DiscreteEventTimer();
+		final SimulationTimer simulationTimer = new DiscreteEventTimer(-WARM_UP_TIME);
 		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search  engine
 
 		// create main application container

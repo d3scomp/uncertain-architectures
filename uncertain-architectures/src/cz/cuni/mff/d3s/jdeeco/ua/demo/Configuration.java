@@ -69,6 +69,7 @@ public class Configuration {
 	// SIMULATION CONFIGURATION
 	///////////////////////////////////////////////////////////////////////////
 
+	public static long WARM_UP_TIME = 0;
 	public static long SIMULATION_DURATION = 600_000;
 
 	public static int DIRT_DETECTION_RADIUS = 2;

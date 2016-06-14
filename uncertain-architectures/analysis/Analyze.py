@@ -101,8 +101,11 @@ def analyzeLog(simulationSignature, logDirName, phase_sep):
     print("Found " + str(len(dirtinesses)) + " dirtiness events")
 
     # Dirtiness durations
-    durations_phase1 = [d.duration() for d in dirtinesses if d.startTime < phase_sep]
-    durations_phase2 = [d.duration() for d in dirtinesses if d.startTime >= phase_sep]
+    warmed = [d for d in dirtinesses if d.startTime > 0]
+    print("warmed length is {}".format(len(warmed)));
+    print("dirtinesses length is {}".format(len(dirtinesses)));
+    durations_phase1 = [d.duration() for d in warmed if d.startTime < phase_sep]
+    durations_phase2 = [d.duration() for d in warmed if d.startTime >= phase_sep]
     result_phase1 = np.percentile(durations_phase1, PERCENTILE) if len(durations_phase1) > 0 else 0
     result_phase2 = np.percentile(durations_phase2, PERCENTILE) if len(durations_phase2) > 0 else 0
     print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase1)))

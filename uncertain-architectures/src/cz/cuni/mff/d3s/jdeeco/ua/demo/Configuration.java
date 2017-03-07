@@ -41,10 +41,8 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 public class Configuration {
 
 	///////////////////////////////////////////////////////////////////////////
-	// COMPONENTS IDs AND SEEDS
+	// COMPONENTS IDs
 	///////////////////////////////////////////////////////////////////////////
-
-	public static final boolean WITH_SEED = false;
 
 	public static final String ROBOT1_NAME = "TB1";
 	public static final long ROBOT1_SEED = 9387;
@@ -63,7 +61,6 @@ public class Configuration {
 	public static final String[] DOCK_NAMES = new String[]{DOCK1_NAME, DOCK2_NAME, DOCK3_NAME};
 
 	public static final String ENVIRONMENT_NAME = "Environment";
-	public static final long ENVIRONMENT_SEED = 85328;
 	
 	/////////////////////////////////////////////////////////////////////////
 	// SIMULATION CONFIGURATION
@@ -91,7 +88,9 @@ public class Configuration {
 
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
 	public static long DOCK_FAILURE_TIME = 50_000;
-	
+
+	public static boolean WITH_SEED = false;
+	public static long ENVIRONMENT_SEED = 85328;
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////

@@ -171,9 +171,15 @@ public class Run {
 				}
 				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
 			}
-
+			WITH_SEED = Boolean.parseBoolean(args[i]);
+			System.out.println(String.format("%s = %s", "WITH_SEED", WITH_SEED));
+			i++;
+			if(WITH_SEED){
+				ENVIRONMENT_SEED = Long.parseLong(args[i]);
+				System.out.println(String.format("%s = %s", "ENVIRONMENT_SEED", ENVIRONMENT_SEED));
+				i++;
+			}
 		}
-		
 		
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);

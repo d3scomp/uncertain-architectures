@@ -31,6 +31,10 @@ from Scenarios import *
 from Configuration import *
 
 
+ENABLE_SEED = True # Seed usage
+seed = 0
+seed_step = 1
+
 simulated = []
 
 
@@ -86,6 +90,11 @@ def simulate(scenarioIndex):
         else:
             params.append("false")
             
+        params.append("true" if ENABLE_SEED else "false")
+        if ENABLE_SEED:
+            global seed
+            params.append(str(seed))
+            seed += seed_step 
             
         # Compose invocation command
         #mvn = 'mvn.cmd' if sys.platform == 'win32' else 'mvn'

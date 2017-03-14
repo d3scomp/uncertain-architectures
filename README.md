@@ -1,6 +1,6 @@
 # Architecture Homeostatic Mechanisms
 
-This repository contains the demo accompanying the submission of our paper "Architecture Homeostasis in Software-Intensive Cyber-Physical Systems" to WICSA'16.
+This repository contains the demo accompanying the submission of our paper "Architecture Homeostasis in Software-Intensive Cyber-Physical Systems" to ECSA'16.
 
 ## Usage Guide
 ### Compilation 

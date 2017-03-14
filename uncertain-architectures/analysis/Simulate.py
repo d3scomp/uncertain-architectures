@@ -147,7 +147,7 @@ if __name__ == '__main__':
     print("jar prepared.")
     
     try:
-        si = extractScenarioArgs(sys.argv)
+        si = extractScenarioArgs(sys.argv)        
         
         start = time.time()
         for i in si:

@@ -18,7 +18,6 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.PositionFilter;
@@ -28,6 +27,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.movement.NearestTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.SearchTrajectoryPlanner;
 import cz.cuni.mff.d3s.jdeeco.ua.movement.TrajectoryExecutor;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
 
 public class RobotFactory {
 

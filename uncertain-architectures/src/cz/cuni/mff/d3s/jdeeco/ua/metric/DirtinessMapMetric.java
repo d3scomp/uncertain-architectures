@@ -15,9 +15,9 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.metric;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
+import cz.cuni.mff.d3s.metaadaptation.correlation.metric.Metric;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>

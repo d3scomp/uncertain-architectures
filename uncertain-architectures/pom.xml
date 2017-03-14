@@ -64,12 +64,12 @@
 		<dependency>
 			<groupId>cz.cuni.mff.d3s.jdeeco</groupId>
 			<artifactId>cz.cuni.mff.d3s.jdeeco.core</artifactId>
-			<version>3.0.2</version>
+			<version>3.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>cz.cuni.mff.d3s.jdeeco</groupId>
 			<artifactId>cz.cuni.mff.d3s.jdeeco.network</artifactId>
-			<version>3.0.2</version>
+			<version>3.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>cz.cuni.mff.d3s.jdeeco</groupId>
@@ -80,6 +80,11 @@
 			<groupId>cz.cuni.mff.d3s.jdeeco</groupId>
 			<artifactId>adaptation</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cz.cuni.mff.d3s</groupId>
+			<artifactId>meta-adaptation-manager</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>cz.filipekt.jdcv</groupId>

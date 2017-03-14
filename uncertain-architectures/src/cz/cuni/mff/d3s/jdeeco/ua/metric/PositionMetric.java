@@ -17,11 +17,11 @@ package cz.cuni.mff.d3s.jdeeco.ua.metric;
 
 import java.util.List;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Dijkstra;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
+import cz.cuni.mff.d3s.metaadaptation.correlation.metric.Metric;
 
 public class PositionMetric implements Metric {
 

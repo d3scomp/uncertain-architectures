@@ -71,7 +71,7 @@ public class Configuration {
 
 	public static int DIRT_DETECTION_RADIUS = 2;
 	
-	public static boolean CORRELATION_ON = false;
+	public static boolean CORRELATION_ON = true;
 	public static boolean ROLE_REMOVAL_ON = false;
 	
 	public static boolean NON_DETERMINISM_ON = false;

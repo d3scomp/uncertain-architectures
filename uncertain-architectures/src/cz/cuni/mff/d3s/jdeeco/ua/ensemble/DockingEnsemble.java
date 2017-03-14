@@ -30,12 +30,12 @@ import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.DockData;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockRole;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockableRole;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
+import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>

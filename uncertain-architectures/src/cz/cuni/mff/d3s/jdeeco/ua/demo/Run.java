@@ -18,9 +18,9 @@ package cz.cuni.mff.d3s.jdeeco.ua.demo;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CORRELATION_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_NAMES;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_NAMES;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
@@ -29,12 +29,14 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABIL
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_PROBABILITY_STEP;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
@@ -184,7 +186,7 @@ public class Run {
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);
 
-		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
+		final Set<DEECoNode> nodesInSimulation = new HashSet<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer(-WARM_UP_TIME);
 		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search  engine
 
@@ -196,17 +198,20 @@ public class Run {
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
-
-		if(CORRELATION_ON || NON_DETERMINISM_ON){
-			simulation.addPlugin(new AdaptationPlugin().withPeriod(10000));
-		}
+		
 		
 		// Prepare adaptation plugins
 		List<DEECoPlugin> adaptPlugins = new ArrayList<>();
+		
+		if(CORRELATION_ON || NON_DETERMINISM_ON){
+			adaptPlugins.add(new AdaptationPlugin().withPeriod(10000));
+		}
+		
+		CorrelationPlugin correlationPlugin = null;
 		if (CORRELATION_ON) {
 			// create correlation plugin
-			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
-					.withVerbosity(true).withDumping(false).withGeneratedEnsemblesLogging(false);
+			correlationPlugin = new CorrelationPlugin()
+					.withVerbosity(true).withDumping(true);
 			adaptPlugins.add(correlationPlugin);
 		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
@@ -242,6 +247,10 @@ public class Run {
 		// Deploy robots
 		deployRobots(IntStream.range(0, robotCnt).toArray(), simulation, defaultNode, nodesInSimulation, writers);
 		
+		if(correlationPlugin != null){
+			correlationPlugin.setDEECoNodes(nodesInSimulation);
+		}
+		
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + logPath + "'");
 		Log.i("Simulation Starts");
@@ -251,7 +260,7 @@ public class Run {
 	}
 	
 	private static void deployRobots(int robots[], DEECoSimulation simulation,
-			DEECoNode defaultNode, List<DEECoNode> nodesInSimulation,
+			DEECoNode defaultNode, Set<DEECoNode> nodesInSimulation,
 			RuntimeLogWriters writers) throws Exception {
 		for(int i : robots){
 			if (enableMultipleDEECoNodes) {

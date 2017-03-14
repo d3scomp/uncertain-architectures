@@ -18,9 +18,9 @@ package cz.cuni.mff.d3s.jdeeco.ua.role;
 import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.annotations.Role;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.DockData;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
+import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>

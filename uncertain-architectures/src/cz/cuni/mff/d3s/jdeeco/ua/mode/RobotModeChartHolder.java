@@ -21,7 +21,6 @@ import java.util.Map;
 import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
 import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.metadata.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeChartFactory;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.modes.runtimelog.ModeTransitionLogger;
@@ -30,6 +29,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.map.LinkPosition;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
+import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
 
 public class RobotModeChartHolder extends ModeChartHolder {
 

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitness;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.ModeSwitchFitness;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -30,7 +30,7 @@ import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class DirtinessDurationFitness implements NonDetModeSwitchFitness {
+public class DirtinessDurationFitness implements ModeSwitchFitness {
 
 	/**
 	 * Initial times of uncompleted dirtiness events.

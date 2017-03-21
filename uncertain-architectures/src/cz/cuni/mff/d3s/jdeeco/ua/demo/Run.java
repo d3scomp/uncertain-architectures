@@ -52,6 +52,7 @@ import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchAnnealState;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDeterministicModeSwitchingPlugin;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.TimeProgressImpl;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
@@ -216,10 +217,11 @@ public class Run {
 		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
 			NonDeterministicModeSwitchingPlugin nonDetPlugin =
-					new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class)
+					new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class,
+							new TimeProgressImpl(simulationTimer))
 					.startAt(NON_DET_START_TIME)
 					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
-					.withVerbosity(false);
+					.withVerbosity(true);
 			adaptPlugins.add(nonDetPlugin);
 		}
 
@@ -245,7 +247,7 @@ public class Run {
 		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
 
 		// Deploy robots
-		deployRobots(IntStream.range(0, robotCnt).toArray(), simulation, defaultNode, nodesInSimulation, writers);
+		deployRobots(IntStream.range(0, robotCnt).toArray(), simulation, simulationTimer, defaultNode, nodesInSimulation, writers);
 		
 		if(correlationPlugin != null){
 			correlationPlugin.setDEECoNodes(nodesInSimulation);
@@ -260,15 +262,16 @@ public class Run {
 	}
 	
 	private static void deployRobots(int robots[], DEECoSimulation simulation,
-			DEECoNode defaultNode, Set<DEECoNode> nodesInSimulation,
-			RuntimeLogWriters writers) throws Exception {
+			SimulationTimer simulationTimer, DEECoNode defaultNode,
+			Set<DEECoNode> nodesInSimulation, RuntimeLogWriters writers) throws Exception {
 		for(int i : robots){
 			if (enableMultipleDEECoNodes) {
 				// Create node
 				DEECoNode deeco;
 				if(NON_DETERMINISM_ON){
 					NonDeterministicModeSwitchingPlugin nonDetPlugin =
-							new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class)
+							new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class,
+									new TimeProgressImpl(simulationTimer))
 							.startAt(NON_DET_START_TIME)
 							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 							.withVerbosity(false);

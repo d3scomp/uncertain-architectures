@@ -15,12 +15,13 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode.adapt;
 
-import cz.cuni.mff.d3s.deeco.search.SearchParameters;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
-import cz.cuni.mff.d3s.jdeeco.adaptation.search.annealing.Annealing;
-import cz.cuni.mff.d3s.jdeeco.adaptation.search.annealing.LinearTemperature;
-import cz.cuni.mff.d3s.jdeeco.adaptation.search.annealing.SimpleAcceptance;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.TimeProgressImpl;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
+import cz.cuni.mff.d3s.metaadaptation.search.SearchParameters;
+import cz.cuni.mff.d3s.metaadaptation.search.annealing.Annealing;
+import cz.cuni.mff.d3s.metaadaptation.search.annealing.LinearTemperature;
+import cz.cuni.mff.d3s.metaadaptation.search.annealing.SimpleAcceptance;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
@@ -33,7 +34,7 @@ public class AnnealingParams extends SearchParameters {
 	public AnnealingParams(){
 		super();
 		parameters.put(Annealing.TEMPERATURE_PARAMETER, new LinearTemperature(
-				Configuration.NON_DET_START_TIME, Configuration.NON_DET_END_TIME, timer));
+				Configuration.NON_DET_START_TIME, Configuration.NON_DET_END_TIME, new TimeProgressImpl(timer)));
 		parameters.put(Annealing.PROBABILITY_PARAMETER, new SimpleAcceptance());
 		// parameters.put(Annealing.SEED_PARAMETER, 12345);
 	}

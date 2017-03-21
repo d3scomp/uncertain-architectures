@@ -50,7 +50,6 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import cz.cuni.mff.d3s.jdeeco.adaptation.search.annealing.Annealing;
 import cz.cuni.mff.d3s.jdeeco.annotations.ComponentModeChart;
 import cz.cuni.mff.d3s.jdeeco.annotations.ExcludeModes;
 import cz.cuni.mff.d3s.jdeeco.annotations.Mode;
@@ -79,6 +78,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Link;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
 import cz.cuni.mff.d3s.metaadaptation.correlation.metric.DifferenceMetric;
+import cz.cuni.mff.d3s.metaadaptation.search.annealing.Annealing;
  
 
 @Component

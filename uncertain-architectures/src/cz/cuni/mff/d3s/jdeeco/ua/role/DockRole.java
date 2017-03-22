@@ -30,4 +30,6 @@ public class DockRole {
 	public String id;
 	public List<String> robotsInLine;
 	public Node position;
+	
+	public Boolean isWorking;
 }

@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import ComponentIsolation.ComponentIsolationPlugin;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
@@ -203,15 +204,10 @@ public class Run {
 		
 		// Prepare adaptation plugins
 		List<DEECoPlugin> adaptPlugins = new ArrayList<>();
-		
-		if(CORRELATION_ON || NON_DETERMINISM_ON){
-			adaptPlugins.add(new AdaptationPlugin().withPeriod(10000));
-		}
-		
-		CorrelationPlugin correlationPlugin = null;
+				
 		if (CORRELATION_ON) {
 			// create correlation plugin
-			correlationPlugin = new CorrelationPlugin()
+			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
 					.withVerbosity(true).withDumping(true);
 			adaptPlugins.add(correlationPlugin);
 		}
@@ -224,10 +220,17 @@ public class Run {
 					.withVerbosity(true);
 			adaptPlugins.add(nonDetPlugin);
 		}
+		if (ROLE_REMOVAL_ON){
+			ComponentIsolationPlugin roleRemovalPlugin = 
+					new ComponentIsolationPlugin(nodesInSimulation)
+					.withVerbosity(true);
+			adaptPlugins.add(roleRemovalPlugin);
+		}
 
 		// Create node -1 (default node)
 		DEECoNode defaultNode;
 		if(adaptPlugins.size() > 0) {
+			adaptPlugins.add(new AdaptationPlugin().withPeriod(10000));
 			defaultNode = simulation.createNode(-1, writers, adaptPlugins.toArray(new DEECoPlugin[]{}));
 		} else {
 			defaultNode = simulation.createNode(-1, writers);
@@ -249,9 +252,9 @@ public class Run {
 		// Deploy robots
 		deployRobots(IntStream.range(0, robotCnt).toArray(), simulation, simulationTimer, defaultNode, nodesInSimulation, writers);
 		
-		if(correlationPlugin != null){
+		/*if(correlationPlugin != null){
 			correlationPlugin.setDEECoNodes(nodesInSimulation);
-		}
+		}*/
 		
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + logPath + "'");

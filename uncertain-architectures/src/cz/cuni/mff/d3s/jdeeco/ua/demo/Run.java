@@ -23,6 +23,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_NAMES;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_END_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
@@ -34,8 +35,10 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -50,10 +53,12 @@ import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogWriters;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationPlugin;
+import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationUtility;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchAnnealState;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDeterministicModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.TimeProgressImpl;
+import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitchprops.ModeSwitchPropsPlugin;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
@@ -62,6 +67,7 @@ import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
+import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.CleaningPlanEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -211,20 +217,28 @@ public class Run {
 					.withVerbosity(true).withDumping(true);
 			adaptPlugins.add(correlationPlugin);
 		}
+		if (ROLE_REMOVAL_ON){
+			ComponentIsolationPlugin roleRemovalPlugin = 
+					new ComponentIsolationPlugin(nodesInSimulation)
+					.withVerbosity(true);
+			adaptPlugins.add(roleRemovalPlugin);
+		}
 		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
 			NonDeterministicModeSwitchingPlugin nonDetPlugin =
-					new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class,
+					new NonDeterministicModeSwitchingPlugin(new DirtinessDurationFitness(simulationTimer),
 							new TimeProgressImpl(simulationTimer))
 					.startAt(NON_DET_START_TIME)
 					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 					.withVerbosity(true);
 			adaptPlugins.add(nonDetPlugin);
 		}
-		if (ROLE_REMOVAL_ON){
-			ComponentIsolationPlugin roleRemovalPlugin = 
-					new ComponentIsolationPlugin(nodesInSimulation)
+		if(MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes){
+			Map<String, AdaptationUtility> utilities = new HashMap<>();
+			utilities.put(Robot.class.getName(), new DirtinessDurationFitness(simulationTimer));
+			
+			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
 					.withVerbosity(true);
-			adaptPlugins.add(roleRemovalPlugin);
+			adaptPlugins.add(mspPlugin);
 		}
 
 		// Create node -1 (default node)
@@ -271,14 +285,30 @@ public class Run {
 			if (enableMultipleDEECoNodes) {
 				// Create node
 				DEECoNode deeco;
+				NonDeterministicModeSwitchingPlugin nonDetPlugin = null;
+				ModeSwitchPropsPlugin mspPlugin = null;
 				if(NON_DETERMINISM_ON){
-					NonDeterministicModeSwitchingPlugin nonDetPlugin =
-							new NonDeterministicModeSwitchingPlugin(DirtinessDurationFitness.class,
+					nonDetPlugin =
+							new NonDeterministicModeSwitchingPlugin(
+									new DirtinessDurationFitness(simulationTimer),
 									new TimeProgressImpl(simulationTimer))
 							.startAt(NON_DET_START_TIME)
 							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
 							.withVerbosity(false);
+				}
+				if(MODE_SWITCH_PROPS_ON){
+					Map<String, AdaptationUtility> utilities = new HashMap<>();
+					utilities.put(Robot.class.getName(), new DirtinessDurationFitness(simulationTimer));
+					
+					mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
+							.withVerbosity(true);
+				}
+				if(nonDetPlugin != null && mspPlugin != null){
+					deeco = simulation.createNode(i, writers, nonDetPlugin, mspPlugin);
+				} else if(nonDetPlugin != null){
 					deeco = simulation.createNode(i, writers, nonDetPlugin);
+				} else if(mspPlugin != null){
+					deeco = simulation.createNode(i, writers, mspPlugin);
 				} else {
 					deeco = simulation.createNode(i, writers);
 				}

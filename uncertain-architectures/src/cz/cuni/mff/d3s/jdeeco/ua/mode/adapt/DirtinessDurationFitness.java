@@ -20,7 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.ModeSwitchFitness;
+import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
+import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationUtility;
 import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
@@ -30,7 +31,7 @@ import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class DirtinessDurationFitness implements ModeSwitchFitness {
+public class DirtinessDurationFitness extends AdaptationUtility {
 
 	/**
 	 * Initial times of uncompleted dirtiness events.
@@ -49,6 +50,17 @@ public class DirtinessDurationFitness implements ModeSwitchFitness {
 	 */
 	private int durationsCnt = 0;
 	
+	private final SimulationTimer timer;
+	
+	
+	public DirtinessDurationFitness(SimulationTimer timer) {
+		if(timer == null){
+			throw new IllegalArgumentException(String.format("The %s argument is null.", "timer"));
+		}
+		
+		this.timer = timer;
+	}
+	
 	
 	/* (non-Javadoc)
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval#getKnowledgeNames()
@@ -62,15 +74,16 @@ public class DirtinessDurationFitness implements ModeSwitchFitness {
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval#getEnergy(long, java.lang.Object[])
 	 */
 	@Override
-	public double getFitness(long currentTime, Object[] knowledgeValues) {
+	public double getUtility(Object[] knowledgeValues) {
 		@SuppressWarnings("unchecked")
 		CorrelationMetadataWrapper<DirtinessMap> map = (CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0];
+		long currentTime = timer.getCurrentMilliseconds();
 		
 		// Add dirt init times for dirt that is not yet present
 		final Set<Node> dirtyTiles = map.getValue().getDirtiness().keySet();
 		for(Node n : dirtyTiles){
 			if(!dirtInitTimes.keySet().contains(n)){
-				dirtInitTimes.put(n,  currentTime);
+				dirtInitTimes.put(n, currentTime);
 			}
 		}
 		
@@ -106,7 +119,6 @@ public class DirtinessDurationFitness implements ModeSwitchFitness {
 		return avg / Configuration.SIMULATION_DURATION;
 	}
 
-
 	/* (non-Javadoc)
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitnessEval#restart()
 	 */
@@ -115,6 +127,15 @@ public class DirtinessDurationFitness implements ModeSwitchFitness {
 		dirtInitTimes.clear();
 		durationsSum = 0;
 		durationsCnt = 0;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationUtility#getUtilityThreshold()
+	 */
+	@Override
+	public double getUtilityThreshold() {
+		return 0; // TODO:
 	}
 
 }

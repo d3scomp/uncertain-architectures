@@ -38,6 +38,10 @@ public class RobotModeChartHolder extends ModeChartHolder {
 	public RobotModeChartHolder(){
 		
 		final ModeGuard deadBatteryGuard = new ModeGuard() {
+			
+			@Override
+			protected void specifyParameters(){}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
 				return ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() <= 0;
@@ -50,10 +54,21 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		final ModeGuard batteryDrainedGuard = new ModeGuard() {
+
+			private static final String DRAINED_LEVEL = "DRAINED_LEVEL";
+			private static final double INIT_DRAINED_LEVEL = 0.2;
+			
+			@Override
+			protected void specifyParameters(){
+				parameters.put(DRAINED_LEVEL, INIT_DRAINED_LEVEL);
+			}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
 				boolean batteryDead = deadBatteryGuard.isSatisfied(knowledgeValue);
-				boolean batteryLow = ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() < 0.2;
+				boolean batteryLow = 
+						((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue()
+						< parameters.get(DRAINED_LEVEL);
 				return !batteryDead && batteryLow;
 			}
 			
@@ -64,6 +79,10 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		final ModeGuard dockReachedGuard = new ModeGuard() {
+
+			@Override
+			protected void specifyParameters(){}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[0]).getValue();
@@ -86,9 +105,19 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		final ModeGuard batteryChargedOrChargingInUnavailableDockGuard = new ModeGuard() {
+
+			private static final String CHARGED_LEVEL = "CHARGED_LEVEL";
+			private static final double INIT_CHARGED_LEVEL = 0.95;
+			
+			@Override
+			protected void specifyParameters(){
+				parameters.put(CHARGED_LEVEL, INIT_CHARGED_LEVEL);
+			}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValue) {
-				boolean batteryCharged = ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue() > 0.95;
+				boolean batteryCharged = ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue()
+						> parameters.get(CHARGED_LEVEL);
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValue[1]).getValue();
 				Map<String, DockData> availableDocks = (Map<String, DockData>) knowledgeValue[2];
 				boolean dockNotInAvailableOnes = true;
@@ -107,13 +136,16 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		final ModeGuard cleanGuard = new ModeGuard() {
+			
+			@Override
+			protected void specifyParameters(){}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValues[1]).getValue();
 				Node positionNode = position.atNode();
 				return (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
-						/*&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})*/
 						&& positionNode != null
 						&& map.getDirtiness().keySet().contains(positionNode));
 			}
@@ -125,6 +157,12 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 
 		final ModeGuard approachGuard = new ModeGuard() {
+			
+			@Override
+			protected void specifyParameters(){
+				// TODO: it is possible to configure the map dirtiness size parameter - but do id smart - how much percent of the local map is dirty
+			}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
@@ -144,6 +182,12 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		final ModeGuard searchGuard = new ModeGuard() {
+
+			@Override
+			protected void specifyParameters(){
+				// TODO: it is possible to configure the map dirtiness size to start searching - do it as above
+			}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
@@ -160,6 +204,12 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 
 		final ModeGuard keepCleaningGuard = new ModeGuard() {
+
+			@Override
+			protected void specifyParameters(){
+				// TODO: it is possible to configure the map dirtiness size to continue cleaning - do it as above
+			}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
@@ -194,6 +244,10 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 		
 		final ModeGuard startWaitGuard = new ModeGuard() {
+			
+			@Override
+			protected void specifyParameters(){}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				if (deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[3]})) {
@@ -224,6 +278,10 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 
 		final ModeGuard stopWaitGuard = new ModeGuard() {
+
+			@Override
+			protected void specifyParameters(){}
+			
 			@Override
 			public boolean isSatisfied(Object[] knowledgeValues) {
 				return !startWaitGuard.isSatisfied(knowledgeValues);

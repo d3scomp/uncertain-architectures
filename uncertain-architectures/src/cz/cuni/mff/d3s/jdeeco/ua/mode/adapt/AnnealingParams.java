@@ -29,13 +29,13 @@ import cz.cuni.mff.d3s.metaadaptation.search.annealing.SimpleAcceptance;
  */
 public class AnnealingParams extends SearchParameters {
 
-	public static SimulationTimer timer;
-	
-	public AnnealingParams(){
-		super();
-		parameters.put(Annealing.TEMPERATURE_PARAMETER, new LinearTemperature(
-				Configuration.NON_DET_START_TIME, Configuration.NON_DET_END_TIME, new TimeProgressImpl(timer)));
-		parameters.put(Annealing.PROBABILITY_PARAMETER, new SimpleAcceptance());
-		// parameters.put(Annealing.SEED_PARAMETER, 12345);
-	}
+//	public static SimulationTimer timer;
+//	
+//	public AnnealingParams(){
+//		super();
+//		parameters.put(Annealing.TEMPERATURE_PARAMETER, new LinearTemperature(
+//				Configuration.NON_DET_START_TIME, Configuration.NON_DET_END_TIME, new TimeProgressImpl(timer)));
+//		parameters.put(Annealing.PROBABILITY_PARAMETER, new SimpleAcceptance());
+//		// parameters.put(Annealing.SEED_PARAMETER, 12345);
+//	}
 }

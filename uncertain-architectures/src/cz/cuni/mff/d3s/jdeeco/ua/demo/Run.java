@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import ComponentIsolation.ComponentIsolationPlugin;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
@@ -52,6 +51,7 @@ import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationUtility;
+import cz.cuni.mff.d3s.jdeeco.adaptation.componentIsolation.ComponentIsolationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchAnnealState;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDeterministicModeSwitchingPlugin;
@@ -120,7 +120,7 @@ public class Run {
 
 		final Set<DEECoNode> nodesInSimulation = new HashSet<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer(-WARM_UP_TIME);
-		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search engine
+//		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search engine
 
 		// create main application container
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
@@ -146,15 +146,17 @@ public class Run {
 			adaptPlugins.add(roleRemovalPlugin);
 		}
 		if (NON_DETERMINISM_ON && !enableMultipleDEECoNodes) {
-			NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
-			Map<String, AdaptationUtility> utilities = new HashMap<>();
+			//NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
+			Map<String, AdaptationUtility> utilities = new HashMap<>(); // TODO: make universal utility
 			utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
 			utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
 			utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
 
-			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities,
+			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities/*,
 					new TimeProgressImpl(simulationTimer)).startAt(NON_DET_START_TIME)
-							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY).withVerbosity(true);
+							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)*/)
+					.withVerbosity(true)
+					; // TODO: fill parameters - make section in Configuration to override then easily
 			adaptPlugins.add(nonDetPlugin);
 		}
 		if (MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes) {
@@ -212,15 +214,16 @@ public class Run {
 				NonDeterministicModeSwitchingPlugin nonDetPlugin = null;
 				ModeSwitchPropsPlugin mspPlugin = null;
 				if (NON_DETERMINISM_ON) {
-					NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
+//					NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
 					Map<String, AdaptationUtility> utilities = new HashMap<>();
 					utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
 					utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
 					utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
 
-					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities,
+					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities/*,
 							new TimeProgressImpl(simulationTimer)).startAt(NON_DET_START_TIME)
-									.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY).withVerbosity(false);
+									.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY*/)
+							.withVerbosity(false); // TODO:
 				}
 				if (MODE_SWITCH_PROPS_ON) {
 					Map<String, AdaptationUtility> utilities = new HashMap<>();

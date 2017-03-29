@@ -15,31 +15,12 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode;
+import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
 
-public class SearchMode implements NonDetModeSwitchMode {
+public class SearchMode extends DEECoMode {
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicIn()
-	 */
-	@Override
-	public boolean nonDeterministicIn() {
-		return true;
+	public SearchMode(){
+		super("SearchMode");
 	}
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicOut()
-	 */
-	@Override
-	public boolean nonDeterministicOut() {
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#isFitnessComputed()
-	 */
-	@Override
-	public boolean isFitnessComputed() {
-		return true;
-	}
 }

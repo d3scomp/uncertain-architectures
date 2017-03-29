@@ -139,12 +139,12 @@ public class DirtinessDurationFitness extends AdaptationUtility {
 	/* (non-Javadoc)
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchFitnessEval#restart()
 	 */
-	@Override
-	public void restart() {
-/*		dirtInitTimes.clear();
-		durationsSum = 0;
-		durationsCnt = 0;
-*/	}
+//	@Override
+//	public void restart() {
+//		dirtInitTimes.clear();
+//		durationsSum = 0;
+//		durationsCnt = 0;
+//	}
 
 
 	/* (non-Javadoc)

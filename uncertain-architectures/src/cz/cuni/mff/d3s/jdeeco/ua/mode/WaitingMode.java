@@ -15,35 +15,16 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode;
+import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
-public class WaitingMode implements NonDetModeSwitchMode {
+public class WaitingMode extends DEECoMode {
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicIn()
-	 */
-	@Override
-	public boolean nonDeterministicIn() {
-		return true;
+	public WaitingMode(){
+		super("WaitingMode");
 	}
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicOut()
-	 */
-	@Override
-	public boolean nonDeterministicOut() {
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#isFitnessComputed()
-	 */
-	@Override
-	public boolean isFitnessComputed() {
-		return false;
-	}
 }

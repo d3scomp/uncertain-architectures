@@ -15,31 +15,12 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode;
+import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
 
-public class DirtApproachMode implements NonDetModeSwitchMode {
+public class DirtApproachMode extends DEECoMode {
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicIn()
-	 */
-	@Override
-	public boolean nonDeterministicIn() {
-		return true;
+	public DirtApproachMode(){
+		super("DirtApproachMode");
 	}
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicOut()
-	 */
-	@Override
-	public boolean nonDeterministicOut() {
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#isFitnessComputed()
-	 */
-	@Override
-	public boolean isFitnessComputed() {
-		return true;
-	}
 }

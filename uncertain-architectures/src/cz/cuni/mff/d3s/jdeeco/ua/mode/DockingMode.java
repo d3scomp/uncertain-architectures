@@ -15,31 +15,12 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode;
 
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode;
+import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
 
-public class DockingMode implements NonDetModeSwitchMode {
+public class DockingMode extends DEECoMode {
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicIn()
-	 */
-	@Override
-	public boolean nonDeterministicIn() {
-		return true;
+	public DockingMode(){
+		super("DockingMode");
 	}
 
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#nonDeterministicOut()
-	 */
-	@Override
-	public boolean nonDeterministicOut() {
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchMode#isFitnessComputed()
-	 */
-	@Override
-	public boolean isFitnessComputed() {
-		return false;
-	}
 }

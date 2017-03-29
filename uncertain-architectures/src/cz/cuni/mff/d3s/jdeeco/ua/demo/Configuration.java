@@ -81,7 +81,7 @@ public class Configuration {
 	public static boolean ROLE_REMOVAL_ON = false;
 	public static boolean MODE_SWITCH_PROPS_ON = false;
 	
-	public static boolean NON_DETERMINISM_ON = true;
+	public static boolean NON_DETERMINISM_ON = false;
 	public static double NON_DET_INIT_PROBABILITY = 0.0001;
 	public static double NON_DET_PROBABILITY_STEP = 0.00005;
 	public static long NON_DET_START_TIME = 0;

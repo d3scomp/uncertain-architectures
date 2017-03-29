@@ -16,19 +16,17 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CORRELATION_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_FAILURE_TIME;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_FAILURE_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_COUNT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_NAMES;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.LOG_DIR;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_END_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_PROBABILITY_STEP;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_COUNT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
@@ -67,7 +65,6 @@ import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
-import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.CleaningPlanEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -97,106 +94,33 @@ public class Run {
 		Log.i("Preparing simulation");
 
 		// Process arguments
-		String logPath = "STANDARD";
+		Configuration.override(args);
+
+		// Configure Logs
 		RuntimeLogWriters writers;
-		int robotCnt = 3;
-		int dockCnt = 3;
-		
-		if (args.length == 0) {
+		if (LOG_DIR == null) {
 			writers = new RuntimeLogWriters();
 		} else {
-			logPath = args[0];
-			writers = new RuntimeLogWriters(logPath);
-			
-			int i = 1;
-			WARM_UP_TIME = Long.parseLong(args[i]);
-			System.out.println(String.format("%s = %s", "WARM_UP_TIME", WARM_UP_TIME));
-			i++;
-			
-			SIMULATION_DURATION = Integer.parseInt(args[i]);
-			System.out.println(String.format("%s = %d", "SIMULATION_DURATION", SIMULATION_DURATION));
-			i++;
-			
-			robotCnt = Integer.parseInt(args[i]);
-			if(robotCnt < 1 || robotCnt > Configuration.ROBOT_PARAMS.length){
-				System.out.println(String.format("Invalid number of robots: %d", robotCnt));
-				return;
-			}
-			System.out.println(String.format("Number of robots = %d", robotCnt));
-			i++;
-			
-			dockCnt = Integer.parseInt(args[i]);
-			if(dockCnt < 1 || dockCnt > Configuration.DOCK_NAMES.length){
-				System.out.println(String.format("Invalid number of docks: %d", dockCnt));
-				return;
-			}
-			System.out.println(String.format("Number of docks = %d", dockCnt));
-			i++;
-			
-			DIRT_DETECTION_FAILURE_ON = Boolean.parseBoolean(args[i]);
-			System.out.println(String.format("%s = %s", "DIRT_DETECTION_FAILURE_ON", DIRT_DETECTION_FAILURE_ON));
-			i++;
-			if(DIRT_DETECTION_FAILURE_ON){
-				DIRT_DETECTION_FAILURE_TIME = Long.parseLong(args[i]);
-				System.out.println(String.format("%s = %s", "DIRT_DETECTION_FAILURE_TIME", DIRT_DETECTION_FAILURE_TIME));
-				i++;
-				
-				CORRELATION_ON = Boolean.parseBoolean(args[i]);
-				System.out.println(String.format("%s = %s", "CORRELATION_ON", CORRELATION_ON));
-				i++;
-			}
-			DOCK_FAILURE_ON = Boolean.parseBoolean(args[i]);
-			System.out.println(String.format("%s = %s", "DOCK_FAILURE_ON", DOCK_FAILURE_ON));
-			i++;
-			if(DOCK_FAILURE_ON){
-				DOCK_FAILURE_TIME = Long.parseLong(args[i]);
-				System.out.println(String.format("%s = %s", "DOCK_FAILURE_TIME", DOCK_FAILURE_TIME));
-				i++;
-				
-				ROLE_REMOVAL_ON = Boolean.parseBoolean(args[i]);
-				System.out.println(String.format("%s = %s", "ROLE_REMOVAL_ON", ROLE_REMOVAL_ON));
-				i++;
-			}
-			NON_DETERMINISM_ON = Boolean.parseBoolean(args[i]);
-			System.out.println(String.format("%s = %s", "NON_DETERMINISM_ON", NON_DETERMINISM_ON));
-			i++;
-			if(NON_DETERMINISM_ON){
-				NON_DET_INIT_PROBABILITY = Double.parseDouble(args[i]);
-				System.out.println(String.format("%s = %s", "NON_DET_INIT_PROBABILITY", NON_DET_INIT_PROBABILITY));
-				i++;
-				NON_DET_PROBABILITY_STEP = Double.parseDouble(args[i]);
-				NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
-				System.out.println(String.format("%s = %s", "NON_DET_PROBABILITY_STEP", NON_DET_PROBABILITY_STEP));
-				i++;
-				if(args.length > i) {
-					NON_DET_START_TIME = Long.parseLong(args[i]);
-					i++;
-				}
-				System.out.println(String.format("%s = %s", "NON_DET_START_TIME", NON_DET_START_TIME));
-				if(args.length > i) {
-					NON_DET_END_TIME = Long.parseLong(args[i]);
-					i++;
-				} else {
-					NON_DET_END_TIME = SIMULATION_DURATION;
-				}
-				System.out.println(String.format("%s = %s", "NON_DET_END_TIME", NON_DET_END_TIME));
-			}
-			WITH_SEED = Boolean.parseBoolean(args[i]);
-			System.out.println(String.format("%s = %s", "WITH_SEED", WITH_SEED));
-			i++;
-			if(WITH_SEED){
-				ENVIRONMENT_SEED = Long.parseLong(args[i]);
-				System.out.println(String.format("%s = %s", "ENVIRONMENT_SEED", ENVIRONMENT_SEED));
-				i++;
-			}
+			writers = new RuntimeLogWriters(LOG_DIR);
 		}
-		
+
+		// Check robot and dock count
+		if (ROBOT_COUNT < 1 || ROBOT_COUNT > Configuration.ROBOT_PARAMS.length) {
+			Log.e(String.format("Invalid number of robots: %d", ROBOT_COUNT));
+			return;
+		}
+		if (DOCK_COUNT < 1 || DOCK_COUNT > Configuration.DOCK_NAMES.length) {
+			Log.e(String.format("Invalid number of docks: %d", DOCK_COUNT));
+			return;
+		}
+
+
 		VisualizationSettings.createConfigFile();
 		DirtinessMap.outputToFile(VisualizationSettings.MAP_FILE);
 
 		final Set<DEECoNode> nodesInSimulation = new HashSet<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer(-WARM_UP_TIME);
-		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search  engine
+		AnnealingParams.timer = simulationTimer; // HACK: rather provide deeco node to the search engine
 
 		// create main application container
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
@@ -206,36 +130,39 @@ public class Run {
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
 		simulation.addPlugin(new ModeSwitchingPlugin().withPeriod(50));
 		simulation.addPlugin(new PositionPlugin(0, 0));
-		
-		
+
 		// Prepare adaptation plugins
 		List<DEECoPlugin> adaptPlugins = new ArrayList<>();
-				
+
 		if (CORRELATION_ON) {
 			// create correlation plugin
-			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation)
-					.withVerbosity(true).withDumping(true);
+			CorrelationPlugin correlationPlugin = new CorrelationPlugin(nodesInSimulation).withVerbosity(true)
+					.withDumping(true);
 			adaptPlugins.add(correlationPlugin);
 		}
-		if (ROLE_REMOVAL_ON){
-			ComponentIsolationPlugin roleRemovalPlugin = 
-					new ComponentIsolationPlugin(nodesInSimulation)
+		if (ROLE_REMOVAL_ON) {
+			ComponentIsolationPlugin roleRemovalPlugin = new ComponentIsolationPlugin(nodesInSimulation)
 					.withVerbosity(true);
 			adaptPlugins.add(roleRemovalPlugin);
 		}
-		if(NON_DETERMINISM_ON && !enableMultipleDEECoNodes){
-			NonDeterministicModeSwitchingPlugin nonDetPlugin =
-					new NonDeterministicModeSwitchingPlugin(new DirtinessDurationFitness(simulationTimer),
-							new TimeProgressImpl(simulationTimer))
-					.startAt(NON_DET_START_TIME)
-					.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
-					.withVerbosity(true);
+		if (NON_DETERMINISM_ON && !enableMultipleDEECoNodes) {
+			NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
+			Map<String, AdaptationUtility> utilities = new HashMap<>();
+			utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
+			utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
+			utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+
+			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities,
+					new TimeProgressImpl(simulationTimer)).startAt(NON_DET_START_TIME)
+							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY).withVerbosity(true);
 			adaptPlugins.add(nonDetPlugin);
 		}
-		if(MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes){
+		if (MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes) {
 			Map<String, AdaptationUtility> utilities = new HashMap<>();
-			utilities.put(Robot.class.getName(), new DirtinessDurationFitness(simulationTimer));
-			
+			utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
+			utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
+			utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+
 			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
 					.withVerbosity(true);
 			adaptPlugins.add(mspPlugin);
@@ -243,9 +170,9 @@ public class Run {
 
 		// Create node -1 (default node)
 		DEECoNode defaultNode;
-		if(adaptPlugins.size() > 0) {
+		if (adaptPlugins.size() > 0) {
 			adaptPlugins.add(new AdaptationPlugin().withPeriod(10000));
-			defaultNode = simulation.createNode(-1, writers, adaptPlugins.toArray(new DEECoPlugin[]{}));
+			defaultNode = simulation.createNode(-1, writers, adaptPlugins.toArray(new DEECoPlugin[] {}));
 		} else {
 			defaultNode = simulation.createNode(-1, writers);
 		}
@@ -256,67 +183,67 @@ public class Run {
 		defaultNode.deployComponent(environment);
 
 		// Deploy docking stations
-		for(int i : IntStream.range(0, dockCnt).toArray()){
-			Dock d = new Dock(DOCK_NAMES[i], DirtinessMap.randomNode(environment.random), defaultNode.getRuntimeLogger());
+		for (int i : IntStream.range(0, DOCK_COUNT).toArray()) {
+			Dock d = new Dock(DOCK_NAMES[i], DirtinessMap.randomNode(environment.random),
+					defaultNode.getRuntimeLogger());
 			defaultNode.deployComponent(d);
 		}
 		defaultNode.deployEnsemble(DockingEnsemble.class);
 		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
 
 		// Deploy robots
-		deployRobots(IntStream.range(0, robotCnt).toArray(), simulation, simulationTimer, defaultNode, nodesInSimulation, writers);
-		
-		/*if(correlationPlugin != null){
-			correlationPlugin.setDEECoNodes(nodesInSimulation);
-		}*/
-		
+		deployRobots(IntStream.range(0, ROBOT_COUNT).toArray(), simulation, simulationTimer, defaultNode,
+				nodesInSimulation, writers);
+
 		// Start the simulation
-		System.out.println("Simulation Starts - writing to '" + logPath + "'");
+		System.out.println("Simulation Starts - writing to '" + LOG_DIR + "'");
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_DURATION);
 		Log.i("Simulation Finished");
-		System.out.println("Simulation Finished - writen to '" + logPath + "'");
+		System.out.println("Simulation Finished - writen to '" + LOG_DIR + "'");
 	}
-	
-	private static void deployRobots(int robots[], DEECoSimulation simulation,
-			SimulationTimer simulationTimer, DEECoNode defaultNode,
-			Set<DEECoNode> nodesInSimulation, RuntimeLogWriters writers) throws Exception {
-		for(int i : robots){
+
+	private static void deployRobots(int robots[], DEECoSimulation simulation, SimulationTimer simulationTimer,
+			DEECoNode defaultNode, Set<DEECoNode> nodesInSimulation, RuntimeLogWriters writers) throws Exception {
+		for (int i : robots) {
 			if (enableMultipleDEECoNodes) {
 				// Create node
 				DEECoNode deeco;
 				NonDeterministicModeSwitchingPlugin nonDetPlugin = null;
 				ModeSwitchPropsPlugin mspPlugin = null;
-				if(NON_DETERMINISM_ON){
-					nonDetPlugin =
-							new NonDeterministicModeSwitchingPlugin(
-									new DirtinessDurationFitness(simulationTimer),
-									new TimeProgressImpl(simulationTimer))
-							.startAt(NON_DET_START_TIME)
-							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)
-							.withVerbosity(false);
-				}
-				if(MODE_SWITCH_PROPS_ON){
+				if (NON_DETERMINISM_ON) {
+					NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
 					Map<String, AdaptationUtility> utilities = new HashMap<>();
-					utilities.put(Robot.class.getName(), new DirtinessDurationFitness(simulationTimer));
-					
-					mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
-							.withVerbosity(true);
+					utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
+					utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
+					utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+
+					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities,
+							new TimeProgressImpl(simulationTimer)).startAt(NON_DET_START_TIME)
+									.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY).withVerbosity(false);
 				}
-				if(nonDetPlugin != null && mspPlugin != null){
+				if (MODE_SWITCH_PROPS_ON) {
+					Map<String, AdaptationUtility> utilities = new HashMap<>();
+					utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
+					utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
+					utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+
+					mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities).withVerbosity(true);
+				}
+				if (nonDetPlugin != null && mspPlugin != null) {
 					deeco = simulation.createNode(i, writers, nonDetPlugin, mspPlugin);
-				} else if(nonDetPlugin != null){
+				} else if (nonDetPlugin != null) {
 					deeco = simulation.createNode(i, writers, nonDetPlugin);
-				} else if(mspPlugin != null){
+				} else if (mspPlugin != null) {
 					deeco = simulation.createNode(i, writers, mspPlugin);
 				} else {
 					deeco = simulation.createNode(i, writers);
 				}
 				nodesInSimulation.add(deeco);
-	
+
 				// Deploy robot
 				deeco.deployComponent(Configuration.createRobot(i, deeco.getRuntimeLogger()));
-	
+
 				// Deploy ensembles on node
 				deeco.deployEnsemble(DockingEnsemble.class);
 				deeco.deployEnsemble(CleaningPlanEnsemble.class);

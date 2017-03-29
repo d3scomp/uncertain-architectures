@@ -55,56 +55,26 @@ def simulate(scenarioIndex):
         
         # Prepare parameters
         params = []
-        params.append(os.path.join(LOGS_DIR,
+        params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
                                    getSignature(scenario),
-                                   'log_' + str(i)))
-        params.append(str(scenario[WARM_UP_TIME]))
-        params.append(str(scenario[DURATION]))
-        params.append(str(scenario[ROBOT_CNT]))
-        params.append(str(scenario[DOCK_CNT]))
+                                   'log_' + str(i))))
         
-        if scenario[DDF]:
-            params.append("true")
-            if DDF_TIME in scenario:
-                params.append(str(scenario[DDF_TIME]))
-            else:    
-                params.append(str(DDF_DEFAULT_TIME))
-            params.append("true" if (scenario[CS]) else "false")
-        else:
-            params.append("false")
-        if scenario[DF]:
-            params.append("true")
-            if DF_TIME in scenario:
-                params.append(str(scenario[DF_TIME]))
-            else:    
-                params.append(str(DF_DEFAULT_TIME))
-            params.append("true" if (scenario[FCI]) else "false")
-        else:
-            params.append("false")
-        if scenario[UMS]:
-            params.append("true")
-            params.append(str(scenario[PROBABILITY]))
-            params.append(str(scenario[PROBABILITY_STEP]))
-            params.append(str(scenario[UMS_START]))
-            params.append(str(scenario[UMS_END]))
-        else:
-            params.append("false")
-            
-        params.append("true" if ENABLE_SEED else "false")
-        if ENABLE_SEED:
+        if(ENABLE_SEED):
             global seed
-            params.append(str(seed))
-            seed += seed_step 
+            params.append("{}={}".format(WITH_SEED, True))
+            params.append("{}={}".format(SEED, seed))
+            seed += seed_step
+            
+        for key, value in scenario.items():
+            params.append("{}={}".format(key, value))    
             
         # Compose invocation command
-        #mvn = 'mvn.cmd' if sys.platform == 'win32' else 'mvn'
-        #cmd = [mvn, 'exec:java', '-f..','-Dexec.args=' + ' '.join(params)]
         cmd = ['java', '-Xmx4096m', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
         cmd.extend(params)
         
         print(cmd)
         print("Iteration {}".format(i))
-        
+
         simulation = Popen(cmd)
         simulated.append(simulation)
     

@@ -29,21 +29,24 @@ from Configuration import DF_DEFAULT_TIME
 #################################################
 
 # Parameters
-DDF = "DDF" # Dirt detection failure
-DDF_TIME = "DDF_time"
-CS = "CS" # Collaborative sensing
-DF = "DF" # Dock failure
-DF_TIME = "DF_time"
-FCI = "FCI" # Faulty component isolation
-UMS = "UMS" # Unspecified mode switching
-PROBABILITY = "Probability" # Starting probability for UMS
-PROBABILITY_STEP = "step" # Probability step for UMS
-UMS_START = "UMS_start_time" # The UMS start time
-UMS_END = "UMS_end_time" # The UMS end time
-ROBOT_CNT = "robot_cnt" # The robot count
-DOCK_CNT = "dock_cnt" # The dock count
-DURATION = "duration" # The Simulation Duration
-WARM_UP_TIME = "warmup" # The warm up time
+LOG_DIR = "LOG_DIR"
+DDF = "DIRT_DETECTION_FAILURE_ON" # Dirt detection failure
+DDF_TIME = "DIRT_DETECTION_FAILURE_TIME"
+CS = "CORRELATION_ON" # Collaborative sensing
+DF = "DOCK_FAILURE_ON" # Dock failure
+DF_TIME = "DOCK_FAILURE_TIME"
+FCI = "ROLE_REMOVAL_ON" # Faulty component isolation
+UMS = "NON_DETERMINISM_ON" # Unspecified mode switching
+PROBABILITY = "NON_DET_INIT_PROBABILITY" # Starting probability for UMS
+PROBABILITY_STEP = "NON_DET_PROBABILITY_STEP" # Probability step for UMS
+UMS_START = "NON_DET_START_TIME" # The UMS start time
+UMS_END = "NON_DET_END_TIME" # The UMS end time
+ROBOT_CNT = "ROBOT_COUNT" # The robot count
+DOCK_CNT = "DOCK_COUNT" # The dock count
+DURATION = "SIMULATION_DURATION" # The Simulation Duration
+WARM_UP_TIME = "WARM_UP_TIME" # The warm up time
+WITH_SEED = "WITH_SEED"
+SEED = "ENVIRONMENT_SEED"
 
 # Scenarios
 scenarios = []

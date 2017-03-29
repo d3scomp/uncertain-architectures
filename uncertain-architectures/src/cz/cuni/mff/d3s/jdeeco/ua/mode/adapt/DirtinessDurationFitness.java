@@ -67,7 +67,7 @@ public class DirtinessDurationFitness extends AdaptationUtility {
 	 */
 	@Override
 	public String[] getKnowledgeNames() {
-		return new String[]{"map"};
+		return new String[]{"map", "id"};
 	}
 
 	/* (non-Javadoc)
@@ -78,6 +78,18 @@ public class DirtinessDurationFitness extends AdaptationUtility {
 		@SuppressWarnings("unchecked")
 		CorrelationMetadataWrapper<DirtinessMap> map = (CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0];
 		long currentTime = timer.getCurrentMilliseconds();
+		
+		System.out.println();
+		System.out.println(knowledgeValues[1]);
+		System.out.println(currentTime);
+		System.out.println("Init Times");
+		for(Node n : dirtInitTimes.keySet()){
+			System.out.println(dirtInitTimes.get(n));
+		}
+		System.out.println("Dirt level");
+		for(Node n : map.getValue().getDirtiness().keySet()){
+			System.out.println(map.getValue().getDirtiness().get(n));
+		}
 		
 		// Add dirt init times for dirt that is not yet present
 		final Set<Node> dirtyTiles = map.getValue().getDirtiness().keySet();
@@ -111,6 +123,11 @@ public class DirtinessDurationFitness extends AdaptationUtility {
 		if(ucDurationCnt == 0 && durationsCnt == 0){
 			return 1; // Default value
 		}
+
+		System.out.println("Duration Sum: " + durationsSum);
+		System.out.println("ucDuration Sum: " + ucDurationSum);
+		System.out.println("Duration Cnt: " + durationsCnt);
+		System.out.println("ucDuration Cnt: " + ucDurationCnt);
 		
 		double avg = (double) (durationsSum + ucDurationSum)
 				/ (double) (durationsCnt + ucDurationCnt);
@@ -124,10 +141,10 @@ public class DirtinessDurationFitness extends AdaptationUtility {
 	 */
 	@Override
 	public void restart() {
-		dirtInitTimes.clear();
+/*		dirtInitTimes.clear();
 		durationsSum = 0;
 		durationsCnt = 0;
-	}
+*/	}
 
 
 	/* (non-Javadoc)

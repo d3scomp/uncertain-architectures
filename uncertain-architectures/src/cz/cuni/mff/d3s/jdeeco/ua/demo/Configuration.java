@@ -15,8 +15,12 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
+import java.lang.reflect.Field;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.filter.DoubleFilter;
@@ -66,6 +70,8 @@ public class Configuration {
 	// SIMULATION CONFIGURATION
 	///////////////////////////////////////////////////////////////////////////
 
+	public static String LOG_DIR = null;
+	
 	public static long WARM_UP_TIME = 0;
 	public static long SIMULATION_DURATION = 600_000;
 
@@ -82,13 +88,15 @@ public class Configuration {
 	public static long NON_DET_END_TIME = SIMULATION_DURATION;
 	
 	public static boolean DIRT_DETECTION_FAILURE_ON = false;
-	public static boolean DOCK_FAILURE_ON = false;
-
 	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
 	public static long DIRT_DETECTION_FAILURE_TIME = 100_000;
 
+	public static boolean DOCK_FAILURE_ON = false;
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
 	public static long DOCK_FAILURE_TIME = 50_000;
+	
+	public static int ROBOT_COUNT = 3;
+	public static int DOCK_COUNT = 3;
 
 	public static boolean WITH_SEED = false;
 	public static long ENVIRONMENT_SEED = 85328;
@@ -263,4 +271,71 @@ public class Configuration {
 	}
 
 	///////////////////////////////////////////////////////////////////////////
+	
+	public static void override(String[] params){
+		final Pattern nameValuePattern = Pattern.compile("(\\w+)=(.+)");
+		
+		for(String param : params){
+			final Matcher nameValueMatcher = nameValuePattern.matcher(param);
+			if((!nameValueMatcher.matches()) ||
+					nameValueMatcher.groupCount() != 2){
+				Log.e(String.format("The \"%s\" parameter is not valid.", param));
+				continue;
+			}
+			
+			final String name = nameValueMatcher.group(1);
+			final String value = nameValueMatcher.group(2);
+			try{
+				Field field = Configuration.class.getField(name);
+				setValue(field, value);
+			} catch(NoSuchFieldException e){
+				Log.e(String.format("The configuration field \"%s\" cannot be found", name));
+				continue;
+			}
+			
+		}
+	}
+	
+	private static void setValue(Field field, String value){
+		Log.i(String.format("Overriding: %s = %s", field.getName(), value));
+		
+		Class<?> type = field.getType();
+		if(type == long.class || type == Long.class){
+			try{
+				long v = Long.parseLong(value);
+				field.set(null, v);
+			}catch (Exception e) {
+				Log.e(e.getMessage());
+			}
+		} else if(type == int.class || type == Integer.class){
+			try{
+				int v = Integer.parseInt(value);
+				field.set(null, v);
+			}catch (Exception e) {
+				Log.e(e.getMessage());
+			}
+		} else if(type == boolean.class || type == Boolean.class){
+			try{
+				boolean v = Boolean.parseBoolean(value);
+				field.set(null, v);
+			}catch (Exception e) {
+				Log.e(e.getMessage());
+			}
+		} else if(type == double.class || type == Double.class){
+			try{
+				double v = Double.parseDouble(value);
+				field.set(null, v);
+			}catch (Exception e) {
+				Log.e(e.getMessage());
+			}
+		} else if(type == String.class){
+			try{
+				field.set(null, value);
+			}catch (Exception e) {
+				Log.e(e.getMessage());
+			}
+		} else {
+			Log.e(String.format("Unknown type to assign: %s", type.toString()));
+		}
+	}
 }

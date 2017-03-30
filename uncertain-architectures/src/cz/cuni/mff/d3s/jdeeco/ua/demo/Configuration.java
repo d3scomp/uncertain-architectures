@@ -71,35 +71,51 @@ public class Configuration {
 	///////////////////////////////////////////////////////////////////////////
 
 	public static String LOG_DIR = null;
-	
-	public static long WARM_UP_TIME = 0;
-	public static long SIMULATION_DURATION = 600_000;
 
-	public static int DIRT_DETECTION_RADIUS = 2;
-	
-	public static boolean CORRELATION_ON = false;
-	public static boolean ROLE_REMOVAL_ON = false;
-	public static boolean MODE_SWITCH_PROPS_ON = false;
-	
-	public static boolean NON_DETERMINISM_ON = false;
-	public static double NON_DET_INIT_PROBABILITY = 0.0001;
-	public static double NON_DET_PROBABILITY_STEP = 0.00005;
-	public static long NON_DET_START_TIME = 0;
-	public static long NON_DET_END_TIME = SIMULATION_DURATION;
-	
-	public static boolean DIRT_DETECTION_FAILURE_ON = false;
-	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
-	public static long DIRT_DETECTION_FAILURE_TIME = 100_000;
-
-	public static boolean DOCK_FAILURE_ON = false;
-	public static final String DOCK_TO_FAIL = DOCK2_NAME;
-	public static long DOCK_FAILURE_TIME = 50_000;
-	
 	public static int ROBOT_COUNT = 3;
 	public static int DOCK_COUNT = 3;
 
 	public static boolean WITH_SEED = false;
 	public static long ENVIRONMENT_SEED = 85328;
+	
+	public static long WARM_UP_TIME = 0;
+	public static long SIMULATION_DURATION = 600_000;
+	public static int DIRT_DETECTION_RADIUS = 2;
+	
+	// COLLABORATIVE SENSING
+	
+	public static boolean CORRELATION_ON = false;
+	public static boolean DIRT_DETECTION_FAILURE_ON = false;
+	public static long DIRT_DETECTION_FAILURE_TIME = 100_000;
+	public static final String DIRT_DETECTION_FAILURE_ROBOT = ROBOT1_NAME;
+	
+	// FAULTY COMPONENT ISOLATION
+
+	public static boolean ROLE_REMOVAL_ON = false;
+	public static boolean DOCK_FAILURE_ON = false;
+	public static long DOCK_FAILURE_TIME = 50_000;
+	public static final String DOCK_TO_FAIL = DOCK2_NAME;
+	
+//	public static double NON_DET_INIT_PROBABILITY = 0.0001;
+//	public static double NON_DET_PROBABILITY_STEP = 0.00005;
+//	public static long NON_DET_START_TIME = 0;
+//	public static long NON_DET_END_TIME = SIMULATION_DURATION;
+	
+	// ENHANCING MODE SWITCHING
+
+	public static boolean NON_DETERMINISM_ON = true;
+	public static double TRANSITION_PROBABILITY = 0;
+	public static int TRANSITION_PRIORITY = 10;
+	public static boolean NON_DETERMINISM_TRAINING = true;
+	public static String NON_DETERMINISM_TRAIN_FROM = "DeadBatteryMode";
+	public static String NON_DETERMINISM_TRAIN_TO = "WaitingMode";
+	public static String NON_DETERMINISM_TRAINING_OUTPUT = "train.txt";//null;
+	
+	// MODE SWITCHING PROPERTIES
+
+	public static boolean MODE_SWITCH_PROPS_ON = false;
+		
+
 	///////////////////////////////////////////////////////////////////////////
 	// MAP CONFIGURATION 
 	///////////////////////////////////////////////////////////////////////////

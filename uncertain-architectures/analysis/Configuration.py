@@ -21,7 +21,7 @@ class ArgError(Exception):
 # HW RESOURCES
 ###############################################################################
 
-CORES = 25
+CORES = 4
 ''' The number of processor cores to utilize. The number of simulations
     to run in parallel. '''
     
@@ -38,6 +38,8 @@ RESULTS_DIR = os.path.join('..','results')
     
 LOGS_DIR = os.path.join(RESULTS_DIR,'logs')
 ''' The directory where the logs produced by simulations are placed. '''
+
+UMS_LOGS = "UMS_logs"
 
 CSV_DIR = os.path.join(RESULTS_DIR,'csv')
 ''' The directory where values computed by analysis are placed. '''

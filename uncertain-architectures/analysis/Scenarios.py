@@ -36,17 +36,56 @@ CS = "CORRELATION_ON" # Collaborative sensing
 DF = "DOCK_FAILURE_ON" # Dock failure
 DF_TIME = "DOCK_FAILURE_TIME"
 FCI = "ROLE_REMOVAL_ON" # Faulty component isolation
-UMS = "NON_DETERMINISM_ON" # Unspecified mode switching
-PROBABILITY = "NON_DET_INIT_PROBABILITY" # Starting probability for UMS
-PROBABILITY_STEP = "NON_DET_PROBABILITY_STEP" # Probability step for UMS
-UMS_START = "NON_DET_START_TIME" # The UMS start time
-UMS_END = "NON_DET_END_TIME" # The UMS end time
+# PROBABILITY = "NON_DET_INIT_PROBABILITY" # Starting probability for UMS
+# PROBABILITY_STEP = "NON_DET_PROBABILITY_STEP" # Probability step for UMS
+# UMS_START = "NON_DET_START_TIME" # The UMS start time
+# UMS_END = "NON_DET_END_TIME" # The UMS end time
 ROBOT_CNT = "ROBOT_COUNT" # The robot count
 DOCK_CNT = "DOCK_COUNT" # The dock count
 DURATION = "SIMULATION_DURATION" # The Simulation Duration
 WARM_UP_TIME = "WARM_UP_TIME" # The warm up time
 WITH_SEED = "WITH_SEED"
 SEED = "ENVIRONMENT_SEED"
+
+# ENHANCING MODE SWITCHING
+UMS = "NON_DETERMINISM_ON" # Unspecified mode switching
+TRANSITION_PROBABILITY = "TRANSITION_PROBABILITY" 
+TRANSITION_PRIORITY = "TRANSITION_PRIORITY"
+NON_DETERMINISM_TRAINING = "NON_DETERMINISM_TRAINING"
+NON_DETERMINISM_TRAIN_FROM = "NON_DETERMINISM_TRAIN_FROM"
+NON_DETERMINISM_TRAIN_TO = "NON_DETERMINISM_TRAIN_TO"
+NON_DETERMINISM_TRAINING_OUTPUT = "NON_DETERMINISM_TRAINING_OUTPUT"
+
+# Transitions not present in the default robot's mode chart
+missingTransitions = [
+    ("DirtApproachMode","ChargingMode"),
+    ("DirtApproachMode","WaitingMode"),
+    ("DirtApproachMode","DeadBatteryMode"),
+    ("ChargingMode","DirtApproachMode"),
+    ("ChargingMode","WaitingMode"),
+    ("ChargingMode","CleanMode"),
+    ("ChargingMode","DockingMode"),
+    ("ChargingMode","DeadBatteryMod,e"),
+    ("WaitingMode","DirtApproachMode"),
+    ("WaitingMode","ChargingMode"),
+    ("WaitingMode","CleanMode"),
+    ("WaitingMode","SearchMode"),
+    ("WaitingMode","DeadBatteryMode"),
+    ("CleanMode","ChargingMode"),
+    ("CleanMode","WaitingMode"),
+    ("CleanMode","DeadBatteryMode"),
+    ("DockingMode","DirtApproachMode"),
+    ("DockingMode","CleanMode"),
+    ("DockingMode","SearchMode"),
+    ("SearchMode","ChargingMode"),
+    ("SearchMode","WaitingMode"),
+    ("SearchMode","CleanMode"),
+    ("DeadBatteryMode","DirtApproachMode"),
+    ("DeadBatteryMode","ChargingMode"),
+    ("DeadBatteryMode","WaitingMode"),
+    ("DeadBatteryMode","CleanMode"),
+    ("DeadBatteryMode","DockingMode"),
+    ("DeadBatteryMode","SearchMode")]
 
 # Scenarios
 scenarios = []
@@ -66,58 +105,65 @@ scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, ROBOT_CNT:4, DOCK_CNT
 # Too many robots for docking stations
 scenarios.append({DDF:False, DF:False, UMS:False, ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:True,
-                  PROBABILITY:0.0001,
-                  PROBABILITY_STEP:0.00005,
-                  UMS_START:LEARNING_PHASE_START,
-                  UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:4,
-                  DOCK_CNT:1, 
-                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
-# All fails, no meta-adaptation
-scenarios.append({DDF:True, CS:False, DF:True, FCI:False, UMS:False,
-                  ROBOT_CNT:4, DOCK_CNT:2, DURATION:SIMULATION_DURATION,
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
-# All fails, all meta-adaptation
-scenarios.append({DDF:True, CS:True, DF:True, FCI:True, UMS:True,
-                  PROBABILITY:0.0001,
-                  PROBABILITY_STEP:0.00005,
-                  UMS_START:LEARNING_PHASE_START,
-                  UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:4, DOCK_CNT:2, 
-                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
+# scenarios.append({DDF:False, DF:False, UMS:True,
+#                   PROBABILITY:0.0001,
+#                   PROBABILITY_STEP:0.00005,
+#                   UMS_START:LEARNING_PHASE_START,
+#                   UMS_END:LEARNING_PHASE_END,
+#                   ROBOT_CNT:4,
+#                   DOCK_CNT:1, 
+#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
+#                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# # All fails, no meta-adaptation
+# scenarios.append({DDF:True, CS:False, DF:True, FCI:False, UMS:False,
+#                   ROBOT_CNT:4, DOCK_CNT:2, DURATION:SIMULATION_DURATION,
+#                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# # All fails, all meta-adaptation
+# scenarios.append({DDF:True, CS:True, DF:True, FCI:True, UMS:True,
+#                   PROBABILITY:0.0001,
+#                   PROBABILITY_STEP:0.00005,
+#                   UMS_START:LEARNING_PHASE_START,
+#                   UMS_END:LEARNING_PHASE_END,
+#                   ROBOT_CNT:4, DOCK_CNT:2, 
+#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
+#                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# 
+# # To test different probabilities of EMS
+# scenarios.append({DDF:False, DF:False, UMS:True,
+#                   PROBABILITY:0.000001,
+#                   PROBABILITY_STEP:0.0000005,
+#                   UMS_START:LEARNING_PHASE_START,
+#                   UMS_END:LEARNING_PHASE_END,
+#                   ROBOT_CNT:4,
+#                   DOCK_CNT:1, 
+#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
+#                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# scenarios.append({DDF:False, DF:False, UMS:True,
+#                   PROBABILITY:0.00001,
+#                   PROBABILITY_STEP:0.000005,
+#                   UMS_START:LEARNING_PHASE_START,
+#                   UMS_END:LEARNING_PHASE_END,
+#                   ROBOT_CNT:4,
+#                   DOCK_CNT:1, 
+#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
+#                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# scenarios.append({DDF:False, DF:False, UMS:True,
+#                   PROBABILITY:0.001,
+#                   PROBABILITY_STEP:0.0005,
+#                   UMS_START:LEARNING_PHASE_START,
+#                   UMS_END:LEARNING_PHASE_END,
+#                   ROBOT_CNT:4,
+#                   DOCK_CNT:1, 
+#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
+#                   WARM_UP_TIME:SIMULATION_WARM_UP})
 
-# To test different probabilities of EMS
 scenarios.append({DDF:False, DF:False, UMS:True,
-                  PROBABILITY:0.000001,
-                  PROBABILITY_STEP:0.0000005,
-                  UMS_START:LEARNING_PHASE_START,
-                  UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:4,
-                  DOCK_CNT:1, 
-                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
+                  NON_DETERMINISM_TRAINING:True,
+                  TRANSITION_PROBABILITY:0.001,
+                  TRANSITION_PRIORITY:10, 
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:True,
-                  PROBABILITY:0.00001,
-                  PROBABILITY_STEP:0.000005,
-                  UMS_START:LEARNING_PHASE_START,
-                  UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:4,
-                  DOCK_CNT:1, 
-                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:True,
-                  PROBABILITY:0.001,
-                  PROBABILITY_STEP:0.0005,
-                  UMS_START:LEARNING_PHASE_START,
-                  UMS_END:LEARNING_PHASE_END,
-                  ROBOT_CNT:4,
-                  DOCK_CNT:1, 
-                  DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
-
 
 #################################################
 
@@ -150,11 +196,9 @@ def getSignature(scenario, iterations = 0, detailed = False):
         outputSignature.append("!DF-")
     if scenario[UMS]:
         outputSignature.append("UMS")
-        if detailed:
-            outputSignature.append("-P" + str(scenario[PROBABILITY]))
-            outputSignature.append("-S" + str(scenario[PROBABILITY_STEP]))
-            outputSignature.append("-B" + str(scenario[UMS_START]))
-            outputSignature.append("-E" + str(scenario[UMS_END]))
+        if detailed:            
+            outputSignature.append("-T" if (scenario[NON_DETERMINISM_TRAINING]) else "-!T")
+            outputSignature.append("-P" + str(scenario[TRANSITION_PROBABILITY]))
         else:
             outputSignature.append("-" + str(scenarios.index(scenario)))
     else:

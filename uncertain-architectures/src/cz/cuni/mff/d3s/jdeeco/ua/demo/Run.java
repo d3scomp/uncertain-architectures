@@ -23,14 +23,17 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.LOG_DIR;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_INIT_PROBABILITY;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_PROBABILITY_STEP;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DET_START_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_COUNT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TRANSITION_PROBABILITY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TRANSITION_PRIORITY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,9 +56,7 @@ import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationUtility;
 import cz.cuni.mff.d3s.jdeeco.adaptation.componentIsolation.ComponentIsolationPlugin;
 import cz.cuni.mff.d3s.jdeeco.adaptation.correlation.CorrelationPlugin;
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchAnnealState;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDeterministicModeSwitchingPlugin;
-import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.TimeProgressImpl;
 import cz.cuni.mff.d3s.jdeeco.adaptation.modeswitchprops.ModeSwitchPropsPlugin;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeSwitchingPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
@@ -68,7 +69,6 @@ import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.CleaningPlanEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
-import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.AnnealingParams;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.DirtinessDurationFitness;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
@@ -152,11 +152,14 @@ public class Run {
 			utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
 			utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
 
-			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities/*,
-					new TimeProgressImpl(simulationTimer)).startAt(NON_DET_START_TIME)
-							.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY)*/)
+			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities)
 					.withVerbosity(true)
-					; // TODO: fill parameters - make section in Configuration to override then easily
+					.withTraining(NON_DETERMINISM_TRAINING)
+					.withTransitionProbability(TRANSITION_PROBABILITY)
+					.withTransitionPriority(TRANSITION_PRIORITY)
+					.withTrainFrom(NON_DETERMINISM_TRAIN_FROM)
+					.withTrainTo(NON_DETERMINISM_TRAIN_TO)
+					.withTrainingOutput(NON_DETERMINISM_TRAINING_OUTPUT);
 			adaptPlugins.add(nonDetPlugin);
 		}
 		if (MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes) {
@@ -220,10 +223,14 @@ public class Run {
 					utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
 					utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
 
-					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities/*,
-							new TimeProgressImpl(simulationTimer)).startAt(NON_DET_START_TIME)
-									.withStartingNondetermoinism(NON_DET_INIT_PROBABILITY*/)
-							.withVerbosity(false); // TODO:
+					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities)
+							.withVerbosity(true)
+							.withTraining(NON_DETERMINISM_TRAINING)
+							.withTransitionProbability(TRANSITION_PROBABILITY)
+							.withTransitionPriority(TRANSITION_PRIORITY)
+							.withTrainFrom(NON_DETERMINISM_TRAIN_FROM)
+							.withTrainTo(NON_DETERMINISM_TRAIN_TO)
+							.withTrainingOutput(NON_DETERMINISM_TRAINING_OUTPUT);
 				}
 				if (MODE_SWITCH_PROPS_ON) {
 					Map<String, AdaptationUtility> utilities = new HashMap<>();

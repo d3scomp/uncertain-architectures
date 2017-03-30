@@ -48,42 +48,68 @@ def simulate(scenarioIndex):
     scenario = scenarios[scenarioIndex]
           
     print('Spawning simulation processes...')
+    
     # invoke number of iterations with the same configuration
     for i in range(1,SIMULATION_ITERATIONS+1):
         if (len(simulated) >= CORES) :
             finalizeOldestSimulation()
         
-        # Prepare parameters
-        params = []
-        params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
-                                   getSignature(scenario),
-                                   'log_' + str(i))))
+        params = prepareParameters(scenario, i)
+        if scenario[UMS]:
+            for fromMode, toMode in missingTransitions:
+                params.append(prepareUMSParams(scenario, fromMode, toMode, i));
+                spawnSimulation(params, i)
+        else:
+            spawnSimulation(params, i)
         
-        if(ENABLE_SEED):
-            global seed
-            params.append("{}={}".format(WITH_SEED, True))
-            params.append("{}={}".format(SEED, seed))
-            seed += seed_step
-            
-        for key, value in scenario.items():
-            params.append("{}={}".format(key, value))    
-            
-        # Compose invocation command
-        cmd = ['java', '-Xmx4096m', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
-        cmd.extend(params)
-        
-        print(cmd)
-        print("Iteration {}".format(i))
+    print("Simulation processes finished.")
+   
+def spawnSimulation(params, iteration):
+    # Compose invocation command
+    cmd = ['java', '-Xmx4096m', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
+    cmd.extend(params)
+    
+    print(cmd)
+    print("Iteration {}".format(iteration))
 
-        simulation = Popen(cmd)
-        simulated.append(simulation)
+    simulation = Popen(cmd)
+    simulated.append(simulation)
     
     # finalize the rest
     while len(simulated) > 0:
         finalizeOldestSimulation()
-        
-    print("Simulation processes finished.")
+    
    
+def prepareParameters(scenario, iteration):
+    # Prepare parameters
+    params = []
+    params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
+                               getSignature(scenario),
+                               'log_' + str(iteration))))
+    
+    if(ENABLE_SEED):
+        global seed
+        params.append("{}={}".format(WITH_SEED, True))
+        params.append("{}={}".format(SEED, seed))
+        seed += seed_step
+        
+    for key, value in scenario.items():
+        params.append("{}={}".format(key, value))
+
+    return params
+
+
+def prepareUMSParams(scenario, fromMode, toMode, iteration):
+    params = []
+    params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
+    params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))
+    filename = os.path.join(LOGS_DIR, getSignature(scenario), UMS_LOGS,
+                            fromMode + "-"  + toMode + "/" +
+                            'log_' + str(iteration))
+    params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT, filename))
+    
+    return params
+
 
 def printHelp():
     print("\nUsage:")

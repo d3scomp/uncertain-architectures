@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.modes.DEECoMode;
-import cz.cuni.mff.d3s.deeco.modes.ModeGuard;
-import cz.cuni.mff.d3s.deeco.modes.ModeTransitionListener;
+import cz.cuni.mff.d3s.deeco.modes.DEECoModeGuard;
+import cz.cuni.mff.d3s.deeco.modes.DEECoTransitionListener;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.jdeeco.modes.ModeChartHolder;
 import cz.cuni.mff.d3s.jdeeco.modes.Transition;
@@ -40,7 +40,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		// GUARDS #############################################################
 		
-		final ModeGuard deadBatteryGuard = new ModeGuard() {
+		final DEECoModeGuard deadBatteryGuard = new DEECoModeGuard() {
 			
 			@Override
 			protected void specifyParameters(){}
@@ -56,7 +56,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeGuard batteryDrainedGuard = new ModeGuard() {
+		final DEECoModeGuard batteryDrainedGuard = new DEECoModeGuard() {
 
 			private static final String DRAINED_LEVEL = "DRAINED_LEVEL";
 			private static final double INIT_DRAINED_LEVEL = 0.2;
@@ -81,7 +81,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeGuard dockReachedGuard = new ModeGuard() {
+		final DEECoModeGuard dockReachedGuard = new DEECoModeGuard() {
 
 			@Override
 			protected void specifyParameters(){}
@@ -107,7 +107,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeGuard batteryChargedOrChargingInUnavailableDockGuard = new ModeGuard() {
+		final DEECoModeGuard batteryChargedOrChargingInUnavailableDockGuard = new DEECoModeGuard() {
 
 			private static final String CHARGED_LEVEL = "CHARGED_LEVEL";
 			private static final double INIT_CHARGED_LEVEL = 0.95;
@@ -138,7 +138,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeGuard cleanGuard = new ModeGuard() {
+		final DEECoModeGuard cleanGuard = new DEECoModeGuard() {
 			
 			@Override
 			protected void specifyParameters(){}
@@ -159,7 +159,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 
-		final ModeGuard approachGuard = new ModeGuard() {
+		final DEECoModeGuard approachGuard = new DEECoModeGuard() {
 			
 			@Override
 			protected void specifyParameters(){
@@ -184,7 +184,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeGuard searchGuard = new ModeGuard() {
+		final DEECoModeGuard searchGuard = new DEECoModeGuard() {
 
 			@Override
 			protected void specifyParameters(){
@@ -206,7 +206,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 
-		final ModeGuard keepCleaningGuard = new ModeGuard() {
+		final DEECoModeGuard keepCleaningGuard = new DEECoModeGuard() {
 
 			@Override
 			protected void specifyParameters(){
@@ -234,7 +234,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeTransitionListener clearPlanEventListener = new ModeTransitionListener() {
+		final DEECoTransitionListener clearPlanEventListener = new DEECoTransitionListener() {
 			@Override
 			public void transitionTaken(ParamHolder<?>[] knowledgeValues) {
 				List<Link> trajectory = (List<Link>)knowledgeValues[0].value;
@@ -246,7 +246,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final ModeGuard startWaitGuard = new ModeGuard() {
+		final DEECoModeGuard startWaitGuard = new DEECoModeGuard() {
 			
 			@Override
 			protected void specifyParameters(){}
@@ -280,7 +280,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 
-		final ModeGuard stopWaitGuard = new ModeGuard() {
+		final DEECoModeGuard stopWaitGuard = new DEECoModeGuard() {
 
 			@Override
 			protected void specifyParameters(){}

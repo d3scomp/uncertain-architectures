@@ -104,7 +104,7 @@ public class Configuration {
 	// ENHANCING MODE SWITCHING
 
 	public static boolean NON_DETERMINISM_ON = true;
-	public static double TRANSITION_PROBABILITY = 0;
+	public static double TRANSITION_PROBABILITY = 0.01;
 	public static int TRANSITION_PRIORITY = 10;
 	public static boolean NON_DETERMINISM_TRAINING = true;
 	public static String NON_DETERMINISM_TRAIN_FROM = "DeadBatteryMode";
@@ -114,6 +114,8 @@ public class Configuration {
 	// MODE SWITCHING PROPERTIES
 
 	public static boolean MODE_SWITCH_PROPS_ON = false;
+	
+	public static String UTILITY_DIRECTORY = "results\\logs\\06)-!DDF-!DF-UMS-6\\UMS_logs";
 		
 
 	///////////////////////////////////////////////////////////////////////////

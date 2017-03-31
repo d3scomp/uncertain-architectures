@@ -58,7 +58,7 @@ def simulate(scenarioIndex):
         if scenario[UMS]:
             for fromMode, toMode in missingTransitions:
                 params.append(prepareUMSParams(scenario, fromMode, toMode, i));
-                spawnSimulation(params, i)
+                #spawnSimulation(params, i)
         else:
             spawnSimulation(params, i)
         
@@ -107,6 +107,10 @@ def prepareUMSParams(scenario, fromMode, toMode, iteration):
                             fromMode + "-"  + toMode + "/" +
                             'log_' + str(iteration))
     params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT, filename))
+    
+    f = open(filename, 'w')
+    f.write("0.0\n")
+    f.close()
     
     return params
 

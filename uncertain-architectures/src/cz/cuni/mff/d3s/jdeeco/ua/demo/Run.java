@@ -71,6 +71,7 @@ import cz.cuni.mff.d3s.jdeeco.ua.ensemble.CleaningPlanEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.DirtinessDurationFitness;
+import cz.cuni.mff.d3s.jdeeco.ua.mode.adapt.UtilityLoader;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.VisualizationSettings;
 
 /**
@@ -96,7 +97,7 @@ public class Run {
 
 		// Process arguments
 		Configuration.override(args);
-
+		
 		// Configure Logs
 		RuntimeLogWriters writers;
 		if (LOG_DIR == null) {
@@ -150,8 +151,9 @@ public class Run {
 			//NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
 			Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
 			utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
+			Map<String, Double> precomputedUtilities= UtilityLoader.loadUtilities();
 
-			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities)
+			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities, precomputedUtilities)
 					.withVerbosity(true)
 					.withTraining(NON_DETERMINISM_TRAINING)
 					.withTransitionProbability(TRANSITION_PROBABILITY)
@@ -217,8 +219,9 @@ public class Run {
 //					NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
 					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
 					utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
-
-					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities)
+					Map<String, Double> precomputedUtilities= UtilityLoader.loadUtilities();
+					
+					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities, precomputedUtilities)
 							.withVerbosity(true)
 							.withTraining(NON_DETERMINISM_TRAINING)
 							.withTransitionProbability(TRANSITION_PROBABILITY)

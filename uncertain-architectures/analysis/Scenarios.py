@@ -65,7 +65,7 @@ missingTransitions = [
     ("ChargingMode","WaitingMode"),
     ("ChargingMode","CleanMode"),
     ("ChargingMode","DockingMode"),
-    ("ChargingMode","DeadBatteryMod,e"),
+    ("ChargingMode","DeadBatteryMode"),
     ("WaitingMode","DirtApproachMode"),
     ("WaitingMode","ChargingMode"),
     ("WaitingMode","CleanMode"),

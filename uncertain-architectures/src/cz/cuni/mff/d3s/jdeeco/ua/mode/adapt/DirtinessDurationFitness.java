@@ -39,7 +39,7 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	 * Initial time is when the dirt appears. The dirtiness event
 	 * is completed when the dirt is cleaned.
 	 */
-	private final Map<Node, Long> dirtInitTimes = new HashMap<>();
+	private final Map<Node, Long> discoveredDirt = new HashMap<>();
 	
 	private final SimulationTimer timer;
 
@@ -81,9 +81,13 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 		int unfinishedDurationCnt = 0;
 		long currentTime = timer.getCurrentMilliseconds();
 		
-		for(Node n : dirtInitTimes.keySet()){
-			unfinishedDurationSum += (currentTime - dirtInitTimes.get(n));
+		for(Node n : discoveredDirt.keySet()){
+			unfinishedDurationSum += (currentTime - discoveredDirt.get(n));
 			unfinishedDurationCnt++;
+		}
+		
+		if((durationsCnt + unfinishedDurationCnt) == 0){
+			return 0;
 		}
 		
 		double avg = (double) (durationsSum + unfinishedDurationSum)
@@ -98,7 +102,7 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	 */
 	@Override
 	public double getUtilityThreshold() {
-		return 0; // TODO:
+		return 200000; // ms
 	}
 
 
@@ -118,8 +122,8 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	@Override
 	public void dirtDiscovered(Node node) {
 		long currentTime = timer.getCurrentMilliseconds();
-		if(!dirtInitTimes.containsKey(node)){
-			dirtInitTimes.put(node, currentTime);
+		if(!discoveredDirt.containsKey(node)){
+			discoveredDirt.put(node, currentTime);
 		}
 		
 	}
@@ -131,10 +135,10 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	@Override
 	public void dirtCleaned(Node node) {
 		long currentTime = timer.getCurrentMilliseconds();
-		if(dirtInitTimes.containsKey(node)){
-			durationsSum += (currentTime - dirtInitTimes.get(node));
+		if(discoveredDirt.containsKey(node)){
+			durationsSum += (currentTime - discoveredDirt.get(node));
 			durationsCnt++;
-			dirtInitTimes.remove(node);
+			discoveredDirt.remove(node);
 		}
 		
 	}

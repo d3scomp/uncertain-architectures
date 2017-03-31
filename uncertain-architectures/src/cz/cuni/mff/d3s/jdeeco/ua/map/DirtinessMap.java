@@ -15,20 +15,22 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.map;
 
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_RADIUS;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_GENERATION_RATE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_HEIGHT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MAP_WIDTH;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_DETECTION_RADIUS;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -43,8 +45,8 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 /**
  * Environment heat map holder.
  */
-public class DirtinessMap implements Serializable{
-
+public class DirtinessMap implements Serializable {
+ // TODO: split the dirtiness map into global and local instances
 	/**
 	 * Generated UID.
 	 */
@@ -77,7 +79,9 @@ public class DirtinessMap implements Serializable{
 	 * Global dirtiness. Holds the objective state of the dirtiness in the environment.
 	 */
 	private static final Map<Node, Double> DIRTINESS = new HashMap<>();
-
+	
+	private static final List<DirtChangedListener> listeners = new ArrayList<>();
+	
 	/**
 	 * Local dirtiness. Holds the state of the dirtiness in the environment
 	 * subjective to each robot.
@@ -153,6 +157,14 @@ public class DirtinessMap implements Serializable{
 		return NETWORK;
 	}
 
+	public static void registerListener(DirtChangedListener listener){
+		listeners.add(listener);
+	}
+	
+	public static void removeListener(DirtChangedListener listener){
+		listeners.remove(listener);
+	}
+	
 	/**
 	 * Get the visited {@link Tile}s with the timestamps of the last visit.
 	 * 
@@ -271,6 +283,10 @@ public class DirtinessMap implements Serializable{
 			if (DIRTINESS.containsKey(n) && DIRTINESS.get(n) > 0){
 				double intensity = DIRTINESS.get(n);
 				dirtiness.put(n, intensity);
+				for(DirtChangedListener l : listeners){
+					l.dirtDiscovered(n);
+				}
+				
 			} else if(dirtiness.containsKey(n)){
 				dirtiness.remove(n);
 			}
@@ -305,6 +321,9 @@ public class DirtinessMap implements Serializable{
 
 			double intensity = Math.min(currentIntensity + intensityIncrement, 1);
 			DIRTINESS.put(node, intensity);
+			for(DirtChangedListener l : listeners){
+				l.dirtAppeared(node);
+			}
 
 			logDirtiness(node, intensity);
 		}
@@ -339,6 +358,9 @@ public class DirtinessMap implements Serializable{
 				intensity -= portion;
 				if(intensity < DIRT_EPSILON){
 					intensity = 0;
+					for(DirtChangedListener l : listeners){
+						l.dirtCleaned(node);
+					}
 				}
 				DIRTINESS.put(node, intensity);
 

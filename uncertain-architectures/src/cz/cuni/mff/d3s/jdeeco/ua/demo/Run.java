@@ -66,6 +66,7 @@ import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Dock;
 import cz.cuni.mff.d3s.jdeeco.ua.component.Environment;
+import cz.cuni.mff.d3s.jdeeco.ua.component.Robot;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.CleaningPlanEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.ensemble.DockingEnsemble;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
@@ -147,10 +148,8 @@ public class Run {
 		}
 		if (NON_DETERMINISM_ON && !enableMultipleDEECoNodes) {
 			//NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
-			Map<String, AdaptationUtility> utilities = new HashMap<>(); // TODO: make universal utility
-			utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
-			utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
-			utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+			Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
+			utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
 
 			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities)
 					.withVerbosity(true)
@@ -163,10 +162,8 @@ public class Run {
 			adaptPlugins.add(nonDetPlugin);
 		}
 		if (MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes) {
-			Map<String, AdaptationUtility> utilities = new HashMap<>();
-			utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
-			utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
-			utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+			Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
+			utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
 
 			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
 					.withVerbosity(true);
@@ -218,10 +215,8 @@ public class Run {
 				ModeSwitchPropsPlugin mspPlugin = null;
 				if (NON_DETERMINISM_ON) {
 //					NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
-					Map<String, AdaptationUtility> utilities = new HashMap<>();
-					utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
-					utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
-					utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
+					utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
 
 					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities)
 							.withVerbosity(true)
@@ -233,10 +228,8 @@ public class Run {
 							.withTrainingOutput(NON_DETERMINISM_TRAINING_OUTPUT);
 				}
 				if (MODE_SWITCH_PROPS_ON) {
-					Map<String, AdaptationUtility> utilities = new HashMap<>();
-					utilities.put(Configuration.ROBOT1_NAME, new DirtinessDurationFitness(simulationTimer));
-					utilities.put(Configuration.ROBOT2_NAME, new DirtinessDurationFitness(simulationTimer));
-					utilities.put(Configuration.ROBOT3_NAME, new DirtinessDurationFitness(simulationTimer));
+					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
+					utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
 
 					mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities).withVerbosity(true);
 				}

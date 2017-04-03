@@ -15,18 +15,17 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode.adapt;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.adaptation.AdaptationUtility;
-import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtChangedListener;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
-import cz.cuni.mff.d3s.metaadaptation.correlation.CorrelationMetadataWrapper;
 
 /**
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
@@ -42,6 +41,9 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	private final Map<Node, Long> discoveredDirt = new HashMap<>();
 	
 	private final SimulationTimer timer;
+	
+
+	private PrintWriter writer;
 
 	/**
 	 * Summary of time durations of completed dirtiness events.
@@ -54,15 +56,31 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	private int durationsCnt = 0;
 	
 	
-	public DirtinessDurationFitness(SimulationTimer timer) {
+	public DirtinessDurationFitness(SimulationTimer timer, String file) {
 		if(timer == null){
 			throw new IllegalArgumentException(String.format("The %s argument is null.", "timer"));
 		}
+		if(file == null){
+			throw new IllegalArgumentException(String.format("The %s argument is null.", "file"));
+		}
+		
+		try {
+			writer = new PrintWriter(file);
+		} catch (FileNotFoundException e) {
+			Log.e(e.getMessage());
+		}
+		
 		
 		DirtinessMap.registerListener(this);
 		this.timer = timer;
 	}
 	
+
+	public void terminate(){
+		if(writer != null){
+			writer.close();
+		}
+	}
 	
 	/* (non-Javadoc)
 	 * @see cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.NonDetModeSwitchEval#getKnowledgeNames()
@@ -136,6 +154,7 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 	public void dirtCleaned(Node node) {
 		long currentTime = timer.getCurrentMilliseconds();
 		if(discoveredDirt.containsKey(node)){
+			writer.println(String.format("%d", currentTime - discoveredDirt.get(node)));
 			durationsSum += (currentTime - discoveredDirt.get(node));
 			durationsCnt++;
 			discoveredDirt.remove(node);

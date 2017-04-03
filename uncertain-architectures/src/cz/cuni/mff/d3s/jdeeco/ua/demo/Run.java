@@ -147,11 +147,13 @@ public class Run {
 					.withVerbosity(true);
 			adaptPlugins.add(roleRemovalPlugin);
 		}
+		DirtinessDurationFitness ddf = new DirtinessDurationFitness(simulationTimer, Configuration.NON_DETERMINISM_TRAINING_OUTPUT);
 		if (NON_DETERMINISM_ON && !enableMultipleDEECoNodes) {
 			//NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
 			Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
-			utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
-			Map<String, Double> precomputedUtilities= UtilityLoader.loadUtilities();
+//			ddf = new DirtinessDurationFitness(simulationTimer, Configuration.NON_DETERMINISM_TRAINING_OUTPUT);
+			utilities.put(Robot.class, ddf);
+			Map<String, Double> precomputedUtilities= (new UtilityLoader()).loadUtilities();
 
 			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities, precomputedUtilities)
 					.withVerbosity(true)
@@ -165,7 +167,7 @@ public class Run {
 		}
 		if (MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes) {
 			Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
-			utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
+			utilities.put(Robot.class, ddf);
 
 			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
 					.withVerbosity(true);
@@ -197,18 +199,22 @@ public class Run {
 
 		// Deploy robots
 		deployRobots(IntStream.range(0, ROBOT_COUNT).toArray(), simulation, simulationTimer, defaultNode,
-				nodesInSimulation, writers);
+				nodesInSimulation, writers, ddf);
 
 		// Start the simulation
 		System.out.println("Simulation Starts - writing to '" + LOG_DIR + "'");
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_DURATION);
+		if(ddf != null){
+			ddf.terminate();
+		}
 		Log.i("Simulation Finished");
 		System.out.println("Simulation Finished - writen to '" + LOG_DIR + "'");
 	}
 
 	private static void deployRobots(int robots[], DEECoSimulation simulation, SimulationTimer simulationTimer,
-			DEECoNode defaultNode, Set<DEECoNode> nodesInSimulation, RuntimeLogWriters writers) throws Exception {
+			DEECoNode defaultNode, Set<DEECoNode> nodesInSimulation, RuntimeLogWriters writers,
+			DirtinessDurationFitness ddf) throws Exception {
 		for (int i : robots) {
 			if (enableMultipleDEECoNodes) {
 				// Create node
@@ -218,8 +224,8 @@ public class Run {
 				if (NON_DETERMINISM_ON) {
 //					NonDetModeSwitchAnnealState.NON_DETERMINISTIC_STEP = NON_DET_PROBABILITY_STEP;
 					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
-					utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
-					Map<String, Double> precomputedUtilities= UtilityLoader.loadUtilities();
+					utilities.put(Robot.class, ddf);
+					Map<String, Double> precomputedUtilities= (new UtilityLoader()).loadUtilities();
 					
 					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities, precomputedUtilities)
 							.withVerbosity(true)
@@ -232,7 +238,7 @@ public class Run {
 				}
 				if (MODE_SWITCH_PROPS_ON) {
 					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
-					utilities.put(Robot.class, new DirtinessDurationFitness(simulationTimer));
+					utilities.put(Robot.class, ddf);
 
 					mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities).withVerbosity(true);
 				}

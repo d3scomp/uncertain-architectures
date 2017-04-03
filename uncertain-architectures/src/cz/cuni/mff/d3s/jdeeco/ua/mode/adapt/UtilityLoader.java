@@ -31,7 +31,26 @@ import cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration;
  */
 public class UtilityLoader {
 
-	public static Map<String, Double> loadUtilities(){
+	private class ValueHolder{
+		private int count;
+		private long sum;
+		
+		public ValueHolder(){
+			count = 0;
+			sum = 0;
+		}
+		
+		public void addValue(int value){
+			sum += value;
+			count++;
+		}
+		
+		public double getAverage(){
+			return (double) sum / (double) count;
+		}
+	}
+	
+	public Map<String, Double> loadUtilities(){
 		if(Configuration.UTILITY_DIRECTORY == null){
 			Log.e(String.format("The %s not specified.", "UTILITY_DIRECTORY"));
 			return null;
@@ -51,7 +70,7 @@ public class UtilityLoader {
 		return utilities;
 	}
 	
-	private static File[] getSubDirs(File directory){
+	private File[] getSubDirs(File directory){
 		File[] directories = directory.listFiles(new FilenameFilter() {
 			  @Override
 			  public boolean accept(File current, String name) {
@@ -61,7 +80,7 @@ public class UtilityLoader {
 		return directories;
 	}
 	
-	private static File[] getFiles(File directory){
+	private File[] getFiles(File directory){
 		File[] files = directory.listFiles(new FilenameFilter() {
 			  @Override
 			  public boolean accept(File current, String name) {
@@ -72,33 +91,26 @@ public class UtilityLoader {
 		return files;
 	}
 	
-	private static double computeUtility(File directory){
+	private double computeUtility(File directory){
 		File[] files = getFiles(directory);
-		double utilSum = 0;
-		int utilCnt = 0;
+		final ValueHolder values = new ValueHolder();
 		for(File file : files){
-			utilSum += extractUtility(file);
-			utilCnt++;
+			extractUtility(file, values);
 		}
 		
-		return utilSum / utilCnt;
+		return values.getAverage();
 	}
 	
-	private static double extractUtility(File file){
-		double utilSum = 0;
-		int utilCnt = 0;
+	private void extractUtility(File file, final ValueHolder values){
 		try(BufferedReader reader = new BufferedReader(new FileReader(file))){
 			String line = reader.readLine();
 			while(line != null){
-				utilSum += Double.parseDouble(line);
-				utilCnt++;
+				values.addValue(Integer.parseInt(line));
 				
 				line = reader.readLine();
 			}
 		} catch (Exception e) {
 			Log.e(e.getMessage());
 		}
-		
-		return utilSum / utilCnt;
 	}
 }

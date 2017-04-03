@@ -19,10 +19,8 @@ The probability following the UMS is the starting UMS probability.
 @author: Ilias
 @author: Dominik Skoda
 '''
-from Configuration import SIMULATION_DURATION, LEARNING_PHASE_END,\
-    LEARNING_PHASE_START, SIMULATION_WARM_UP
-from Configuration import DDF_DEFAULT_TIME
-from Configuration import DF_DEFAULT_TIME
+
+from Configuration import *
 
 #################################################
 # SCENARIOS

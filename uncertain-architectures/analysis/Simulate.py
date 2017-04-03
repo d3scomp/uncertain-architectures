@@ -93,6 +93,12 @@ def prepareParameters(scenario, iteration):
         params.append("{}={}".format(SEED, seed))
         seed += seed_step
         
+    if not scenario[UMS]:
+        filename = os.path.join(LOGS_DIR,
+                                getSignature(scenario),
+                                UMS_LOGS, 'log')
+        params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT, filename))
+        
     for key, value in scenario.items():
         params.append("{}={}".format(key, value))
 
@@ -107,11 +113,7 @@ def prepareUMSParams(scenario, fromMode, toMode, iteration):
                             fromMode + "-"  + toMode + "/" +
                             'log_' + str(iteration))
     params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT, filename))
-    
-    f = open(filename, 'w')
-    f.write("0.0\n")
-    f.close()
-    
+        
     return params
 
 

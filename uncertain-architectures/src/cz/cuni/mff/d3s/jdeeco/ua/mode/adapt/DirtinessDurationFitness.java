@@ -15,7 +15,8 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.mode.adapt;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,8 +66,10 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 		}
 		
 		try {
-			writer = new PrintWriter(file);
-		} catch (FileNotFoundException e) {
+			File f = new File(file);
+			f.getParentFile().createNewFile();
+			writer = new PrintWriter(f);
+		} catch (IOException e) {
 			Log.e(e.getMessage());
 		}
 		

@@ -58,7 +58,7 @@ def simulate(scenarioIndex):
         if scenario[UMS]:
             for fromMode, toMode in missingTransitions:
                 params.append(prepareUMSParams(scenario, fromMode, toMode, i));
-                #spawnSimulation(params, i)
+                spawnSimulation(params, i)
         else:
             spawnSimulation(params, i)
         

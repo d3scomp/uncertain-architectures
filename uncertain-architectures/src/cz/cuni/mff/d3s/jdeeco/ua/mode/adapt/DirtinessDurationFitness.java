@@ -18,6 +18,8 @@ package cz.cuni.mff.d3s.jdeeco.ua.mode.adapt;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,9 +69,11 @@ public class DirtinessDurationFitness extends AdaptationUtility implements DirtC
 		
 		try {
 			File f = new File(file);
-			f.getParentFile().createNewFile();
+			Path dir = f.getParentFile().toPath();
+			Files.createDirectories(dir);
 			writer = new PrintWriter(f);
 		} catch (IOException e) {
+			e.printStackTrace();
 			Log.e(e.getMessage());
 		}
 		

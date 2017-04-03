@@ -58,7 +58,7 @@ public class UtilityLoader {
 
 		File directory = new File(Configuration.UTILITY_DIRECTORY);
 		if(!directory.exists()){
-			Log.e(String.format("The %s directory doesn't exist.", Configuration.UTILITY_DIRECTORY));
+			Log.e(String.format("The %s directory with utilities doesn't exist.", Configuration.UTILITY_DIRECTORY));
 			return null;
 		}
 		

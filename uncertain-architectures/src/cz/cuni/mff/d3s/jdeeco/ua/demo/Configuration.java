@@ -109,7 +109,8 @@ public class Configuration {
 	public static boolean NON_DETERMINISM_TRAINING = true;
 	public static String NON_DETERMINISM_TRAIN_FROM = "DeadBatteryMode";
 	public static String NON_DETERMINISM_TRAIN_TO = "WaitingMode";
-	public static String NON_DETERMINISM_TRAINING_OUTPUT = "train.txt";//null;
+	public static String NON_DETERMINISM_TRAINING_OUTPUT = "results/logs/utility.txt";
+
 	
 	// MODE SWITCHING PROPERTIES
 

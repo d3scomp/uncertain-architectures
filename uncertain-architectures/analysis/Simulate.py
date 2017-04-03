@@ -51,9 +51,6 @@ def simulate(scenarioIndex):
     
     # invoke number of iterations with the same configuration
     for i in range(1,SIMULATION_ITERATIONS+1):
-        if (len(simulated) >= CORES) :
-            finalizeOldestSimulation()
-        
         params = prepareParameters(scenario, i)
         if scenario[UMS]:
             for fromMode, toMode in missingTransitions:
@@ -62,12 +59,21 @@ def simulate(scenarioIndex):
         else:
             spawnSimulation(params, i)
         
+    # finalize the rest
+    while len(simulated) > 0:
+        finalizeOldestSimulation()
+        
     print("Simulation processes finished.")
+   
    
 def spawnSimulation(params, iteration):
     # Compose invocation command
     cmd = ['java', '-Xmx4096m', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
     cmd.extend(params)
+    
+    # Wait for free core
+    if (len(simulated) >= CORES) :
+        finalizeOldestSimulation()
     
     print(cmd)
     print("Iteration {}".format(iteration))
@@ -75,11 +81,7 @@ def spawnSimulation(params, iteration):
     simulation = Popen(cmd)
     simulated.append(simulation)
     
-    # finalize the rest
-    while len(simulated) > 0:
-        finalizeOldestSimulation()
     
-   
 def prepareParameters(scenario, iteration):
     # Prepare parameters
     params = []

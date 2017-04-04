@@ -10,12 +10,13 @@ produced by simulations.
 
 import os
 import sys
+import re
 import xml.etree.ElementTree as etree
 from Scenarios import *
 from Configuration import *
 
 
-TRIM_FULL_PACKAGE_NAME = True
+# TRIM_FULL_PACKAGE_NAME = True
 
 
 class Modes:
@@ -59,9 +60,6 @@ def extractTransitionRecords(records, transitions):
     for r in records:
         fromMode = r.find('oldMode').text
         toMode = r.find('newMode').text
-        if TRIM_FULL_PACKAGE_NAME:
-            fromMode = fromMode[fromMode.rindex('.')+1:]
-            toMode = toMode[toMode.rindex('.')+1:]
         modes = Modes(fromMode, toMode)
         incrementDictValue(transitions, modes, 1)
 
@@ -71,34 +69,48 @@ def mergeDicts(inputDict, outputDict):
         incrementDictValue(outputDict, item, inputDict[item])
 
 
-def analyzeLog(simulationSignature, logDirName):
-    logDir = os.path.join(LOGS_DIR, simulationSignature, logDirName)
+def analyzeLog(scenario, logDirName):
+    logDir = os.path.join(LOGS_DIR, getSignature(scenario), logDirName)
     print("Analyzing " + logDir)
     
     tree = etree.parse(os.path.join(logDir, RUNTIME_LOG_FILE))  
     root = tree.getroot()
         
     transitions = {}
-    nonDetTransitions = {}
     transitionsRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.modes.runtimelog.ModeRecord']")
-    nonDerTransitionsRecords = root.findall("*[@eventType='cz.cuni.mff.d3s.jdeeco.adaptation.modeswitching.runtimelog.NonDetModeRecord']")
     
     print("Found " + str(len(transitionsRecords)) + " transition records")
-    print("Found " + str(len(nonDerTransitionsRecords)) + " non deterministic transition records")
     
     extractTransitionRecords(transitionsRecords, transitions)
-    extractTransitionRecords(nonDerTransitionsRecords, nonDetTransitions)
-
-    return (transitions, nonDetTransitions)
+    return transitions
 
 
-def printTransitions(transitions):
+def printTransitions(transitions, file, transition = None):
+    f = open(file, 'a')
+    
+    msg = "\n"
+    print(msg)
+    f.write(msg + "\n")
+        
+    if(transition != None):
+        msg = "Added transition: {}".format(transition)
+        print(msg)
+        f.write(msg + "\n")
+        
+    msg = "Number of transitions taken: {}".format(countTransitions(transitions))
+    print(msg)
+    f.write(msg + "\n")
+    
     lineLen = 0
     for transition in transitions.keys():
         lineLen = max(lineLen, len(str(transition)))
     for transition in sorted(transitions.keys()):
         indent = lineLen - len(str(transition))
-        print("{} : {}{}".format(transition, " " * indent, transitions[transition]))   
+        msg = "{} : {}{}".format(transition, " " * indent, transitions[transition])
+        print(msg)
+        f.write(msg + "\n")
+    
+    f.close()
 
 
 def countTransitions(transitions):
@@ -108,29 +120,45 @@ def countTransitions(transitions):
         
     return count
 
-
-def analyzeSignature(signature):
-    logsDir = os.path.join(LOGS_DIR, signature)
+def analyzeScenario(scenario):
+    
+    logsDir = os.path.join(LOGS_DIR, getSignature(scenario))
     
     if not os.path.isdir(logsDir):
-        raise Exception("Logs from scenario {} are missing.".format(signature))
+        raise Exception("Logs from scenario {} are missing.".format(scenarios.indexof(scenario)))
     if not os.path.exists(CSV_DIR):
         os.makedirs(CSV_DIR)
     
-    transitions = {}
-    nonDetTransitions = {}
+    validDir = re.compile('.+_\d+')
+    output = os.path.join(LOGS_DIR, getSignature(scenario), "ModeSwitchStat.txt")
+    f = open(output, 'w')
+    f.close()
     
-    #for root, dirs, files in os.walk(logsDir):
-    for _, dirs, _ in os.walk(logsDir):
-        for logDirName in dirs:
-            res = analyzeLog(signature, logDirName)
-            mergeDicts(res[0], transitions)
-            mergeDicts(res[1], nonDetTransitions)
+    if scenario[UMS]:
+        fromTo = re.compile('(\w+)-(\w+)_\d+')
+        transitions = {}
+        for _, dirs, _ in os.walk(logsDir):
+            for logDirName in dirs:
+                match = fromTo.match(logDirName)
+                if(match != None):
+                    fromT = match.group(1)
+                    toT = match.group(2)
+                    res = analyzeLog(scenario, logDirName)
+                    t = "{}-{}".format(fromT, toT)
+                    if not transitions.__contains__(t):
+                        transitions[t] = {}
+                    mergeDicts(res, transitions[t])
+        for transition in transitions.keys():
+            printTransitions(transitions[transition], output, transition)
+    else:
+        transitions = {}
+        for _, dirs, _ in os.walk(logsDir):
+            for logDirName in dirs:
+                if(validDir.match(logDirName) != None):
+                    res = analyzeLog(scenario, logDirName)
+                    mergeDicts(res, transitions)
 
-    print("\nNumber of transitions taken: {}".format(countTransitions(transitions)))
-    printTransitions(transitions)
-    print("\nNumber of non deterministic transitions taken: {}".format(countTransitions(nonDetTransitions)))
-    printTransitions(nonDetTransitions)
+        printTransitions(transitions, output)
     
 
 def printHelp():
@@ -164,10 +192,10 @@ if __name__ == '__main__':
     try:            
         scenarioArgs = extractArgs(sys.argv)
         
-        for scenario in scenarioArgs:
-            signature = getScenarioSignature(scenario)
-            print("\n\nAnalyzing scenario {} with signature {}\n".format(scenario, signature))
-            analyzeSignature(signature)
+        for scenarioIndex in scenarioArgs:
+            scenario = scenarios[scenarioIndex]
+            print("\n\nAnalyzing scenario {}\n".format(scenarioIndex))
+            analyzeScenario(scenario)
         
     except ArgError:
         printHelp()

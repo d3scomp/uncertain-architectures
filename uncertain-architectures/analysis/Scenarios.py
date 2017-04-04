@@ -223,6 +223,31 @@ def getScenarioSignature(scenarioIndex, iterations = 0):
     return getSignature(scenarios[scenarioIndex], iterations)
 
 
+def getLogFile(scenario, iteration, fromMode = None, toMode = None):
+    if(scenario[UMS]):
+        return os.path.join(LOGS_DIR,
+                            getSignature(scenario),
+                            fromMode + "-"  + toMode + "_" + str(iteration))
+        
+    return os.path.join(LOGS_DIR,
+                        getSignature(scenario),
+                        'log_' + str(iteration))
+    
+    
+def getUMSLogFile(scenario, iteration, fromMode = None, toMode = None):
+    if(scenario[UMS]):
+        return os.path.join(LOGS_DIR,
+                            getSignature(scenario),
+                            UMS_LOGS,
+                            fromMode + "-"  + toMode,
+                            'log_' + str(iteration))
+    
+    return os.path.join(LOGS_DIR,
+                        getSignature(scenario),
+                        UMS_LOGS,
+                        'log_' + str(iteration))
+
+
 def listScenarios():
     print("\nExplanations of used shortcuts:")
     print("DDF - Dirt detection failure")

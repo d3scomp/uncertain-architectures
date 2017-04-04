@@ -54,16 +54,11 @@ def simulate(scenarioIndex):
         params = prepareParameters(scenario, i)
         if scenario[UMS]:
             for fromMode, toMode in missingTransitions:
-                params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
-                                                                   getSignature(scenario),
-                                                                   fromMode + "-"  + toMode + "_"
-                                                                   + str(i))))
+                params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i, fromMode, toMode)))
                 params = params + prepareUMSParams(scenario, fromMode, toMode, i);
                 spawnSimulation(params, i)
         else:
-            params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
-                                                               getSignature(scenario),
-                                                               'log_' + str(i))))
+            params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i)))
             spawnSimulation(params, i)
         
     # finalize the rest
@@ -100,10 +95,8 @@ def prepareParameters(scenario, iteration):
         seed += seed_step
         
     if not scenario[UMS]:
-        filename = os.path.join(LOGS_DIR,
-                                getSignature(scenario),
-                                UMS_LOGS, 'log')
-        params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT, filename))
+        params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,
+                                     getUMSLogFile(scenario, iteration)))
         
     for key, value in scenario.items():
         params.append("{}={}".format(key, value))
@@ -115,10 +108,8 @@ def prepareUMSParams(scenario, fromMode, toMode, iteration):
     params = []
     params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
     params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))
-    filename = os.path.join(LOGS_DIR, getSignature(scenario), UMS_LOGS,
-                            fromMode + "-"  + toMode + "/" +
-                            'log_' + str(iteration))
-    params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT, filename))
+    params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,
+                                 getUMSLogFile(scenario, iteration, fromMode, toMode)))
         
     return params
 

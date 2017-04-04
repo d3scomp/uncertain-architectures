@@ -14,12 +14,13 @@ import shutil
 import re
 import array
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.text as mpltext
 
 from Configuration import *
 from Scenarios import *
-from traitlets.config.application import catch_config_error
 
 
 
@@ -61,7 +62,6 @@ def analyzeLog(signature):
                     utilities[transition].append(int(line))
                     lineCnt = lineCnt + 1
             print("Found {} records.".format(lineCnt))
-            print("Done.")
 
     print("Ploting...")
     labels = []
@@ -73,10 +73,14 @@ def analyzeLog(signature):
         labels.append(StringLabel(str(i), "black"))
         i = i + 1
         values.append(utilities[k])
-        
-    plt.boxplot(values)
-    plt.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()})
-    plt.savefig("{}.png".format(os.path.join(LOGS_DIR, signature, "utilities")))
+    
+    fig = plt.figure()
+    bp = plt.subplot()    
+    bp.boxplot(values)
+    box = bp.get_position()
+    bp.set_position([box.x0, box.y0, box.width*0.5, box.height])
+    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5))
+    fig.savefig("{}.png".format(os.path.join(LOGS_DIR, signature, "utilities")))
     print("Done.")
 
 

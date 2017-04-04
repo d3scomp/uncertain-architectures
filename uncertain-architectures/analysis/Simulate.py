@@ -54,9 +54,16 @@ def simulate(scenarioIndex):
         params = prepareParameters(scenario, i)
         if scenario[UMS]:
             for fromMode, toMode in missingTransitions:
+                params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
+                                                                   getSignature(scenario),
+                                                                   fromMode + "-"  + toMode + "_"
+                                                                   + str(i))))
                 params = params + prepareUMSParams(scenario, fromMode, toMode, i);
                 spawnSimulation(params, i)
         else:
+            params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
+                                                               getSignature(scenario),
+                                                               'log_' + str(i))))
             spawnSimulation(params, i)
         
     # finalize the rest
@@ -85,9 +92,6 @@ def spawnSimulation(params, iteration):
 def prepareParameters(scenario, iteration):
     # Prepare parameters
     params = []
-    params.append("{}={}".format(LOG_DIR, os.path.join(LOGS_DIR,
-                               getSignature(scenario),
-                               'log_' + str(iteration))))
     
     if(ENABLE_SEED):
         global seed

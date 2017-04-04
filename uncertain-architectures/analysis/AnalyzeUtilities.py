@@ -92,9 +92,13 @@ if __name__ == '__main__':
         if len(sys.argv) < 2:
             raise ArgError("The script expects one number as a parameter.")
         
+        scenario = scenarios[int(sys.argv[1])]
+        logsDir = os.path.join(LOGS_DIR, getSignature(scenario))
+        if not os.path.isdir(logsDir):
+            raise Exception("Logs from scenario {} are missing.".format(scenarios.index(scenario)))
     
         print("Started.")
-        signature = getScenarioSignature(int(sys.argv[1]))
+        signature = getSignature(scenario)
         analyzeLog(signature)
         print("Finished.")
     except ArgError as e:

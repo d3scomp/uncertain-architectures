@@ -125,7 +125,7 @@ def analyzeScenario(scenario):
     logsDir = os.path.join(LOGS_DIR, getSignature(scenario))
     
     if not os.path.isdir(logsDir):
-        raise Exception("Logs from scenario {} are missing.".format(scenarios.indexof(scenario)))
+        raise Exception("Logs from scenario {} are missing.".format(scenarios.index(scenario)))
     if not os.path.exists(CSV_DIR):
         os.makedirs(CSV_DIR)
     

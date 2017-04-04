@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.text as mpltext
+from matplotlib.font_manager import FontProperties
 
 from Configuration import *
 from Scenarios import *
@@ -79,7 +80,9 @@ def analyzeLog(signature):
     bp.boxplot(values)
     box = bp.get_position()
     bp.set_position([box.x0, box.y0, box.width*0.5, box.height])
-    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5))
+    fontP = FontProperties()
+    fontP.set_size('small')
+    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
     fig.savefig("{}.png".format(os.path.join(LOGS_DIR, signature, "utilities")))
     print("Done.")
 

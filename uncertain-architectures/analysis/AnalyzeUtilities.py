@@ -23,6 +23,8 @@ from matplotlib.font_manager import FontProperties
 from Configuration import *
 from Scenarios import *
 
+VERBOSE = False
+PRINT_STATS = True
 
 
 class StringLabel(object):
@@ -49,29 +51,40 @@ def analyzeLog(signature):
     
     logsDir = os.path.join(LOGS_DIR, signature, UMS_LOGS)
     utilities = {}
+    observations = {}
     
     for dirname, dirnames, filenames in os.walk(logsDir):
         # print path to all filenames.
         for filename in filenames:
-            print("Processing: {}".format(os.path.join(dirname, filename)))
+            if VERBOSE:
+                print("Processing: {}".format(os.path.join(dirname, filename)))
             transition = os.path.basename(dirname)
             if not utilities.__contains__(transition):
                 utilities[transition] = []
+                observations[transition] = 0
             lineCnt = 0
             fileUtilities= []
             with open(os.path.join(dirname, filename)) as f:
                 for line in f:
                     fileUtilities.append(int(line))
                     lineCnt = lineCnt + 1
-            print("Found {} records.".format(lineCnt))
+            if VERBOSE:
+                print("Found {} records.".format(lineCnt))
             utilities[transition].append(np.percentile(fileUtilities, PERCENTILE))
+            observations[transition] = observations[transition] + lineCnt
+    
+    if PRINT_STATS:
+        print("Observations statistics:")
+        for key in observations:
+            print("{}: {}".format(key, observations[key]))
     
     return utilities
 
 
 def plot(utilities):
     
-    print("Ploting...")
+    if VERBOSE:
+        print("Ploting...")
     labels = []
     values = []
     signatures = []
@@ -91,7 +104,9 @@ def plot(utilities):
     fontP.set_size('small')
     bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
     fig.savefig("{}.png".format(os.path.join(LOGS_DIR, signature, "utilities")))
-    print("Done.")
+    
+    if VERBOSE:
+        print("Done.")
 
     
 
@@ -99,7 +114,9 @@ if __name__ == '__main__':
     try:
         if len(sys.argv) < 2:
             raise ArgError("The script expects one number as a parameter.")
-        
+    
+        print("Started.")
+            
         sIndex = int(sys.argv[1])
         baselineUtilities = None;
         
@@ -116,7 +133,6 @@ if __name__ == '__main__':
         if not os.path.isdir(logsDir):
             raise Exception("Logs from scenario {} are missing.".format(scenarios.index(scenario)))
     
-        print("Started.")
         signature = getSignature(scenario)
         utilities = analyzeLog(signature)
         if baselineUtilities != None:

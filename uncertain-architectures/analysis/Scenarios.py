@@ -183,6 +183,12 @@ scenarios.append({DDF:False, DF:False, UMS:True,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# UMS baseline
+scenarios.append({DDF:False, DF:False, UMS:False,
+                  NON_DETERMINISM_TRAINING:False,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
 
 #################################################
 

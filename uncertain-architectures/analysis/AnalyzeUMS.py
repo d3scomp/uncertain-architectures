@@ -74,7 +74,7 @@ def finalizeOldestAnalysis():
 
 
 def analyzeLog(simulationSignature, logDirName, phase_sep):
-    logDir = os.path.join(LOGS_DIR, simulationSignature, logDirName)
+    logDir = os.path.join(LOGS_DIR, simulationSignature, logDirName)    
     print("Analyzing " + logDir)
     
     tree = etree.parse(os.path.join(logDir, RUNTIME_LOG_FILE))  

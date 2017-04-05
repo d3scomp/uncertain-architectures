@@ -53,7 +53,7 @@ def analyzeLog(signature):
     utilities = {}
     observations = {}
     
-    for dirname, dirnames, filenames in os.walk(logsDir):
+    for dirname, _, filenames in os.walk(logsDir):
         # print path to all filenames.
         for filename in filenames:
             if VERBOSE:

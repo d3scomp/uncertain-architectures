@@ -65,7 +65,12 @@ def analyzeLog(signature):
                     lineCnt = lineCnt + 1
             print("Found {} records.".format(lineCnt))
             utilities[transition].append(np.percentile(fileUtilities, PERCENTILE))
+    
+    return utilities
 
+
+def plot(utilities):
+    
     print("Ploting...")
     labels = []
     values = []
@@ -88,20 +93,36 @@ def analyzeLog(signature):
     fig.savefig("{}.png".format(os.path.join(LOGS_DIR, signature, "utilities")))
     print("Done.")
 
+    
 
 if __name__ == '__main__':
     try:
         if len(sys.argv) < 2:
             raise ArgError("The script expects one number as a parameter.")
         
-        scenario = scenarios[int(sys.argv[1])]
+        sIndex = int(sys.argv[1])
+        baselineUtilities = None;
+        
+        # Add baseline if available
+        if sIndex != 0:
+            baselineScenario = scenarios[0]
+            logsDir = os.path.join(LOGS_DIR, getSignature(baselineScenario))
+            if os.path.isdir(logsDir):
+                baselineSignature = getSignature(baselineScenario)
+                baselineUtilities = analyzeLog(baselineSignature)
+        
+        scenario = scenarios[sIndex]
         logsDir = os.path.join(LOGS_DIR, getSignature(scenario))
         if not os.path.isdir(logsDir):
             raise Exception("Logs from scenario {} are missing.".format(scenarios.index(scenario)))
     
         print("Started.")
         signature = getSignature(scenario)
-        analyzeLog(signature)
+        utilities = analyzeLog(signature)
+        if baselineUtilities != None:
+            for key in baselineUtilities:
+                utilities[key] = baselineUtilities[key]
+        plot(utilities)
         print("Finished.")
     except ArgError as e:
         print(e.__str__())

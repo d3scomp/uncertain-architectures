@@ -58,11 +58,13 @@ def analyzeLog(signature):
             if not utilities.__contains__(transition):
                 utilities[transition] = []
             lineCnt = 0
+            fileUtilities= []
             with open(os.path.join(dirname, filename)) as f:
                 for line in f:
-                    utilities[transition].append(int(line))
+                    fileUtilities.append(int(line))
                     lineCnt = lineCnt + 1
             print("Found {} records.".format(lineCnt))
+            utilities[transition].append(np.percentile(fileUtilities, PERCENTILE))
 
     print("Ploting...")
     labels = []

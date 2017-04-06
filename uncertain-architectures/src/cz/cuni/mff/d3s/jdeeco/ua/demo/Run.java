@@ -34,6 +34,9 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_TRAINING;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,7 +173,10 @@ public class Run {
 			utilities.put(Robot.class, ddf);
 
 			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
-					.withVerbosity(true);
+					.withVerbosity(true)
+					.withTraining(MODE_SWITCH_PROPS_TRAINING)
+					.withTrainProperty(MODE_SWITCH_PROPS_PROPERTY)
+					.withTrainValue(MODE_SWITCH_PROPS_VALUE);
 			adaptPlugins.add(mspPlugin);
 		}
 

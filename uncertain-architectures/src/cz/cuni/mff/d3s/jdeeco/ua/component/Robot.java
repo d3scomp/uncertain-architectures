@@ -230,7 +230,7 @@ public class Robot {
 		}
 		
 		LinkPosition positionValue = position.value.getValue();
-		boolean waitOnCollision = DockingMode.class.equals(ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
+		boolean waitOnCollision = ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode() instanceof DockingMode;
 		// Move
 		mover.move(trajectory.value, positionValue, waitOnCollision);
 		

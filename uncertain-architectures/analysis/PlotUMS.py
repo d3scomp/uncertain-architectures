@@ -266,7 +266,7 @@ if __name__ == '__main__':
             
         scenarioIndices = extractArgs(sys.argv)
         # add baseline
-        scenarioIndices[0] = False;
+        scenarioIndices[UMS_BASELINE] = False;
         
         signature = '-'.join(map(str, scenarioIndices.keys()))
         print("Plotting scenarios {} ...".format(signature))

@@ -72,8 +72,8 @@ public class Configuration {
 
 	public static String LOG_DIR = null;
 
-	public static int ROBOT_COUNT = 3;
-	public static int DOCK_COUNT = 3;
+	public static int ROBOT_COUNT = 4;
+	public static int DOCK_COUNT = 1;
 
 	public static boolean WITH_SEED = false;
 	public static long ENVIRONMENT_SEED = 85328;
@@ -103,10 +103,10 @@ public class Configuration {
 	
 	// ENHANCING MODE SWITCHING
 
-	public static boolean NON_DETERMINISM_ON = true;
+	public static boolean NON_DETERMINISM_ON = false;
+	public static boolean NON_DETERMINISM_TRAINING = false;
 	public static double TRANSITION_PROBABILITY = 0.01;
 	public static int TRANSITION_PRIORITY = 10;
-	public static boolean NON_DETERMINISM_TRAINING = true;
 	public static String NON_DETERMINISM_TRAIN_FROM = "DeadBatteryMode";
 	public static String NON_DETERMINISM_TRAIN_TO = "WaitingMode";
 	public static String NON_DETERMINISM_TRAINING_OUTPUT = "results/logs/utility.txt";

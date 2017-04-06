@@ -122,7 +122,7 @@ if __name__ == '__main__':
         
         # Add baseline if available
         if sIndex != 0:
-            baselineScenario = scenarios[0]
+            baselineScenario = scenarios[UMS_BASELINE]
             logsDir = os.path.join(LOGS_DIR, getSignature(baselineScenario))
             if os.path.isdir(logsDir):
                 baselineSignature = getSignature(baselineScenario)

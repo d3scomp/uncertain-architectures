@@ -21,7 +21,7 @@ class ArgError(Exception):
 # HW RESOURCES
 ###############################################################################
 
-CORES = 4
+CORES = 25
 ''' The number of processor cores to utilize. The number of simulations
     to run in parallel. '''
     
@@ -78,7 +78,7 @@ DDF_DEFAULT_TIME = 100000
 DF_DEFAULT_TIME = 50000
 ''' The default time of dock failure in milliseconds. '''
 
-SIMULATION_ITERATIONS = 1
+SIMULATION_ITERATIONS = 50
 ''' The number of simulation iterations '''
 
 ###############################################################################
@@ -96,5 +96,7 @@ TIME_DIVISOR = 1000
 
 PLOT_LABELS = False
 ''' Indicates whether the produced plot should contain signature labels. '''
+
+UMS_BASELINE = 10
 
 ###############################################################################

@@ -222,7 +222,13 @@ public class Robot {
 			@In("mover") TrajectoryExecutor mover,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
-			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map) {
+			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map,
+			@In("batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel) {
+		// Don't move if dead
+		if(batteryLevel.getValue() <= 0){
+			return;
+		}
+		
 		LinkPosition positionValue = position.value.getValue();
 		boolean waitOnCollision = DockingMode.class.equals(ProcessContext.getCurrentProcess().getComponentInstance().getModeChart().getCurrentMode());
 		// Move
@@ -329,7 +335,13 @@ public class Robot {
 	@PeriodicScheduling(period = CLEAN_PROCESS_PERIOD)
 	public static void clean(@In("id") String id,
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map,
-			@In("position") CorrelationMetadataWrapper<LinkPosition> position) {
+			@In("position") CorrelationMetadataWrapper<LinkPosition> position,
+			@In("batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel) {
+		// Don't clean if dead
+		if(batteryLevel.getValue() <= 0){
+			return;
+		}
+		
 		Node node = position.getValue().atNode();
 		if(node != null && map.value.getValue().getDirtiness().containsKey(node)){
 			double intensity = map.value.getValue().getDirtiness().get(node);

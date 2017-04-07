@@ -15,7 +15,7 @@
  *******************************************************************************/
 package cz.cuni.mff.d3s.jdeeco.ua.ensemble;
 
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.PLAN_PROCESS_PERIOD;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PLAN_EXCHANGE_PERIOD;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
  *
  */
 @Ensemble(enableLogging=false)
-@PeriodicScheduling(period = PLAN_PROCESS_PERIOD)
+@PeriodicScheduling(period = CLEAN_PLAN_EXCHANGE_PERIOD)
 public class CleaningPlanEnsemble {
 	@Membership
 	public static boolean membership(@In("member.id") String mId, @In("coord.id") String cId) {

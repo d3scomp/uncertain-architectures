@@ -123,13 +123,13 @@ public class RobotModeChartHolder extends ModeChartHolder {
 						> parameters.get(CHARGED_LEVEL);
 				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValue[1]).getValue();
 				Map<String, DockData> availableDocks = (Map<String, DockData>) knowledgeValue[2];
-				boolean dockNotInAvailableOnes = true;
+				/*boolean dockNotInAvailableOnes = true;
 				for (DockData dockData : availableDocks.values()) {
 					if ((dockData.position).equals(position.atNode())) {
 						dockNotInAvailableOnes = false;
 					}
-				}
-				return batteryCharged || dockNotInAvailableOnes;
+				}*/
+				return batteryCharged;// || dockNotInAvailableOnes;
 			}
 			
 			@Override

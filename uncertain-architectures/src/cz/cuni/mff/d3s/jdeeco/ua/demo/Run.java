@@ -100,6 +100,7 @@ public class Run {
 
 		// Process arguments
 		Configuration.override(args);
+		if(true) return;
 		
 		// Configure Logs
 		RuntimeLogWriters writers;

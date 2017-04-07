@@ -102,9 +102,9 @@ def extractValues(analysisResultFiles):
         values.append([])
         for file in files:
             f = open(os.path.join(CSV_DIR, file), "r")
-            line = f.readline()
+            for line in f:
+                values[i].append(float(line) / TIME_DIVISOR)
             f.close()
-            values[i].append(float(line) / TIME_DIVISOR)
     
     return values
 

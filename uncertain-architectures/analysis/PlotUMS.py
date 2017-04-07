@@ -111,12 +111,13 @@ def extractValues(analysisResultFiles):
             else:
                 t = "baseline"
         
-            f = open(os.path.join(CSV_DIR, file), "r")
-            line = f.readline()
-            f.close()
             if(not values.__contains__(t)):
                 values[t] = []
-            values[t].append(float(line) / TIME_DIVISOR)
+                
+            f = open(os.path.join(CSV_DIR, file), "r")
+            for line in f:
+                values[t].append(float(line) / TIME_DIVISOR)
+            f.close()            
     
     return values
 

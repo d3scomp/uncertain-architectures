@@ -107,23 +107,30 @@ def analyzeLog(simulationSignature, logDirName, phase_sep):
     print("dirtinesses length is {}".format(len(dirtinesses)));
     durations_phase1 = [d.duration() for d in warmed if d.startTime < phase_sep]
     durations_phase2 = [d.duration() for d in warmed if d.startTime >= phase_sep]
-#     result_phase1 = np.percentile(durations_phase1, PERCENTILE) if len(durations_phase1) > 0 else 0
-#     result_phase2 = np.percentile(durations_phase2, PERCENTILE) if len(durations_phase2) > 0 else 0
-#     print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase1)))
-#     print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase2)))
-    result_phase1 = np.mean(durations_phase1) if len(durations_phase1) > 0 else 0
-    result_phase2 = np.mean(durations_phase2) if len(durations_phase2) > 0 else 0
-    print("The mean of dirtiness event durations is {}".format(str(result_phase1)))
-    print("The mean of dirtiness event durations is {}".format(str(result_phase2)))
+    if METHOD == Method.PERCENTILE:
+        result_phase1 = [np.percentile(durations_phase1, PERCENTILE)] if len(durations_phase1) > 0 else [0]
+        result_phase2 = [np.percentile(durations_phase2, PERCENTILE)] if len(durations_phase2) > 0 else [0]
+        print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase1)))
+        print("The {}th percentile of dirtiness event durations is {}".format(PERCENTILE, str(result_phase2)))
+    if METHOD == Method.MEAN:
+        result_phase1 = [np.mean(durations_phase1)] if len(durations_phase1) > 0 else [0]
+        result_phase2 = [np.mean(durations_phase2)] if len(durations_phase2) > 0 else [0]
+        print("The mean of dirtiness event durations is {}".format(str(result_phase1)))
+        print("The mean of dirtiness event durations is {}".format(str(result_phase2)))
+    if METHOD == Method.SAMPLES:
+        result_phase1 = durations_phase1 if len(durations_phase1) > 0 else [0]
+        result_phase2 = durations_phase2 if len(durations_phase2) > 0 else [0]
 
     outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + "_phase1" + ".csv")
     outputFile = open(outputFilePath, "w")
-    outputFile.write(str(result_phase1)+"\n")
+    for value in result_phase1:
+        outputFile.write(str(value)+"\n")
     outputFile.close()
     
     outputFilePath = os.path.join(CSV_DIR,simulationSignature + "_" + logDirName + "_phase2" + ".csv")
     outputFile = open(outputFilePath, "w")
-    outputFile.write(str(result_phase2)+"\n")
+    for value in result_phase2:
+        outputFile.write(str(value)+"\n")
     outputFile.close()
     
     probabilities = {}

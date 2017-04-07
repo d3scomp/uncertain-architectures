@@ -7,6 +7,7 @@ The configuration for the rest of the scripts in the analysis folder.
 '''
 
 import os
+from enum import Enum
 
 
 class ArgError(Exception):
@@ -15,6 +16,11 @@ class ArgError(Exception):
         self.value = value
     def __str__(self):
         return repr(self.value)
+    
+class Method(Enum):
+    PERCENTILE = 1
+    MEAN = 2
+    SAMPLES = 3
     
 
 ###############################################################################
@@ -88,6 +94,8 @@ SIMULATION_ITERATIONS = 50
 # ANALYSIS CONFIGURATION
 ###############################################################################
 
+METHOD = Method.SAMPLES
+
 PERCENTILE = 90
 ''' The percentile to use for analysis. '''
 
@@ -97,6 +105,6 @@ TIME_DIVISOR = 1000
 PLOT_LABELS = False
 ''' Indicates whether the produced plot should contain signature labels. '''
 
-UMS_BASELINE = 10
+UMS_BASELINE = 0
 
 ###############################################################################

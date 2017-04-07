@@ -142,7 +142,12 @@ def plot(allValues, scenarioIndices):
                 fontsize = 10)
     
     plt.xlabel("Scenario number")
-    plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
+    if METHOD == Method.PERCENTILE:
+        plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
+    if METHOD == Method.MEAN:
+        plt.ylabel("Mean time to clean a dirty tile [s]")
+    if METHOD == Method.SAMPLES:
+        plt.ylabel("Time to clean a dirty tile [s]")
     
     # X ticks
     indices = []

@@ -243,6 +243,30 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
+
+# Dirt generation with respect to cleaning plan exchange
+# ratio 1:1
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
+                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
+                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:CLEAN_PLAN_EXCHANGE_PERIOD_VALUE})
+# ratio 1:10
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
+                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
+                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(0.1*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
+# ratio 1:100
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
+                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
+                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(0.01*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
+# ratio 10:1
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
+                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
+                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(10*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
+
+# Mode Switch Properties
 scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
                   MODE_SWITCH_PROPS_TRAINING:True,
                   MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
@@ -271,29 +295,6 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-
-# Dirt generation with respect to cleaning plan exchange
-# ratio 1:1
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:CLEAN_PLAN_EXCHANGE_PERIOD_VALUE})
-# ratio 1:10
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(0.1*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
-# ratio 1:100
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(0.01*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
-# ratio 10:1
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-                  DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-                  CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(10*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
-
 #################################################
 
 

@@ -105,6 +105,6 @@ TIME_DIVISOR = 1000
 PLOT_LABELS = False
 ''' Indicates whether the produced plot should contain signature labels. '''
 
-UMS_BASELINE = 0
+UMS_BASELINE = 10
 
 ###############################################################################

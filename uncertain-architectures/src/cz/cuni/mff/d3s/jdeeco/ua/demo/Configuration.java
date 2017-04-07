@@ -164,14 +164,16 @@ public class Configuration {
 	public static final long DETERMINE_POSITION_PERIOD = 1000; // ms
 	
 	public static final long PLAN_PROCESS_PERIOD = 1000; // ms
-	
-	public static long CLEAN_PLAN_EXCHANGE_PERIOD = 1000;
+
+	public static final long CLEAN_PLAN_EXCHANGE_PERIOD = 1000;
+	public static long CLEAN_PLAN_EXCHANGE_PERIOD_VAR = CLEAN_PLAN_EXCHANGE_PERIOD;
 
 	public static final long BATTERY_PROCESS_PERIOD = 1000; // ms
 	
 	public static final long STATUS_PROCESS_PERIOD = 1000; // ms
-	
-	public static long DIRT_GENERATION_PERIOD = 600; // ms
+
+	public static final long DIRT_GENERATION_PERIOD = 600; // ms
+	public static long DIRT_GENERATION_PERIOD_VAR = DIRT_GENERATION_PERIOD; // ms
 	
 	public static final long DOCK_CHECK_PERIOD = 1000; // ms
 	

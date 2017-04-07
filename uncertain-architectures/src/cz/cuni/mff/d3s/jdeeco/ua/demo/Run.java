@@ -22,21 +22,23 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.LOG_DIR;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_TRAINING;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_COUNT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TRANSITION_PRIORITY;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TRANSITION_PROBABILITY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WARM_UP_TIME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.WITH_SEED;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TRANSITION_PROBABILITY;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.TRANSITION_PRIORITY;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_TRAINING;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DIRT_GENERATION_PERIOD_VAR;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.CLEAN_PLAN_EXCHANGE_PERIOD_VAR;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +50,11 @@ import java.util.stream.IntStream;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
@@ -100,7 +107,6 @@ public class Run {
 
 		// Process arguments
 		Configuration.override(args);
-		if(true) return;
 		
 		// Configure Logs
 		RuntimeLogWriters writers;
@@ -193,7 +199,14 @@ public class Run {
 
 		// Deploy environment
 		Environment environment = new Environment(ENVIRONMENT_NAME, WITH_SEED, ENVIRONMENT_SEED);
-		defaultNode.deployComponent(environment);
+		ComponentInstance ci = defaultNode.deployComponent(environment);
+		for (ComponentProcess p: ci.getComponentProcesses()) {
+			for (Trigger t : p.getTriggers()){
+				if (t instanceof TimeTrigger) {
+					((TimeTrigger) t).setPeriod(DIRT_GENERATION_PERIOD_VAR);
+				}
+			}
+		}
 
 		// Deploy docking stations
 		for (int i : IntStream.range(0, DOCK_COUNT).toArray()) {
@@ -202,7 +215,12 @@ public class Run {
 			defaultNode.deployComponent(d);
 		}
 		defaultNode.deployEnsemble(DockingEnsemble.class);
-		defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
+		EnsembleDefinition ed = defaultNode.deployEnsemble(CleaningPlanEnsemble.class);
+		for (Trigger t : ed.getTriggers()){
+			if (t instanceof TimeTrigger) {
+				((TimeTrigger) t).setPeriod(CLEAN_PLAN_EXCHANGE_PERIOD_VAR);
+			}
+		}
 
 		// Deploy robots
 		deployRobots(IntStream.range(0, ROBOT_COUNT).toArray(), simulation, simulationTimer, defaultNode,

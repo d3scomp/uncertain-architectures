@@ -94,7 +94,7 @@ SIMULATION_ITERATIONS = 50
 # ANALYSIS CONFIGURATION
 ###############################################################################
 
-METHOD = Method.SAMPLES
+METHOD = Method.MEAN
 
 PERCENTILE = 90
 ''' The percentile to use for analysis. '''

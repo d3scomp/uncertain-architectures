@@ -243,6 +243,35 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE:1,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE:3,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE:7,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE:9,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+
 # Dirt generation with respect to cleaning plan exchange
 # ratio 1:1
 scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,

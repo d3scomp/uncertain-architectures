@@ -160,10 +160,14 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		};
 
 		final DEECoModeGuard approachGuard = new DEECoModeGuard() {
+
+			private static final String FOUND_ENOUGH = "FOUND_ENOUGH";
+			private static final double FOUND_ENOUGH_VALUE = 5;
 			
 			@Override
 			protected void specifyParameters(){
 				// TODO: it is possible to configure the map dirtiness size parameter - but do id smart - how much percent of the local map is dirty
+				parameters.put(FOUND_ENOUGH, FOUND_ENOUGH_VALUE);
 			}
 			
 			@Override
@@ -174,7 +178,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				boolean b = (!batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& !deadBatteryGuard.isSatisfied(new Object[]{knowledgeValues[2]})
 						&& positionNode != null
-						&& map.getDirtiness().keySet().size() > 5);
+						&& map.getDirtiness().keySet().size() > parameters.get(FOUND_ENOUGH));
 				return b;
 			}
 			

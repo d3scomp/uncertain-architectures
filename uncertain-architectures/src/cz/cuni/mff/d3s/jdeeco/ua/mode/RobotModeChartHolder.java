@@ -190,9 +190,13 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		
 		final DEECoModeGuard searchGuard = new DEECoModeGuard() {
 
+			private static final String CLEANED_ENOUGH = "CLEANED_ENOUGH";
+			private static final double CLEANED_ENOUGH_VALUE = 0;
+			
 			@Override
 			protected void specifyParameters(){
 				// TODO: it is possible to configure the map dirtiness size to start searching - do it as above
+				parameters.put(CLEANED_ENOUGH, CLEANED_ENOUGH_VALUE);
 			}
 			
 			@Override
@@ -200,7 +204,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				DirtinessMap map = (DirtinessMap) ((CorrelationMetadataWrapper<DirtinessMap>) knowledgeValues[0]).getValue();
 				
 				boolean lowPower = batteryDrainedGuard.isSatisfied(new Object[]{knowledgeValues[1]});
-				boolean moreDirt = map.getDirtiness().keySet().size() > 0;
+				boolean moreDirt = map.getDirtiness().keySet().size() > parameters.get(CLEANED_ENOUGH);
 				return !lowPower && !moreDirt;
 			}
 			
@@ -212,9 +216,13 @@ public class RobotModeChartHolder extends ModeChartHolder {
 
 		final DEECoModeGuard keepCleaningGuard = new DEECoModeGuard() {
 
+			private static final String CLEANED_ENOUGH = "CLEANED_ENOUGH";
+			private static final double CLEANED_ENOUGH_VALUE = 0;
+			
 			@Override
 			protected void specifyParameters(){
 				// TODO: it is possible to configure the map dirtiness size to continue cleaning - do it as above
+				parameters.put(CLEANED_ENOUGH, CLEANED_ENOUGH_VALUE);
 			}
 			
 			@Override
@@ -227,7 +235,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 				boolean atDirt = positionNode != null
 						&& map.getDirtiness().containsKey(positionNode)
 						&& map.getDirtiness().get(positionNode) > 0;
-				boolean moreDirt = map.getDirtiness().keySet().size() > 0;
+				boolean moreDirt = map.getDirtiness().keySet().size() > parameters.get(CLEANED_ENOUGH);
 				
 				return !lowPower && !atDirt && moreDirt;
 			}

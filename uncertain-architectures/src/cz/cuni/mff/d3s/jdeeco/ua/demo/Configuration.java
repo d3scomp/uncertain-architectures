@@ -116,8 +116,8 @@ public class Configuration {
 
 	public static boolean MODE_SWITCH_PROPS_ON = true;
 	public static boolean MODE_SWITCH_PROPS_TRAINING = true;
-	public static String MODE_SWITCH_PROPS_PROPERTY = "FOUND_ENOUGH";
-	public static double MODE_SWITCH_PROPS_VALUE = 3;
+	public static String MODE_SWITCH_PROPS_PROPERTY = "CLEANED_ENOUGH";
+	public static double MODE_SWITCH_PROPS_VALUE = 1;
 	
 	
 	public static String UTILITY_DIRECTORY = "results\\logs\\06)-!DDF-!DF-UMS-6\\UMS_logs";

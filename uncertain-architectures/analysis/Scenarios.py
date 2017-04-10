@@ -55,8 +55,11 @@ UMS = "NON_DETERMINISM_ON" # Unspecified mode switching
 TRANSITION_PROBABILITY = "TRANSITION_PROBABILITY" 
 TRANSITION_PRIORITY = "TRANSITION_PRIORITY"
 NON_DETERMINISM_TRAINING = "NON_DETERMINISM_TRAINING"
+NON_DETERMINISM_TRAINING2 = "NON_DETERMINISM_TRAINING2"
 NON_DETERMINISM_TRAIN_FROM = "NON_DETERMINISM_TRAIN_FROM"
 NON_DETERMINISM_TRAIN_TO = "NON_DETERMINISM_TRAIN_TO"
+NON_DETERMINISM_TRAIN_FROM2 = "NON_DETERMINISM_TRAIN_FROM2"
+NON_DETERMINISM_TRAIN_TO2 = "NON_DETERMINISM_TRAIN_TO2"
 NON_DETERMINISM_TRAINING_OUTPUT = "NON_DETERMINISM_TRAINING_OUTPUT"
 
 # Mode Switch Properties
@@ -95,6 +98,11 @@ missingTransitions = [
     ("DeadBatteryMode","CleanMode"),
     ("DeadBatteryMode","DockingMode"),
     ("DeadBatteryMode","SearchMode")]
+missingTransitions2 = [
+    ("SearchMode","WaitingMode"),
+    ("DockingMode","SearchMode"),
+    ("DockingMode","DirtApproachMode"),
+    ("DeadBatteryMode","WaitingMode")]
 
 # Scenarios
 scenarios = []
@@ -316,7 +324,15 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-
+# UMS training 2
+scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
+                  NON_DETERMINISM_TRAINING:True,
+                  NON_DETERMINISM_TRAINING2:True,
+                  TRANSITION_PROBABILITY:0.01,
+                  TRANSITION_PRIORITY:10, 
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
 #################################################
 
 
@@ -378,23 +394,35 @@ def getScenarioSignature(scenarioIndex, iterations = 0):
     return getSignature(scenarios[scenarioIndex], iterations)
 
 
-def getLogFile(scenario, iteration, fromMode = None, toMode = None):
+def getLogFile(scenario, iteration, fromMode = None, toMode = None, fromMode2 = None, toMode2 = None):
     if(scenario[UMS]):
-        return os.path.join(LOGS_DIR,
+        if(fromMode2 == None or toMode2 == None):
+            return os.path.join(LOGS_DIR,
                             getSignature(scenario),
                             fromMode + "-"  + toMode + "_" + str(iteration))
+        else:
+            return os.path.join(LOGS_DIR,
+                            getSignature(scenario),
+                            fromMode + "_"  + toMode + "-" + fromMode2 + "_" + toMode2 + "_" + str(iteration))
         
     return os.path.join(LOGS_DIR,
                         getSignature(scenario),
                         'log_' + str(iteration))
     
     
-def getUMSLogFile(scenario, iteration, fromMode = None, toMode = None):
+def getUMSLogFile(scenario, iteration, fromMode = None, toMode = None, fromMode2 = None, toMode2 = None):
     if(scenario[UMS]):
-        return os.path.join(LOGS_DIR,
+        if(fromMode2 == None or toMode2 == None):
+            return os.path.join(LOGS_DIR,
                             getSignature(scenario),
                             UMS_LOGS,
                             fromMode + "-"  + toMode,
+                            'log_' + str(iteration))
+        else:
+            return os.path.join(LOGS_DIR,
+                            getSignature(scenario),
+                            UMS_LOGS,
+                            fromMode + "_"  + toMode + "-" + fromMode2 + "_" + toMode2,
                             'log_' + str(iteration))
     
     return os.path.join(LOGS_DIR,

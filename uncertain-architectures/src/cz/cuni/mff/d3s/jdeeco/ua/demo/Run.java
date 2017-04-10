@@ -30,6 +30,8 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM2;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO2;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_COUNT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
@@ -172,6 +174,8 @@ public class Run {
 					.withTransitionPriority(TRANSITION_PRIORITY)
 					.withTrainFrom(NON_DETERMINISM_TRAIN_FROM)
 					.withTrainTo(NON_DETERMINISM_TRAIN_TO)
+					.withTrainFrom2(NON_DETERMINISM_TRAIN_FROM2)
+					.withTrainTo2(NON_DETERMINISM_TRAIN_TO2)
 					.withTrainingOutput(NON_DETERMINISM_TRAINING_OUTPUT);
 			adaptPlugins.add(nonDetPlugin);
 		}

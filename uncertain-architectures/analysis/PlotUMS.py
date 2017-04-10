@@ -99,7 +99,7 @@ def getPhaseCsvFiles(scenarioIndices):
 
 
 def extractValues(analysisResultFiles):
-    fromTo = re.compile('.*_(\w+)-([^_]+)_.*')
+    fromTo = re.compile('.*[\d]_(\w+)-(\w+)_[\d].*')
     values = {}
     for i, files in enumerate(analysisResultFiles):
         for file in files:

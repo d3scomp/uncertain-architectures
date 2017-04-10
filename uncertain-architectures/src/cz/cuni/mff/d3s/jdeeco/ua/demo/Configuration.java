@@ -107,17 +107,19 @@ public class Configuration {
 	public static boolean NON_DETERMINISM_TRAINING = false;
 	public static double TRANSITION_PROBABILITY = 0.01;
 	public static int TRANSITION_PRIORITY = 10;
-	public static String NON_DETERMINISM_TRAIN_FROM = "DeadBatteryMode";
-	public static String NON_DETERMINISM_TRAIN_TO = "WaitingMode";
+	public static String NON_DETERMINISM_TRAIN_FROM = null;//"DeadBatteryMode";
+	public static String NON_DETERMINISM_TRAIN_TO = null;//"WaitingMode";
+	public static String NON_DETERMINISM_TRAIN_FROM2 = null;//"WaitingMode";
+	public static String NON_DETERMINISM_TRAIN_TO2 = null;//"DeadBatteryMode";
 	public static String NON_DETERMINISM_TRAINING_OUTPUT = "results/logs/utility.txt";
 
 	
 	// MODE SWITCHING PROPERTIES
 
-	public static boolean MODE_SWITCH_PROPS_ON = true;
-	public static boolean MODE_SWITCH_PROPS_TRAINING = true;
+	public static boolean MODE_SWITCH_PROPS_ON = false;
+	public static boolean MODE_SWITCH_PROPS_TRAINING = false;
 	public static String MODE_SWITCH_PROPS_PROPERTY = "CLEANED_ENOUGH";
-	public static double MODE_SWITCH_PROPS_VALUE = 1;
+	public static double MODE_SWITCH_PROPS_VALUE = 3;
 	
 	
 	public static String UTILITY_DIRECTORY = "results\\logs\\06)-!DDF-!DF-UMS-6\\UMS_logs";

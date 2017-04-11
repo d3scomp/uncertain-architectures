@@ -147,8 +147,8 @@ def plotUMS(utilities):
     for k in utilities.keys():
         signatures.append(k)
         labels.append(StringLabel(str(i), "black"))
-        i = i + 1
         print("{}\t{}".format(i, k))
+        i = i + 1
         values.append(utilities[k])
     
     plt.figure()

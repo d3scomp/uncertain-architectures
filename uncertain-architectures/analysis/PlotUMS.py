@@ -143,10 +143,12 @@ def plotUMS(utilities):
     values = []
     signatures = []
     i = 1
+    print("LEGEND:")
     for k in utilities.keys():
         signatures.append(k)
         labels.append(StringLabel(str(i), "black"))
         i = i + 1
+        print("{}\t{}".format(i, k))
         values.append(utilities[k])
     
     plt.figure()

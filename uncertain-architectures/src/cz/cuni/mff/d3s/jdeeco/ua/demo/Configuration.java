@@ -73,7 +73,7 @@ public class Configuration {
 	public static String LOG_DIR = null;
 
 	public static int ROBOT_COUNT = 4;
-	public static int DOCK_COUNT = 1;
+	public static int DOCK_COUNT = 3;
 
 	public static boolean WITH_SEED = false;
 	public static long ENVIRONMENT_SEED = 85328;

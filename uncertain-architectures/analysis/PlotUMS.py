@@ -152,11 +152,11 @@ def plotUMS(utilities):
     plt.figure()
     bp = plt.subplot()    
     bp.boxplot(values)
-    box = bp.get_position()
-    bp.set_position([box.x0, box.y0, box.width*0.5, box.height])
-    fontP = FontProperties()
-    fontP.set_size('small')
-    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
+#    box = bp.get_position()
+#    bp.set_position([box.x0, box.y0, box.width*0.5, box.height])
+#    fontP = FontProperties()
+#    fontP.set_size('small')
+#    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
     
     plt.savefig("{}.png".format(os.path.join(FIGURES_DIR, signature)))
     

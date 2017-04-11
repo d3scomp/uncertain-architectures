@@ -67,6 +67,8 @@ MSP = "MODE_SWITCH_PROPS_ON";
 MODE_SWITCH_PROPS_TRAINING = "MODE_SWITCH_PROPS_TRAINING";
 MODE_SWITCH_PROPS_PROPERTY = "MODE_SWITCH_PROPS_PROPERTY";
 MODE_SWITCH_PROPS_VALUE = "MODE_SWITCH_PROPS_VALUE";
+MODE_SWITCH_PROPS_PROPERTY2 = "MODE_SWITCH_PROPS_PROPERTY2";
+MODE_SWITCH_PROPS_VALUE2 = "MODE_SWITCH_PROPS_VALUE2";
 
 # Transitions not present in the default robot's mode chart
 missingTransitions = [
@@ -333,6 +335,63 @@ scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
+
+# Mode Switch Properties
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
+                  MODE_SWITCH_PROPS_VALUE:0.7,
+                  MODE_SWITCH_PROPS_PROPERTY2:"DRAINED_LEVEL",
+                  MODE_SWITCH_PROPS_VALUE2:0.3,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
+                  MODE_SWITCH_PROPS_VALUE:0.7,
+                  MODE_SWITCH_PROPS_PROPERTY2:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE2:3,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
+                  MODE_SWITCH_PROPS_VALUE:0.7,
+                  MODE_SWITCH_PROPS_PROPERTY2:"CLEANED_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE2:2,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
+                  MODE_SWITCH_PROPS_VALUE:0.3,
+                  MODE_SWITCH_PROPS_PROPERTY2:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE2:3,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
+                  MODE_SWITCH_PROPS_VALUE:0.3,
+                  MODE_SWITCH_PROPS_PROPERTY2:"CLEANED_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE2:2,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+                  MODE_SWITCH_PROPS_TRAINING:True,
+                  MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE:3,
+                  MODE_SWITCH_PROPS_PROPERTY2:"CLEANED_ENOUGH",
+                  MODE_SWITCH_PROPS_VALUE2:2,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+
 #################################################
 
 
@@ -372,11 +431,14 @@ def getSignature(scenario, iterations = 0, detailed = False):
     else:
         outputSignature.append("!UMS")
     if scenario[MSP]:
-        outputSignature.append("MSP")
+        outputSignature.append("-MSP")
         if detailed:            
             outputSignature.append("-T" if (scenario[MODE_SWITCH_PROPS_TRAINING]) else "-!T")
             outputSignature.append("-P" + str(scenario[MODE_SWITCH_PROPS_PROPERTY]))
             outputSignature.append("-V" + str(scenario[MODE_SWITCH_PROPS_VALUE]))
+            if MODE_SWITCH_PROPS_PROPERTY2 in scenario:
+                outputSignature.append("-P2" + str(scenario[MODE_SWITCH_PROPS_PROPERTY2]))
+                outputSignature.append("-V2" + str(scenario[MODE_SWITCH_PROPS_VALUE2]))
         else:
             outputSignature.append("-" + str(scenarios.index(scenario)))
     if detailed:
@@ -385,7 +447,7 @@ def getSignature(scenario, iterations = 0, detailed = False):
         outputSignature.append("-Duration" + str(scenario[DURATION]))
         outputSignature.append("-WarmUp" + str(scenario[WARM_UP_TIME]))
     if iterations > 0:
-        outputSignature.append("-it-" + str(iterations))
+        outputSignature.append("-it-" + str(iterations) + "-")
     return ''.join(outputSignature)
 
 

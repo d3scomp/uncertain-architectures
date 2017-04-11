@@ -22,9 +22,11 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.LOG_DIR;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_TRAINING;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY2;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE2;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
@@ -187,7 +189,9 @@ public class Run {
 					.withVerbosity(true)
 					.withTraining(MODE_SWITCH_PROPS_TRAINING)
 					.withTrainProperty(MODE_SWITCH_PROPS_PROPERTY)
-					.withTrainValue(MODE_SWITCH_PROPS_VALUE);
+					.withTrainValue(MODE_SWITCH_PROPS_VALUE)
+					.withTrainProperty2(MODE_SWITCH_PROPS_PROPERTY2)
+					.withTrainValue2(MODE_SWITCH_PROPS_VALUE2);
 			adaptPlugins.add(mspPlugin);
 		}
 

@@ -84,7 +84,7 @@ DDF_DEFAULT_TIME = 100000
 DF_DEFAULT_TIME = 50000
 ''' The default time of dock failure in milliseconds. '''
 
-SIMULATION_ITERATIONS = 50
+SIMULATION_ITERATIONS = 1
 ''' The number of simulation iterations '''
 
 ###############################################################################

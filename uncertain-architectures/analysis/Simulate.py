@@ -116,7 +116,7 @@ def prepareUMSParams(scenario, fromMode, toMode, iteration):
     params = []
     params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
     params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))
-    if scenario.contains(NON_DETERMINISM_TRAINING2) and scenario[NON_DETERMINISM_TRAINING2]:
+    if NON_DETERMINISM_TRAINING2 in scenario and scenario[NON_DETERMINISM_TRAINING2]:
         params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
         params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))
     params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,

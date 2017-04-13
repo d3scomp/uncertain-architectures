@@ -456,6 +456,16 @@ def getScenarioSignature(scenarioIndex, iterations = 0):
     return getSignature(scenarios[scenarioIndex], iterations)
 
 
+def getMSPProperty(scenario):
+    outputProperty = []
+    if scenario[MSP]:
+        outputProperty.append("{} = {}".format(scenario[MODE_SWITCH_PROPS_PROPERTY], scenario[MODE_SWITCH_PROPS_VALUE]))
+        if MODE_SWITCH_PROPS_PROPERTY2 in scenario:
+            outputProperty.append(" ; {} = {}".format(scenario[MODE_SWITCH_PROPS_PROPERTY2], scenario[MODE_SWITCH_PROPS_VALUE2]))
+
+    return ''.join(outputProperty)
+
+
 def getLogFile(scenario, iteration, fromMode = None, toMode = None, fromMode2 = None, toMode2 = None):
     if(scenario[UMS]):
         if(fromMode2 == None or toMode2 == None):

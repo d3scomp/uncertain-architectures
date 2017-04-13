@@ -199,6 +199,43 @@ def plotUMS(utilities, baseline):
     
     plt.savefig("{}.png".format(outputFile))
     
+    
+def plotMSP(utilities, scenarioIndices, baseline): # TODO: rewrite this method
+    if not os.path.exists(FIGURES_DIR):
+        os.makedirs(FIGURES_DIR)
+    outputFile = os.path.join(FIGURES_DIR, signature)
+    legendFile = open("{}.txt".format(outputFile), 'w')
+        
+    labels = []
+    values = []
+    # Prepend baseline
+    labels.append(StringLabel(str(1), "black"))
+    values.append(baseline)
+    
+    print("LEGEND:")
+    print("{}\t{}".format(1, "baseline"))
+    legendFile.write("LEGEND:\n")
+    legendFile.write("{} - {}\n".format(1, "baseline"))
+    
+    i = 2
+    for k in scenarioIndices.keys():
+        labels.append(StringLabel(str(i), "black"))
+        print("{}\t{}".format(i, getMSPProperty(scenarios[k])))
+        legendFile.write("{} - {}\n".format(i, getMSPProperty(scenarios[k])))
+        values.append(utilities[i-2])
+        i = i + 1
+        
+    legendFile.close()
+    
+    plt.figure()
+    sp = plt.subplot()    
+    bp = sp.boxplot(values)
+    # add the value of the medians to the diagram 
+    printMedians(bp)
+    printYLabel(plt)
+    
+    plt.savefig("{}.png".format(outputFile))
+    
 
 def plot(allValues, scenarioIndices):
     if not os.path.exists(FIGURES_DIR):
@@ -328,15 +365,25 @@ if __name__ == '__main__':
         else:
             analysisResultFiles = getPhaseCsvFiles(scenarioIndices)
             ums = False
+            msp = False
             for si in scenarioIndices.keys():
                 scenario = scenarios[si]
                 if scenario[UMS]:
                     ums = True;
+                if MSP in scenario and scenario[MSP]:
+                    msp = True;
+            if ums and msp:
+                raise Exception("Don't know how to plot UMS and MSP scenarios together")
             if ums:
                 print("Plotting UMS with baseline")
                 values = extractValuesUMS(analysisResultFiles)
                 baseline = extractValues(getPhaseCsvFiles({UMS_BASELINE:False}))
                 plotUMS(values, baseline)
+            elif msp:
+                print("Plotting MSP with baseline")
+                values = extractValues(analysisResultFiles)
+                baseline = extractValues(getPhaseCsvFiles({UMS_BASELINE:False}))
+                plotMSP(values, scenarioIndices, baseline)
             else:
                 print("Plotting non UMS")
                 values = extractValues(analysisResultFiles)

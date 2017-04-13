@@ -153,6 +153,11 @@ def extractProbValues(analysisResultFiles):
 
 
 def plotUMS(utilities, baseline):
+    if not os.path.exists(FIGURES_DIR):
+        os.makedirs(FIGURES_DIR)
+    outputFile = os.path.join(FIGURES_DIR, signature)
+    legendFile = open("{}.txt".format(outputFile), 'w')
+        
     labels = []
     values = []
     signatures = []
@@ -163,14 +168,19 @@ def plotUMS(utilities, baseline):
     
     print("LEGEND:")
     print("{}\t{}".format(1, "baseline"))
+    legendFile.write("LEGEND:\n")
+    legendFile.write("{} - {}\n".format(1, "baseline"))
     
     i = 2
     for k in utilities.keys():
         signatures.append(k)
         labels.append(StringLabel(str(i), "black"))
         print("{}\t{}".format(i, k))
+        legendFile.write("{} - {}\n".format(i, k))
         i = i + 1
         values.append(utilities[k])
+        
+    legendFile.close()
     
     plt.figure()
     sp = plt.subplot()    
@@ -187,7 +197,7 @@ def plotUMS(utilities, baseline):
 #    fontP.set_size('small')
 #    sp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
     
-    plt.savefig("{}.png".format(os.path.join(FIGURES_DIR, signature)))
+    plt.savefig("{}.png".format(outputFile))
     
 
 def plot(allValues, scenarioIndices):

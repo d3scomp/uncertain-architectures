@@ -8,10 +8,12 @@ This script takes values computed by Analyze.py script and creates a box plot.
 '''
 
 import os
+import re
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.text as mpltext
+from matplotlib.font_manager import FontProperties
 from pylab import *
 from Scenarios import *
 from Configuration import *
@@ -109,6 +111,31 @@ def extractValues(analysisResultFiles):
     return values
 
 
+def extractValuesUMS(analysisResultFiles):
+    fromTo = re.compile('.*[\d]_(\w+)-(\w+)_[\d].*')
+    values = {}
+    for _, files in enumerate(analysisResultFiles):
+                         
+        for file in files:
+            match = fromTo.match(file)
+            if(match != None):
+                fromT = match.group(1)
+                toT = match.group(2)
+                t = "{}-{}".format(fromT, toT)
+            else:
+                raise Exception("Provided scenario {} is not UMS.".format(file))
+        
+            if(t not in values): #.__contains__(t)):
+                values[t] = []
+                
+            f = open(os.path.join(CSV_DIR, file), "r")
+            for line in f:
+                values[t].append(float(line) / TIME_DIVISOR)
+            f.close()            
+    
+    return values
+
+
 def extractProbValues(analysisResultFiles):
     values = []
     for i, files in enumerate(analysisResultFiles):
@@ -124,6 +151,46 @@ def extractProbValues(analysisResultFiles):
     
     return values
 
+
+def plotUMS(utilities, baseline):
+    labels = []
+    values = []
+    signatures = []
+    # Prepend baseline
+    signatures.append("baseline")
+    labels.append(StringLabel(str(1), "black"))
+    values.append(baseline)
+    
+    i = 2
+    print("LEGEND:")
+    for k in utilities.keys():
+        signatures.append(k)
+        labels.append(StringLabel(str(i), "black"))
+        print("{}\t{}".format(i, k))
+        i = i + 1
+        values.append(utilities[k])
+    
+    plt.figure()
+    bp = plt.subplot()    
+    bp.boxplot(values)
+    
+    plt.xlabel("Scenario number")
+    if METHOD == Method.PERCENTILE:
+        plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
+    if METHOD == Method.MEAN:
+        plt.ylabel("Mean time to clean a dirty tile [s]")
+    if METHOD == Method.SAMPLES:
+        plt.ylabel("Time to clean a dirty tile [s]")
+    
+    # Legend
+#    box = bp.get_position()
+#    bp.set_position([box.x0, box.y0, box.width*0.5, box.height])
+#    fontP = FontProperties()
+#    fontP.set_size('small')
+#    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
+    
+    plt.savefig("{}.png".format(os.path.join(FIGURES_DIR, signature)))
+    
 
 def plot(allValues, scenarioIndices):
     if not os.path.exists(FIGURES_DIR):
@@ -242,10 +309,23 @@ if __name__ == '__main__':
         if prob:
             analysisResultFiles = getProbCsvFiles(scenarioIndices)
             values = extractProbValues(analysisResultFiles)
+            plot(values, scenarioIndices)
         else:
             analysisResultFiles = getPhaseCsvFiles(scenarioIndices)
-            values = extractValues(analysisResultFiles)
-        plot(values, scenarioIndices)
+            ums = False
+            for si in scenarioIndices.keys():
+                scenario = scenarios[si]
+                if scenario[UMS]:
+                    ums = True;
+            if ums:
+                print("Plotting UMS with baseline")
+                values = extractValuesUMS(analysisResultFiles)
+                baseline = extractValues(getPhaseCsvFiles({UMS_BASELINE:False}))
+                plotUMS(values, baseline)
+            else:
+                print("Plotting non UMS")
+                values = extractValues(analysisResultFiles)
+                plot(values, scenarioIndices)
         
         print("Plot placed to {}.png".format(os.path.join(FIGURES_DIR, signature)))
     except (ArgError, ValueError) as e:

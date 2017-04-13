@@ -161,8 +161,10 @@ def plotUMS(utilities, baseline):
     labels.append(StringLabel(str(1), "black"))
     values.append(baseline)
     
-    i = 2
     print("LEGEND:")
+    print("{}\t{}".format(1, "baseline"))
+    
+    i = 2
     for k in utilities.keys():
         signatures.append(k)
         labels.append(StringLabel(str(i), "black"))
@@ -171,23 +173,19 @@ def plotUMS(utilities, baseline):
         values.append(utilities[k])
     
     plt.figure()
-    bp = plt.subplot()    
-    bp.boxplot(values)
+    sp = plt.subplot()    
+    bp = sp.boxplot(values)
+    # add the value of the medians to the diagram 
+    printMedians(bp)
     
-    plt.xlabel("Scenario number")
-    if METHOD == Method.PERCENTILE:
-        plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
-    if METHOD == Method.MEAN:
-        plt.ylabel("Mean time to clean a dirty tile [s]")
-    if METHOD == Method.SAMPLES:
-        plt.ylabel("Time to clean a dirty tile [s]")
+    printYLabel(plt)
     
     # Legend
-#    box = bp.get_position()
-#    bp.set_position([box.x0, box.y0, box.width*0.5, box.height])
+#    box = sp.get_position()
+#    sp.set_position([box.x0, box.y0, box.width*0.5, box.height])
 #    fontP = FontProperties()
 #    fontP.set_size('small')
-#    bp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
+#    sp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
     
     plt.savefig("{}.png".format(os.path.join(FIGURES_DIR, signature)))
     
@@ -199,22 +197,10 @@ def plot(allValues, scenarioIndices):
     bp = plt.boxplot(allValues)
         
     # add the value of the medians to the diagram 
-    for line in bp['medians']:
-        # get position data for median line
-        x,y = line.get_xydata()[1] # top of median line
-        # overlay median value
-        annotate("{:.0f}".format(y), xy = (x - 0.03, y),
-                horizontalalignment = 'right',
-                verticalalignment = 'bottom',
-                fontsize = 10)
+    printMedians(bp)
     
     plt.xlabel("Scenario number")
-    if METHOD == Method.PERCENTILE:
-        plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
-    if METHOD == Method.MEAN:
-        plt.ylabel("Mean time to clean a dirty tile [s]")
-    if METHOD == Method.SAMPLES:
-        plt.ylabel("Time to clean a dirty tile [s]")
+    printYLabel(plt)
     
     # X ticks
     indices = []
@@ -256,6 +242,25 @@ def plot(allValues, scenarioIndices):
     plt.savefig("{}.png".format(os.path.join(FIGURES_DIR, signature)))
 
 
+def printMedians(bp):
+    for line in bp['medians']:
+        # get position data for median line
+        x,y = line.get_xydata()[1] # top of median line
+        # overlay median value
+        annotate("{:.0f}".format(y), xy = (x - 0.03, y),
+                horizontalalignment = 'right',
+                verticalalignment = 'bottom',
+                fontsize = 10)
+        
+def printYLabel(plt):
+    if METHOD == Method.PERCENTILE:
+        plt.ylabel("{}th percentile of \"time to clean a dirty tile\" [s]".format(PERCENTILE))
+    if METHOD == Method.MEAN:
+        plt.ylabel("Mean time to clean a dirty tile [s]")
+    if METHOD == Method.SAMPLES:
+        plt.ylabel("Time to clean a dirty tile [s]")
+        
+        
 def printHelp():
     print("\nUsage:")
     print("\tpython Plot.py scenario1 [scenario2 [phase] [...]] ")

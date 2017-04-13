@@ -391,6 +391,15 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
+# UMS training 2
+scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
+                  NON_DETERMINISM_TRAINING:True,
+                  NON_DETERMINISM_TRAINING2:True,
+                  TRANSITION_PROBABILITY:0.001,
+                  TRANSITION_PRIORITY:10, 
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
 
 #################################################
 

@@ -182,9 +182,14 @@ def plotUMS(utilities, baseline):
         
     legendFile.close()
     
-    plt.figure()
-    sp = plt.subplot()    
-    bp = sp.boxplot(values)
+    if len(values) > 20:
+        plt.figure(figsize=(10,8))
+        sp = plt.subplot()
+        bp = sp.boxplot(values, widths=0.8)
+    else:
+        plt.figure()
+        sp = plt.subplot()
+        bp = sp.boxplot(values)
     # add the value of the medians to the diagram 
     printMedians(bp)
     

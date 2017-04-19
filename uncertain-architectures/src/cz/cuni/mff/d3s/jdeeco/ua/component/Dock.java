@@ -22,17 +22,20 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.DOCK_TO_FAIL;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
-import cz.cuni.mff.d3s.deeco.annotations.Out;
+import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.PlaysRole;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.runtimelog.RuntimeLogger;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
+import cz.cuni.mff.d3s.jdeeco.adaptation.componentIsolation.FaultyKnowledgeReportingRole;
 import cz.cuni.mff.d3s.jdeeco.ua.map.DirtinessMap;
 import cz.cuni.mff.d3s.jdeeco.ua.role.DockRole;
 import cz.cuni.mff.d3s.jdeeco.ua.visualization.DockingStationRecord;
@@ -41,6 +44,7 @@ import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
 @Component
 @PlaysRole(DockRole.class)
+@PlaysRole(FaultyKnowledgeReportingRole.class)
 public class Dock {
 
 	///////////////////////////////////////////////////////////////////////////
@@ -54,7 +58,7 @@ public class Dock {
 	
 	public Node position;
 	
-	public Boolean isWorking;
+	public Set<String> faultyKnowledge;
 	
 
 	///////////////////////////////////////////////////////////////////////////
@@ -68,7 +72,7 @@ public class Dock {
 		this.id = id;
 		this.position = position;
 		robotsInLine = new ArrayList<>();
-		isWorking = true;
+		faultyKnowledge = new HashSet<>();
 		
 		// Register the dock position in the dirtiness map
 		DirtinessMap.placeDockingStation(position);
@@ -89,14 +93,12 @@ public class Dock {
 	@PeriodicScheduling(period = DOCK_CHECK_PERIOD)
 	public static void checkDockingStation(@In("id") String dockId,
 			@In("position") Node dockPosition,
-			@Out("isWorking") ParamHolder<Boolean> isWorking) {
+			@InOut("faultyKnowledge") ParamHolder<Set<String>> faultyKnowledge) {
 		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		if (DOCK_FAILURE_ON) {
 			if (DOCK_TO_FAIL.equals(dockId) && currentTime >= DOCK_FAILURE_TIME) {
-				isWorking.value = false;
+				faultyKnowledge.value.add("position");
 				DirtinessMap.setDockWorking(dockPosition, false);
-			} else {
-				isWorking.value = true;
 			}
 		}
 	}

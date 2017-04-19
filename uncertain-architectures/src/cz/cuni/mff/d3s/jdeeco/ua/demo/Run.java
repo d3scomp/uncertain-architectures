@@ -185,7 +185,7 @@ public class Run {
 			Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
 			utilities.put(Robot.class, ddf);
 
-			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities)
+			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(utilities)
 					.withVerbosity(true)
 					.withTraining(MODE_SWITCH_PROPS_TRAINING)
 					.withTrainProperty(MODE_SWITCH_PROPS_PROPERTY)
@@ -273,7 +273,7 @@ public class Run {
 					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
 					utilities.put(Robot.class, ddf);
 
-					mspPlugin = new ModeSwitchPropsPlugin(nodesInSimulation, utilities).withVerbosity(true);
+					mspPlugin = new ModeSwitchPropsPlugin(utilities).withVerbosity(true);
 				}
 				if (nonDetPlugin != null && mspPlugin != null) {
 					deeco = simulation.createNode(i, writers, nonDetPlugin, mspPlugin);

@@ -9,7 +9,6 @@ import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
 import cz.cuni.mff.d3s.deeco.annotations.MemberRole;
 import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
-import cz.cuni.mff.d3s.deeco.task.EnsembleContext;
 
 /**
  * This ensemble connects persons ({@link Person} component) with vehicles ({@link Car}, {@link Bus} components).

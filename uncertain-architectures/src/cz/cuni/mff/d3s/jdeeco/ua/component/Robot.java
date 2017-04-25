@@ -49,6 +49,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
+import cz.cuni.mff.d3s.jdeeco.adaptation.FaultyKnowledgeReportingRole;
 import cz.cuni.mff.d3s.jdeeco.annotations.ComponentModeChart;
 import cz.cuni.mff.d3s.jdeeco.annotations.ExcludeModes;
 import cz.cuni.mff.d3s.jdeeco.annotations.Mode;
@@ -81,6 +82,7 @@ import cz.cuni.mff.d3s.metaadaptation.correlation.metric.DifferenceMetric;
 @Component
 @ComponentModeChart(RobotModeChartHolder.class)
 @PlaysRole(DockableRole.class)
+@PlaysRole(FaultyKnowledgeReportingRole.class)
 public class Robot {
 
 	///////////////////////////////////////////////////////////////////////////
@@ -103,6 +105,8 @@ public class Robot {
 	public Map<String, DockData> availableDocks;
 	
 	public Map<String, Node> othersPlans;
+
+	public Set<String> faultyKnowledge;
 
 	@Local
 	public final List<Link> trajectory;
@@ -138,6 +142,7 @@ public class Robot {
 		trajectory = new ArrayList<>();
 		availableDocks = new HashMap<>();
 		othersPlans = new HashMap<>();
+		faultyKnowledge = new HashSet<>();
 		if (withSeed) {
 			random = new Random(seed);	
 		} else {
@@ -217,6 +222,7 @@ public class Robot {
 			@In("mover") TrajectoryExecutor mover,
 			@InOut("trajectory") ParamHolder<List<Link>> trajectory,
 			@InOut("position") ParamHolder<CorrelationMetadataWrapper<LinkPosition>> position,
+			@InOut("faultyKnowledge") ParamHolder<Set<String>> faultyKnowledge,
 			@InOut("map") ParamHolder<CorrelationMetadataWrapper<DirtinessMap>> map,
 			@In("batteryLevel") CorrelationMetadataWrapper<Double> batteryLevel) {
 		// Don't move if dead
@@ -238,6 +244,9 @@ public class Robot {
 			if (DIRT_DETECTION_FAILURE_ROBOT.equals(id) && currentTime >= DIRT_DETECTION_FAILURE_TIME) {
 				// If the dirt detection sensor failed, don't check the dirtiness
 				map.value.malfunction();
+				if(!faultyKnowledge.value.contains("map")){
+					faultyKnowledge.value.add("map");
+				}
 				return;
 			}
 		}

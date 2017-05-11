@@ -104,13 +104,9 @@ public class Configuration {
 	// ENHANCING MODE SWITCHING
 
 	public static boolean NON_DETERMINISM_ON = false;
-	public static boolean NON_DETERMINISM_TRAINING = false;
+	public static String NON_DETERMINISM_TRAIN_TRANSITIONS = null;
 	public static double TRANSITION_PROBABILITY = 0.01;
 	public static int TRANSITION_PRIORITY = 10;
-	public static String NON_DETERMINISM_TRAIN_FROM = null;//"DeadBatteryMode";
-	public static String NON_DETERMINISM_TRAIN_TO = null;//"WaitingMode";
-	public static String NON_DETERMINISM_TRAIN_FROM2 = null;//"WaitingMode";
-	public static String NON_DETERMINISM_TRAIN_TO2 = null;//"DeadBatteryMode";
 	public static String NON_DETERMINISM_TRAINING_OUTPUT = "results/logs/utility.txt";
 
 	

@@ -28,12 +28,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VAL
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY2;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE2;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAINING_OUTPUT;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_FROM2;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TO2;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TRANSITIONS;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_COUNT;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROLE_REMOVAL_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.SIMULATION_DURATION;
@@ -171,14 +166,9 @@ public class Run {
 
 			NonDeterministicModeSwitchingPlugin nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities, precomputedUtilities)
 					.withVerbosity(true)
-					.withTraining(NON_DETERMINISM_TRAINING)
+					.withTrainTransitions(NON_DETERMINISM_TRAIN_TRANSITIONS)
 					.withTransitionProbability(TRANSITION_PROBABILITY)
-					.withTransitionPriority(TRANSITION_PRIORITY)
-					.withTrainFrom(NON_DETERMINISM_TRAIN_FROM)
-					.withTrainTo(NON_DETERMINISM_TRAIN_TO)
-					.withTrainFrom2(NON_DETERMINISM_TRAIN_FROM2)
-					.withTrainTo2(NON_DETERMINISM_TRAIN_TO2)
-					.withTrainingOutput(NON_DETERMINISM_TRAINING_OUTPUT);
+					.withTransitionPriority(TRANSITION_PRIORITY);
 			adaptPlugins.add(nonDetPlugin);
 		}
 		if (MODE_SWITCH_PROPS_ON && !enableMultipleDEECoNodes) {
@@ -262,12 +252,9 @@ public class Run {
 					
 					nonDetPlugin = new NonDeterministicModeSwitchingPlugin(utilities, precomputedUtilities)
 							.withVerbosity(true)
-							.withTraining(NON_DETERMINISM_TRAINING)
+							.withTrainTransitions(NON_DETERMINISM_TRAIN_TRANSITIONS)
 							.withTransitionProbability(TRANSITION_PROBABILITY)
-							.withTransitionPriority(TRANSITION_PRIORITY)
-							.withTrainFrom(NON_DETERMINISM_TRAIN_FROM)
-							.withTrainTo(NON_DETERMINISM_TRAIN_TO)
-							.withTrainingOutput(NON_DETERMINISM_TRAINING_OUTPUT);
+							.withTransitionPriority(TRANSITION_PRIORITY);
 				}
 				if (MODE_SWITCH_PROPS_ON) {
 					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();

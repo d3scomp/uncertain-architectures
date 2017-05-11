@@ -112,20 +112,18 @@ def extractValues(analysisResultFiles):
 
 
 def extractValuesUMS(analysisResultFiles):
-    fromTo = re.compile('.*[\d]_(\w+)-(\w+)_[\d].*')
+    fromTo = re.compile('[^_]+_((\w+-\w+;)+)[^;]+')
     values = {}
     for _, files in enumerate(analysisResultFiles):
                          
         for file in files:
             match = fromTo.match(file)
             if(match != None):
-                fromT = match.group(1)
-                toT = match.group(2)
-                t = "{}-{}".format(fromT, toT)
+                t = match.group(1)
             else:
                 raise Exception("Provided scenario {} is not UMS.".format(file))
         
-            if(t not in values): #.__contains__(t)):
+            if(t not in values):
                 values[t] = []
                 
             f = open(os.path.join(CSV_DIR, file), "r")

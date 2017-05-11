@@ -55,11 +55,8 @@ UMS = "NON_DETERMINISM_ON" # Unspecified mode switching
 TRANSITION_PROBABILITY = "TRANSITION_PROBABILITY" 
 TRANSITION_PRIORITY = "TRANSITION_PRIORITY"
 NON_DETERMINISM_TRAINING = "NON_DETERMINISM_TRAINING"
-NON_DETERMINISM_TRAINING2 = "NON_DETERMINISM_TRAINING2"
-NON_DETERMINISM_TRAIN_FROM = "NON_DETERMINISM_TRAIN_FROM"
-NON_DETERMINISM_TRAIN_TO = "NON_DETERMINISM_TRAIN_TO"
-NON_DETERMINISM_TRAIN_FROM2 = "NON_DETERMINISM_TRAIN_FROM2"
-NON_DETERMINISM_TRAIN_TO2 = "NON_DETERMINISM_TRAIN_TO2"
+NON_DETERMINISM_TRAINING_DEGREE = "NON_DETERMINISM_TRAINING_DEGREE"
+NON_DETERMINISM_TRAIN_TRANSITIONS = "NON_DETERMINISM_TRAIN_TRANSITIONS"
 NON_DETERMINISM_TRAINING_OUTPUT = "NON_DETERMINISM_TRAINING_OUTPUT"
 
 # Mode Switch Properties
@@ -178,6 +175,7 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_C
 
 scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
+                  NON_DETERMINISM_TRAINING_DEGREE:1,
                   TRANSITION_PROBABILITY:0.001,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
@@ -185,6 +183,7 @@ scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
 scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
+                  NON_DETERMINISM_TRAINING_DEGREE:1,
                   TRANSITION_PROBABILITY:0.01,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
@@ -192,6 +191,7 @@ scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
 scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
+                  NON_DETERMINISM_TRAINING_DEGREE:1,
                   TRANSITION_PROBABILITY:0,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
@@ -199,6 +199,7 @@ scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
 scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
+                  NON_DETERMINISM_TRAINING_DEGREE:1,
                   TRANSITION_PROBABILITY:1,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
@@ -329,7 +330,7 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
 # UMS training 2
 scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
-                  NON_DETERMINISM_TRAINING2:True,
+                  NON_DETERMINISM_TRAINING_DEGREE:2,
                   TRANSITION_PROBABILITY:0.01,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
@@ -394,7 +395,7 @@ scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
 # UMS training 2
 scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
-                  NON_DETERMINISM_TRAINING2:True,
+                  NON_DETERMINISM_TRAINING_DEGREE:2,
                   TRANSITION_PROBABILITY:0.001,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
@@ -432,8 +433,12 @@ def getSignature(scenario, iterations = 0, detailed = False):
         outputSignature.append("!DF-")
     if scenario[UMS]:
         outputSignature.append("UMS")
-        if detailed:            
-            outputSignature.append("-T" if (scenario[NON_DETERMINISM_TRAINING]) else "-!T")
+        if detailed:
+            if scenario[NON_DETERMINISM_TRAINING]:
+                outputSignature.append("-T")
+                outputSignature.append(str(scenario[NON_DETERMINISM_TRAINING_DEGREE]))
+            else:
+                outputSignature.append("-!T")
             outputSignature.append("-P" + str(scenario[TRANSITION_PROBABILITY]))
         else:
             outputSignature.append("-" + str(scenarios.index(scenario)))
@@ -475,35 +480,25 @@ def getMSPProperty(scenario):
     return ''.join(outputProperty)
 
 
-def getLogFile(scenario, iteration, fromMode = None, toMode = None, fromMode2 = None, toMode2 = None):
+def getLogFile(scenario, iteration, transitions = None):
     if(scenario[UMS]):
-        if(fromMode2 == None or toMode2 == None):
+        if(transitions != None):
             return os.path.join(LOGS_DIR,
                             getSignature(scenario),
-                            fromMode + "-"  + toMode + "_" + str(iteration))
-        else:
-            return os.path.join(LOGS_DIR,
-                            getSignature(scenario),
-                            fromMode + "_"  + toMode + "-" + fromMode2 + "_" + toMode2 + "_" + str(iteration))
+                            transitions + "log_" + str(iteration))
         
     return os.path.join(LOGS_DIR,
                         getSignature(scenario),
                         'log_' + str(iteration))
     
     
-def getUMSLogFile(scenario, iteration, fromMode = None, toMode = None, fromMode2 = None, toMode2 = None):
+def getUMSLogFile(scenario, iteration, transitions = None):
     if(scenario[UMS]):
-        if(fromMode2 == None or toMode2 == None):
+        if(transitions != None):
             return os.path.join(LOGS_DIR,
                             getSignature(scenario),
                             UMS_LOGS,
-                            fromMode + "-"  + toMode,
-                            'log_' + str(iteration))
-        else:
-            return os.path.join(LOGS_DIR,
-                            getSignature(scenario),
-                            UMS_LOGS,
-                            fromMode + "_"  + toMode + "-" + fromMode2 + "_" + toMode2,
+                            transitions,
                             'log_' + str(iteration))
     
     return os.path.join(LOGS_DIR,

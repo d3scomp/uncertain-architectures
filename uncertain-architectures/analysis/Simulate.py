@@ -53,18 +53,9 @@ def simulate(scenarioIndex):
     for i in range(1,SIMULATION_ITERATIONS+1):
         params = prepareParameters(scenario, i)
         if scenario[UMS]:    
-            if NON_DETERMINISM_TRAINING2 in scenario and scenario[NON_DETERMINISM_TRAINING2]:
-                for from1, to1 in missingTransitions2:
-                    for from2, to2 in missingTransitions2:
-                        if(from1 != from2 or to1 != to2):
-                            params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i, from1, to1, from2, to2)))
-                            params = params + prepareUMSParams2(scenario, from1, to1, from2, to2, i);
-                            spawnSimulation(params, i)
-            else:
-                for fromMode, toMode in missingTransitions:
-                    params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i, fromMode, toMode)))
-                    params = params + prepareUMSParams(scenario, fromMode, toMode, i);
-                    spawnSimulation(params, i)
+            if NON_DETERMINISM_TRAINING in scenario and scenario[NON_DETERMINISM_TRAINING]:
+                    prepareUMSScenario(scenario, params, i)
+            # TODO: else
         else:
             params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i)))
             spawnSimulation(params, i)
@@ -106,33 +97,43 @@ def prepareParameters(scenario, iteration):
         params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,
                                      getUMSLogFile(scenario, iteration)))
         
-    for key, value in scenario.items():
+    for key, value in scenario.items():        
+        # ignore parameters that are used by this script but not by the simulation
+        if key in {NON_DETERMINISM_TRAINING, NON_DETERMINISM_TRAINING_DEGREE}:
+            continue;
+        
         params.append("{}={}".format(key, value))
 
     return params
 
 
-def prepareUMSParams(scenario, fromMode, toMode, iteration):
-    params = []
-    params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
-    params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))
-    if NON_DETERMINISM_TRAINING2 in scenario and scenario[NON_DETERMINISM_TRAINING2]:
-        params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
-        params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))
-    params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,
-                                 getUMSLogFile(scenario, iteration, fromMode, toMode)))
-        
-    return params
+def prepareUMSScenario(scenario, params, iteration):
+    if scenario[NON_DETERMINISM_TRAINING_DEGREE] == 1:
+        transitions = missingTransitions
+    else:
+        transitions = missingTransitions2
+    
+    runUMSScenario(scenario, transitions, "", params, iteration, scenario[NON_DETERMINISM_TRAINING_DEGREE])
+    
 
+def runUMSScenario(scenario, transitions, preparedTransitions, params, iteration, degree):
+    if degree <= 0:
+        params = params + prepareUMSParams(scenario, preparedTransitions, iteration);
+        spawnSimulation(params, iteration)
+    else:
+        for fromMode, toMode in transitions:
+            sTransition = "{}-{}".format(fromMode, toMode)
+            if sTransition not in preparedTransitions:
+                nextDegreeTransitions = "{}{};".format(preparedTransitions, sTransition)
+                runUMSScenario(scenario, transitions, nextDegreeTransitions, params, iteration, degree-1)
+                
 
-def prepareUMSParams2(scenario, fromMode, toMode, fromMode2, toMode2, iteration):
+def prepareUMSParams(scenario, transitions, iteration):
     params = []
-    params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM, fromMode))
-    params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO, toMode))    
-    params.append("{}={}".format(NON_DETERMINISM_TRAIN_FROM2, fromMode2))
-    params.append("{}={}".format(NON_DETERMINISM_TRAIN_TO2, toMode2))
+    params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i, transitions)))
+    params.append("{}={}".format(NON_DETERMINISM_TRAIN_TRANSITIONS, transitions))
     params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,
-                                 getUMSLogFile(scenario, iteration, fromMode, toMode, fromMode2, toMode2)))
+                                 getUMSLogFile(scenario, iteration, transitions)))
         
     return params
 

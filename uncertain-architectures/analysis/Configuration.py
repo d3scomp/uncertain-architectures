@@ -27,7 +27,7 @@ class Method(Enum):
 # HW RESOURCES
 ###############################################################################
 
-CORES = 25
+CORES = 2
 ''' The number of processor cores to utilize. The number of simulations
     to run in parallel. '''
     
@@ -46,6 +46,7 @@ LOGS_DIR = os.path.join(RESULTS_DIR,'logs')
 ''' The directory where the logs produced by simulations are placed. '''
 
 UMS_LOGS = "UMS_logs"
+MSP_LOGS = "MSP_logs"
 
 CSV_DIR = os.path.join(RESULTS_DIR,'csv')
 ''' The directory where values computed by analysis are placed. '''
@@ -69,7 +70,7 @@ RUNTIME_LOG_FILE = "runtimeData.xml"
 SIMULATION_WARM_UP = 50000
 ''' The time, in milliseconds, the simulation needs to warm up. '''
 
-SIMULATION_DURATION = 600000
+SIMULATION_DURATION = 100000
 ''' The length of each simulation in milliseconds. '''
 
 LEARNING_PHASE_START = 100000
@@ -84,7 +85,7 @@ DDF_DEFAULT_TIME = 100000
 DF_DEFAULT_TIME = 50000
 ''' The default time of dock failure in milliseconds. '''
 
-SIMULATION_ITERATIONS = 100
+SIMULATION_ITERATIONS = 1
 ''' The number of simulation iterations '''
 
 ###############################################################################

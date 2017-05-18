@@ -134,6 +134,29 @@ def extractValuesUMS(analysisResultFiles):
     return values
 
 
+def extractValuesMSP(analysisResultFiles):
+    fromTo = re.compile('[^_]+_((\w+\([-+]?[0-9]*\.?[0-9]+\);)+)[^;]+')
+    values = {}
+    for _, files in enumerate(analysisResultFiles):
+                         
+        for file in files:
+            match = fromTo.match(file)
+            if(match != None):
+                t = match.group(1)
+            else:
+                raise Exception("Provided scenario {} is not MSP.".format(file))
+        
+            if(t not in values):
+                values[t] = []
+                
+            f = open(os.path.join(CSV_DIR, file), "r")
+            for line in f:
+                values[t].append(float(line) / TIME_DIVISOR)
+            f.close()            
+    
+    return values
+
+
 def extractProbValues(analysisResultFiles):
     values = []
     for i, files in enumerate(analysisResultFiles):
@@ -201,44 +224,7 @@ def plotUMS(utilities, baseline):
 #    sp.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()}, loc='center left', bbox_to_anchor=(1, 0.5), prop = fontP)
     
     plt.savefig("{}.png".format(outputFile))
-    
-    
-def plotMSP(utilities, scenarioIndices, baseline): # TODO: rewrite this method
-    if not os.path.exists(FIGURES_DIR):
-        os.makedirs(FIGURES_DIR)
-    outputFile = os.path.join(FIGURES_DIR, signature)
-    legendFile = open("{}.txt".format(outputFile), 'w')
-        
-    labels = []
-    values = []
-    # Prepend baseline
-    labels.append(StringLabel(str(1), "black"))
-    values.append(baseline)
-    
-    print("LEGEND:")
-    print("{}\t{}".format(1, "baseline"))
-    legendFile.write("LEGEND:\n")
-    legendFile.write("{} - {}\n".format(1, "baseline"))
-    
-    i = 2
-    for k in scenarioIndices.keys():
-        labels.append(StringLabel(str(i), "black"))
-        print("{}\t{}".format(i, getMSPProperty(scenarios[k])))
-        legendFile.write("{} - {}\n".format(i, getMSPProperty(scenarios[k])))
-        values.append(utilities[i-2])
-        i = i + 1
-        
-    legendFile.close()
-    
-    plt.figure()
-    sp = plt.subplot()    
-    bp = sp.boxplot(values)
-    # add the value of the medians to the diagram 
-    printMedians(bp)
-    printYLabel(plt)
-    
-    plt.savefig("{}.png".format(outputFile))
-    
+
 
 def plot(allValues, scenarioIndices):
     if not os.path.exists(FIGURES_DIR):
@@ -384,9 +370,9 @@ if __name__ == '__main__':
                 plotUMS(values, baseline)
             elif msp:
                 print("Plotting MSP with baseline")
-                values = extractValues(analysisResultFiles)
+                values = extractValuesMSP(analysisResultFiles)
                 baseline = extractValues(getPhaseCsvFiles({UMS_BASELINE:False}))
-                plotMSP(values, scenarioIndices, baseline)
+                plotUMS(values, baseline)
             else:
                 print("Plotting non UMS")
                 values = extractValues(analysisResultFiles)

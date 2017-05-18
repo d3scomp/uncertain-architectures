@@ -22,11 +22,7 @@ import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_NAME;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ENVIRONMENT_SEED;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.LOG_DIR;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_ON;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_TRAINING;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTY2;
-import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_VALUE2;
+import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.MODE_SWITCH_PROPS_PROPERTIES;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_ON;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.NON_DETERMINISM_TRAIN_TRANSITIONS;
 import static cz.cuni.mff.d3s.jdeeco.ua.demo.Configuration.ROBOT_COUNT;
@@ -177,11 +173,7 @@ public class Run {
 
 			ModeSwitchPropsPlugin mspPlugin = new ModeSwitchPropsPlugin(utilities)
 					.withVerbosity(true)
-					.withTraining(MODE_SWITCH_PROPS_TRAINING)
-					.withTrainProperty(MODE_SWITCH_PROPS_PROPERTY)
-					.withTrainValue(MODE_SWITCH_PROPS_VALUE)
-					.withTrainProperty2(MODE_SWITCH_PROPS_PROPERTY2)
-					.withTrainValue2(MODE_SWITCH_PROPS_VALUE2);
+					.withTrainProperties(MODE_SWITCH_PROPS_PROPERTIES);
 			adaptPlugins.add(mspPlugin);
 		}
 
@@ -260,7 +252,9 @@ public class Run {
 					Map<Class<?>, AdaptationUtility> utilities = new HashMap<>();
 					utilities.put(Robot.class, ddf);
 
-					mspPlugin = new ModeSwitchPropsPlugin(utilities).withVerbosity(true);
+					mspPlugin = new ModeSwitchPropsPlugin(utilities)
+							.withVerbosity(true)
+							.withTrainProperties(MODE_SWITCH_PROPS_PROPERTIES);
 				}
 				if (nonDetPlugin != null && mspPlugin != null) {
 					deeco = simulation.createNode(i, writers, nonDetPlugin, mspPlugin);

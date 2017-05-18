@@ -113,11 +113,7 @@ public class Configuration {
 	// MODE SWITCHING PROPERTIES
 
 	public static boolean MODE_SWITCH_PROPS_ON = false;
-	public static boolean MODE_SWITCH_PROPS_TRAINING = false;
-	public static String MODE_SWITCH_PROPS_PROPERTY = null;//"CLEANED_ENOUGH";
-	public static double MODE_SWITCH_PROPS_VALUE = 0;//3;
-	public static String MODE_SWITCH_PROPS_PROPERTY2 = null;//"CLEANED_ENOUGH";
-	public static double MODE_SWITCH_PROPS_VALUE2 = 0;//3;
+	public static String MODE_SWITCH_PROPS_PROPERTIES = "CHARGED_LEVEL(0.9);";
 	
 	
 	public static String UTILITY_DIRECTORY = "results\\logs\\06)-!DDF-!DF-UMS-6\\UMS_logs";

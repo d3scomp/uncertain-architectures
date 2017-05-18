@@ -55,7 +55,14 @@ def simulate(scenarioIndex):
         if scenario[UMS]:    
             if NON_DETERMINISM_TRAINING in scenario and scenario[NON_DETERMINISM_TRAINING]:
                     prepareUMSScenario(scenario, params, i)
-            # TODO: else
+            else:
+                print("Unsupported scenario!")
+        elif scenario[MSP]:
+            if MODE_SWITCH_PROPS_TRAINING in scenario and scenario[MODE_SWITCH_PROPS_TRAINING]:
+                    prepareMSPScenario(scenario, params, i)
+            else:
+                print("Unsupported scenario!")
+            
         else:
             params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i)))
             spawnSimulation(params, i)
@@ -99,7 +106,10 @@ def prepareParameters(scenario, iteration):
         
     for key, value in scenario.items():        
         # ignore parameters that are used by this script but not by the simulation
-        if key in {NON_DETERMINISM_TRAINING, NON_DETERMINISM_TRAINING_DEGREE}:
+        if key in {NON_DETERMINISM_TRAINING,
+                   NON_DETERMINISM_TRAINING_DEGREE,
+                   MODE_SWITCH_PROPS_TRAINING,
+                   MODE_SWITCH_PROPS_TRAINING_DEGREE}:
             continue;
         
         params.append("{}={}".format(key, value))
@@ -111,14 +121,14 @@ def prepareUMSScenario(scenario, params, iteration):
     if scenario[NON_DETERMINISM_TRAINING_DEGREE] == 1:
         transitions = missingTransitions
     else:
-        transitions = missingTransitions2
+        transitions = missingTransitionsReduced
     
     runUMSScenario(scenario, transitions, "", params, iteration, scenario[NON_DETERMINISM_TRAINING_DEGREE])
     
 
 def runUMSScenario(scenario, transitions, preparedTransitions, params, iteration, degree):
     if degree <= 0:
-        params = params + prepareUMSParams(scenario, preparedTransitions, iteration);
+        params = params + prepareUMSParams(scenario, preparedTransitions, iteration)
         spawnSimulation(params, iteration)
     else:
         for fromMode, toMode in transitions:
@@ -130,10 +140,39 @@ def runUMSScenario(scenario, transitions, preparedTransitions, params, iteration
 
 def prepareUMSParams(scenario, transitions, iteration):
     params = []
-    params.append("{}={}".format(LOG_DIR, getLogFile(scenario, i, transitions)))
+    params.append("{}={}".format(LOG_DIR, getLogFile(scenario, iteration, transitions)))
     params.append("{}={}".format(NON_DETERMINISM_TRAIN_TRANSITIONS, transitions))
     params.append("{}={}".format(NON_DETERMINISM_TRAINING_OUTPUT,
                                  getUMSLogFile(scenario, iteration, transitions)))
+        
+    return params
+
+
+def prepareMSPScenario(scenario, params, iteration):
+    if scenario[MODE_SWITCH_PROPS_TRAINING_DEGREE] == 1:
+        properties = adjustedProperties
+    else:
+        properties = adjustedPropertiesReduced
+    
+    runMSPScenario(scenario, properties, "", params, iteration, scenario[MODE_SWITCH_PROPS_TRAINING_DEGREE])
+
+
+def runMSPScenario(scenario, properties, preparedProperties, params, iteration, degree):
+    if degree <= 0:
+        params = params + prepareMSPParams(scenario, preparedProperties, iteration)
+        spawnSimulation(params, iteration)
+    else:
+        for prop, value in properties:
+            sProperty = "{}({})".format(prop, value)
+            if sProperty not in preparedProperties:
+                nextDegreeeProperties = "{}{};".format(preparedProperties, sProperty)
+                runMSPScenario(scenario, properties, nextDegreeeProperties, params, iteration, degree-1)
+
+
+def prepareMSPParams(scenario, properties, iteration):
+    params = []
+    params.append("{}={}".format(LOG_DIR, getLogFile(scenario, iteration, properties)))
+    params.append("{}={}".format(MODE_SWITCH_PROPS_PROPERTIES, properties))
         
     return params
 

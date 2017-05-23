@@ -123,19 +123,25 @@ def prepareUMSScenario(scenario, params, iteration):
     else:
         transitions = missingTransitionsReduced
     
-    runUMSScenario(scenario, transitions, "", params, iteration, scenario[NON_DETERMINISM_TRAINING_DEGREE])
+    runUMSScenario(scenario, transitions, [], [], params, iteration, scenario[NON_DETERMINISM_TRAINING_DEGREE])
     
 
-def runUMSScenario(scenario, transitions, preparedTransitions, params, iteration, degree):
+def runUMSScenario(scenario, transitions, preparedTransitions, simulatedTransitions, params, iteration, degree):
     if degree <= 0:
-        params = params + prepareUMSParams(scenario, preparedTransitions, iteration)
+        for item in simulatedTransitions:
+            if set(preparedTransitions).issubset(set(item)):
+                return # skip if already done
+        params = params + prepareUMSParams(scenario, ";".join(preparedTransitions), iteration)
+        # remember what was done
+        simulatedTransitions.append(preparedTransitions)
         spawnSimulation(params, iteration)
     else:
         for fromMode, toMode in transitions:
             sTransition = "{}-{}".format(fromMode, toMode)
             if sTransition not in preparedTransitions:
-                nextDegreeTransitions = "{}{};".format(preparedTransitions, sTransition)
-                runUMSScenario(scenario, transitions, nextDegreeTransitions, params, iteration, degree-1)
+                nextDegreeTransitions = list(preparedTransitions) # create a copy of the given list
+                nextDegreeTransitions.append(sTransition)
+                runUMSScenario(scenario, transitions, nextDegreeTransitions, simulatedTransitions, params, iteration, degree-1)
                 
 
 def prepareUMSParams(scenario, transitions, iteration):
@@ -154,19 +160,25 @@ def prepareMSPScenario(scenario, params, iteration):
     else:
         properties = adjustedPropertiesReduced
     
-    runMSPScenario(scenario, properties, "", params, iteration, scenario[MODE_SWITCH_PROPS_TRAINING_DEGREE])
+    runMSPScenario(scenario, properties, [], [], params, iteration, scenario[MODE_SWITCH_PROPS_TRAINING_DEGREE])
 
 
-def runMSPScenario(scenario, properties, preparedProperties, params, iteration, degree):
+def runMSPScenario(scenario, properties, preparedProperties, simulatedProperties, params, iteration, degree):
     if degree <= 0:
-        params = params + prepareMSPParams(scenario, preparedProperties, iteration)
+        for item in simulatedProperties:
+            if set(preparedProperties).issubset(set(item)):
+                return # skip if already done
+        params = params + prepareMSPParams(scenario, ";".join(preparedProperties), iteration)
+        # remember what was done
+        simulatedProperties.append(preparedProperties)
         spawnSimulation(params, iteration)
     else:
         for prop, value in properties:
             sProperty = "{}({})".format(prop, value)
             if sProperty not in preparedProperties:
-                nextDegreeeProperties = "{}{};".format(preparedProperties, sProperty)
-                runMSPScenario(scenario, properties, nextDegreeeProperties, params, iteration, degree-1)
+                nextDegreeeProperties = list(preparedProperties) # create a copy of the given list
+                nextDegreeeProperties.append(sProperty)
+                runMSPScenario(scenario, properties, nextDegreeeProperties, simulatedProperties, params, iteration, degree-1)
 
 
 def prepareMSPParams(scenario, properties, iteration):

@@ -95,12 +95,7 @@ public class Configuration {
 	public static boolean DOCK_FAILURE_ON = false;
 	public static long DOCK_FAILURE_TIME = 50_000;
 	public static final String DOCK_TO_FAIL = DOCK2_NAME;
-	
-//	public static double NON_DET_INIT_PROBABILITY = 0.0001;
-//	public static double NON_DET_PROBABILITY_STEP = 0.00005;
-//	public static long NON_DET_START_TIME = 0;
-//	public static long NON_DET_END_TIME = SIMULATION_DURATION;
-	
+		
 	// ENHANCING MODE SWITCHING
 
 	public static boolean NON_DETERMINISM_ON = false;

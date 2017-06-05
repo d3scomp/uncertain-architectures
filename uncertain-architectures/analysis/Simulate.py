@@ -76,7 +76,7 @@ def simulate(scenarioIndex):
    
 def spawnSimulation(params, iteration):
     # Compose invocation command
-    cmd = ['java', '-Xmx4096m', '-jar', '../target/uncertain-architectures-0.0.1-SNAPSHOT-jar-with-dependencies.jar']
+    cmd = ['java', '-Xmx4096m', '-jar', '../target/uncertain-architectures-' + PROJECT_VERSION + '-jar-with-dependencies.jar']
     cmd.extend(params)
     
     # Wait for free core

@@ -27,6 +27,7 @@ from Configuration import *
 #################################################
 
 # Parameters
+SCENARIO_NAME = "SCENARIO_NAME"
 LOG_DIR = "LOG_DIR"
 DDF = "DIRT_DETECTION_FAILURE_ON" # Dirt detection failure
 DDF_TIME = "DIRT_DETECTION_FAILURE_TIME"
@@ -34,21 +35,12 @@ CS = "CORRELATION_ON" # Collaborative sensing
 DF = "DOCK_FAILURE_ON" # Dock failure
 DF_TIME = "DOCK_FAILURE_TIME"
 FCI = "ROLE_REMOVAL_ON" # Faulty component isolation
-# PROBABILITY = "NON_DET_INIT_PROBABILITY" # Starting probability for UMS
-# PROBABILITY_STEP = "NON_DET_PROBABILITY_STEP" # Probability step for UMS
-# UMS_START = "NON_DET_START_TIME" # The UMS start time
-# UMS_END = "NON_DET_END_TIME" # The UMS end time
 ROBOT_CNT = "ROBOT_COUNT" # The robot count
 DOCK_CNT = "DOCK_COUNT" # The dock count
 DURATION = "SIMULATION_DURATION" # The Simulation Duration
 WARM_UP_TIME = "WARM_UP_TIME" # The warm up time
 WITH_SEED = "WITH_SEED"
 SEED = "ENVIRONMENT_SEED"
-
-DIRT_GENERATION_PERIOD_LABEL = "DIRT_GENERATION_PERIOD_VAR";
-DIRT_GENERATION_PERIOD_VALUE = 600;
-CLEAN_PLAN_EXCHANGE_PERIOD_LABEL = "CLEAN_PLAN_EXCHANGE_PERIOD_VAR";
-CLEAN_PLAN_EXCHANGE_PERIOD_VALUE = 600;
 
 # ENHANCING MODE SWITCHING
 UMS = "NON_DETERMINISM_ON" # Unspecified mode switching
@@ -125,75 +117,44 @@ adjustedPropertiesReduced = [
 
 # Scenarios
 scenarios = []
-# Baseline
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
+# Baseline 3 docks
+scenarios.append({SCENARIO_NAME:"Baseline (3 docks)",
+                  DDF:False, DF:False, UMS:False, MSP:False,
+                  ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+# Baseline 1 dock (for UMS and MSP)
+scenarios.append({SCENARIO_NAME:"Baseline (1 docks)",
+                  DDF:False, DF:False, UMS:False, MSP:False,
+                  NON_DETERMINISM_TRAINING:False,
+                  ROBOT_CNT:4, DOCK_CNT:1,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
 # Dirt detection failure
-scenarios.append({DDF:True, CS:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:True, CS:True, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({SCENARIO_NAME:"CS failure\t",
+                  DDF:True, CS:False, DF:False, UMS:False, MSP:False,
+                  ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({SCENARIO_NAME:"CS remedy\t",
+                  DDF:True, CS:True, DF:False, UMS:False, MSP:False,
+                  ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
 # Dock failure
-scenarios.append({DDF:False, DF:True, FCI:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:True, FCI:True, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
-# Too many robots for docking stations
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:1,
-                  DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:True,
-#                   PROBABILITY:0.0001,
-#                   PROBABILITY_STEP:0.00005,
-#                   UMS_START:LEARNING_PHASE_START,
-#                   UMS_END:LEARNING_PHASE_END,
-#                   ROBOT_CNT:4,
-#                   DOCK_CNT:1, 
-#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# # All fails, no meta-adaptation
-# scenarios.append({DDF:True, CS:False, DF:True, FCI:False, UMS:False,
-#                   ROBOT_CNT:4, DOCK_CNT:2, DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# # All fails, all meta-adaptation
-# scenarios.append({DDF:True, CS:True, DF:True, FCI:True, UMS:True,
-#                   PROBABILITY:0.0001,
-#                   PROBABILITY_STEP:0.00005,
-#                   UMS_START:LEARNING_PHASE_START,
-#                   UMS_END:LEARNING_PHASE_END,
-#                   ROBOT_CNT:4, DOCK_CNT:2, 
-#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# 
-# # To test different probabilities of EMS
-# scenarios.append({DDF:False, DF:False, UMS:True,
-#                   PROBABILITY:0.000001,
-#                   PROBABILITY_STEP:0.0000005,
-#                   UMS_START:LEARNING_PHASE_START,
-#                   UMS_END:LEARNING_PHASE_END,
-#                   ROBOT_CNT:4,
-#                   DOCK_CNT:1, 
-#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:True,
-#                   PROBABILITY:0.00001,
-#                   PROBABILITY_STEP:0.000005,
-#                   UMS_START:LEARNING_PHASE_START,
-#                   UMS_END:LEARNING_PHASE_END,
-#                   ROBOT_CNT:4,
-#                   DOCK_CNT:1, 
-#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:True,
-#                   PROBABILITY:0.001,
-#                   PROBABILITY_STEP:0.0005,
-#                   UMS_START:LEARNING_PHASE_START,
-#                   UMS_END:LEARNING_PHASE_END,
-#                   ROBOT_CNT:4,
-#                   DOCK_CNT:1, 
-#                   DURATION:(SIMULATION_DURATION + LEARNING_PHASE_END),
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-
-scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
+scenarios.append({SCENARIO_NAME:"FCI failure",
+                  DDF:False, DF:True, FCI:False, UMS:False, MSP:False,
+                  ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+scenarios.append({SCENARIO_NAME:"FCI remedy\t",
+                  DDF:False, DF:True, FCI:True, UMS:False, MSP:False,
+                  ROBOT_CNT:4, DOCK_CNT:3,
+                  DURATION:SIMULATION_DURATION,
+                  WARM_UP_TIME:SIMULATION_WARM_UP})
+# Enhanced mode switching
+scenarios.append({SCENARIO_NAME:"EMS p=0.001 deg=1",
+                  DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
                   NON_DETERMINISM_TRAINING_DEGREE:1,
                   TRANSITION_PROBABILITY:0.001,
@@ -201,7 +162,8 @@ scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
+scenarios.append({SCENARIO_NAME:"EMS p=0.01 deg=1",
+                  DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
                   NON_DETERMINISM_TRAINING_DEGREE:1,
                   TRANSITION_PROBABILITY:0.01,
@@ -209,231 +171,40 @@ scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
+scenarios.append({SCENARIO_NAME:"EMS p=0.001 deg=2",
+                  DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
-                  NON_DETERMINISM_TRAINING_DEGREE:1,
-                  TRANSITION_PROBABILITY:0,
+                  NON_DETERMINISM_TRAINING_DEGREE:2,
+                  TRANSITION_PROBABILITY:0.001,
                   TRANSITION_PRIORITY:10, 
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
+scenarios.append({SCENARIO_NAME:"EMS p=0.01 deg=2",
+                  DDF:False, DF:False, UMS:True, MSP:False,
                   NON_DETERMINISM_TRAINING:True,
-                  NON_DETERMINISM_TRAINING_DEGREE:1,
-                  TRANSITION_PROBABILITY:1,
+                  NON_DETERMINISM_TRAINING_DEGREE:2,
+                  TRANSITION_PROBABILITY:0.01,
                   TRANSITION_PRIORITY:10, 
-                  ROBOT_CNT:4, DOCK_CNT:1,
-                  DURATION:SIMULATION_DURATION,
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
-# UMS baseline
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:False,
-                  NON_DETERMINISM_TRAINING:False,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
 # Mode Switch Properties
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+scenarios.append({SCENARIO_NAME:"MSP deg=1\t",
+                  DDF:False, DF:False, UMS:False, MSP:True,
                   MODE_SWITCH_PROPS_TRAINING:True,
                   MODE_SWITCH_PROPS_TRAINING_DEGREE:1,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
-scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
+scenarios.append({SCENARIO_NAME:"MSP deg=2\t",
+                  DDF:False, DF:False, UMS:False, MSP:True,
                   MODE_SWITCH_PROPS_TRAINING:True,
                   MODE_SWITCH_PROPS_TRAINING_DEGREE:2,
                   ROBOT_CNT:4, DOCK_CNT:1,
                   DURATION:SIMULATION_DURATION,
                   WARM_UP_TIME:SIMULATION_WARM_UP})
 
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.9,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.7,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.5,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.1,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.3,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.5,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# 
-# # Dirt generation with respect to cleaning plan exchange
-# # ratio 1:1
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-#                   DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-#                   DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-#                   CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:CLEAN_PLAN_EXCHANGE_PERIOD_VALUE})
-# # ratio 1:10
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-#                   DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-#                   DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-#                   CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(0.1*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
-# # ratio 1:100
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-#                   DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-#                   DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-#                   CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(0.01*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
-# # ratio 10:1
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:False, ROBOT_CNT:4, DOCK_CNT:3,
-#                   DURATION:SIMULATION_DURATION, WARM_UP_TIME:SIMULATION_WARM_UP,
-#                   DIRT_GENERATION_PERIOD_LABEL:DIRT_GENERATION_PERIOD_VALUE,
-#                   CLEAN_PLAN_EXCHANGE_PERIOD_LABEL:int(10*CLEAN_PLAN_EXCHANGE_PERIOD_VALUE)})
-# 
-# # Mode Switch Properties
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:1,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:3,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:7,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:9,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CLEANED_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:1,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CLEANED_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:2,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CLEANED_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:3,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# UMS training 2
-scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
-                  NON_DETERMINISM_TRAINING:True,
-                  NON_DETERMINISM_TRAINING_DEGREE:2,
-                  TRANSITION_PROBABILITY:0.01,
-                  TRANSITION_PRIORITY:10, 
-                  ROBOT_CNT:4, DOCK_CNT:1,
-                  DURATION:SIMULATION_DURATION,
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
-
-# Mode Switch Properties
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.7,
-#                   MODE_SWITCH_PROPS_PROPERTY2:"DRAINED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE2:0.3,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.7,
-#                   MODE_SWITCH_PROPS_PROPERTY2:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE2:3,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"CHARGED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.7,
-#                   MODE_SWITCH_PROPS_PROPERTY2:"CLEANED_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE2:2,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.3,
-#                   MODE_SWITCH_PROPS_PROPERTY2:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE2:3,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"DRAINED_LEVEL",
-#                   MODE_SWITCH_PROPS_VALUE:0.3,
-#                   MODE_SWITCH_PROPS_PROPERTY2:"CLEANED_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE2:2,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# scenarios.append({DDF:False, DF:False, UMS:False, MSP:True,
-#                   MODE_SWITCH_PROPS_TRAINING:True,
-#                   MODE_SWITCH_PROPS_PROPERTY:"FOUND_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE:3,
-#                   MODE_SWITCH_PROPS_PROPERTY2:"CLEANED_ENOUGH",
-#                   MODE_SWITCH_PROPS_VALUE2:2,
-#                   ROBOT_CNT:4, DOCK_CNT:1,
-#                   DURATION:SIMULATION_DURATION,
-#                   WARM_UP_TIME:SIMULATION_WARM_UP})
-# UMS training 2
-scenarios.append({DDF:False, DF:False, UMS:True, MSP:False,
-                  NON_DETERMINISM_TRAINING:True,
-                  NON_DETERMINISM_TRAINING_DEGREE:2,
-                  TRANSITION_PROBABILITY:0.001,
-                  TRANSITION_PRIORITY:10, 
-                  ROBOT_CNT:4, DOCK_CNT:1,
-                  DURATION:SIMULATION_DURATION,
-                  WARM_UP_TIME:SIMULATION_WARM_UP})
 
 #################################################
 
@@ -442,6 +213,13 @@ def getSignature(scenario, iterations = 0, detailed = False):
     ''' Compiles the signature of the given scenario. '''
     outputSignature = []
     outputSignature.append("{:02})-".format(scenarios.index(scenario)))
+    
+    if detailed:
+        if SCENARIO_NAME in scenario:
+            outputSignature.append(" {}\t".format(scenario[SCENARIO_NAME]))
+        else:
+            raise Exception("Scenario name missing.")
+    
     if scenario[DDF]:
         outputSignature.append("DDF-")
         if detailed:

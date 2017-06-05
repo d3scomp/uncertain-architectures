@@ -229,6 +229,7 @@ def plotUMS(utilities, baseline):
 def plot(allValues, scenarioIndices):
     if not os.path.exists(FIGURES_DIR):
         os.makedirs(FIGURES_DIR)
+    outputFile = os.path.join(FIGURES_DIR, signature)
     
     bp = plt.boxplot(allValues)
         
@@ -275,7 +276,7 @@ def plot(allValues, scenarioIndices):
                 i = i+1
         plt.legend(labels, signatures, handler_map = {StringLabel:StringLabelHandler()})
     
-    plt.savefig("{}.png".format(os.path.join(FIGURES_DIR, signature)))
+    plt.savefig("{}.png".format(outputFile))
 
 
 def printMedians(bp):

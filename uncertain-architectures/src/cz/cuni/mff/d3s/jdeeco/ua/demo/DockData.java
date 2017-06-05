@@ -16,7 +16,6 @@
 package cz.cuni.mff.d3s.jdeeco.ua.demo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import cz.cuni.mff.d3s.jdeeco.visualizer.network.Node;
 
@@ -31,6 +30,5 @@ public class DockData implements Serializable {
 	private static final long serialVersionUID = 2436907226577117551L;
 	
 	public Node position;
-	//public List<String> robotsInLine;
 	public long timestanp;
 }

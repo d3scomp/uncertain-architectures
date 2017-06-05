@@ -106,7 +106,8 @@ def prepareParameters(scenario, iteration):
         
     for key, value in scenario.items():        
         # ignore parameters that are used by this script but not by the simulation
-        if key in {NON_DETERMINISM_TRAINING,
+        if key in {SCENARIO_NAME,
+                   NON_DETERMINISM_TRAINING,
                    NON_DETERMINISM_TRAINING_DEGREE,
                    MODE_SWITCH_PROPS_TRAINING,
                    MODE_SWITCH_PROPS_TRAINING_DEGREE}:
@@ -131,7 +132,7 @@ def runUMSScenario(scenario, transitions, preparedTransitions, simulatedTransiti
         for item in simulatedTransitions:
             if set(preparedTransitions).issubset(set(item)):
                 return # skip if already done
-        params = params + prepareUMSParams(scenario, ";".join(preparedTransitions), iteration)
+        params = params + prepareUMSParams(scenario, ";".join(preparedTransitions) + ";", iteration)
         # remember what was done
         simulatedTransitions.append(preparedTransitions)
         spawnSimulation(params, iteration)
@@ -168,7 +169,7 @@ def runMSPScenario(scenario, properties, preparedProperties, simulatedProperties
         for item in simulatedProperties:
             if set(preparedProperties).issubset(set(item)):
                 return # skip if already done
-        params = params + prepareMSPParams(scenario, ";".join(preparedProperties), iteration)
+        params = params + prepareMSPParams(scenario, ";".join(preparedProperties) + ";", iteration)
         # remember what was done
         simulatedProperties.append(preparedProperties)
         spawnSimulation(params, iteration)

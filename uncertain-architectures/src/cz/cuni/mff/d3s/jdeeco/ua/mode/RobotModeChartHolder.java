@@ -107,7 +107,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			}
 		};
 		
-		final DEECoModeGuard batteryChargedOrChargingInUnavailableDockGuard = new DEECoModeGuard() {
+		final DEECoModeGuard batteryChargedGuard = new DEECoModeGuard() {
 
 			private static final String CHARGED_LEVEL = "CHARGED_LEVEL";
 			private static final double INIT_CHARGED_LEVEL = 0.95;
@@ -121,20 +121,12 @@ public class RobotModeChartHolder extends ModeChartHolder {
 			public boolean isSatisfied(Object[] knowledgeValue) {
 				boolean batteryCharged = ((CorrelationMetadataWrapper<Double>)knowledgeValue[0]).getValue()
 						> parameters.get(CHARGED_LEVEL);
-				LinkPosition position = ((CorrelationMetadataWrapper<LinkPosition>) knowledgeValue[1]).getValue();
-				Map<String, DockData> availableDocks = (Map<String, DockData>) knowledgeValue[2];
-				/*boolean dockNotInAvailableOnes = true;
-				for (DockData dockData : availableDocks.values()) {
-					if ((dockData.position).equals(position.atNode())) {
-						dockNotInAvailableOnes = false;
-					}
-				}*/
-				return batteryCharged;// || dockNotInAvailableOnes;
+				return batteryCharged;
 			}
 			
 			@Override
 			public String[] getKnowledgeNames() {
-				return new String[] {"batteryLevel", "position", "availableDocks"};
+				return new String[] {"batteryLevel"};
 			}
 		};
 		
@@ -366,7 +358,7 @@ public class RobotModeChartHolder extends ModeChartHolder {
 		transition = addTransition(waitingMode, dockingMode, stopWaitGuard);
 		addTransitionListener(transition, new ModeTransitionLogger(waitingMode, dockingMode));
 		
-		transition = addTransition(chargingMode, searchMode, batteryChargedOrChargingInUnavailableDockGuard);
+		transition = addTransition(chargingMode, searchMode, batteryChargedGuard);
 		addTransitionListener(transition, new ModeTransitionLogger(chargingMode, searchMode));	
 	}
 

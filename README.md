@@ -5,11 +5,14 @@ This repository contains the demo accompanying the submission of our paper "Arch
 ## Usage Guide
 ### Compilation 
 You first need to checkout the following Github projects:
+* [meta-adaptation-manager](https://github.com/d3scomp/meta-adaptation-manager) - the library with meta-adaptations.
 * [uncertain-architectures](https://github.com/d3scomp/uncertain-architectures.git) (the project featured here), and switch to the "master" branch 
 * [JDEECo](https://github.com/d3scomp/JDEECo.git), and switch to the "uncertain-architectures" branch 
 * [JDEECoVisualizer](https://github.com/d3scomp/JDEECoVisualizer.git), and switch to the "uncertain-architectures" branch 
 
 Import the following Eclipse projects to a running Eclipse instance (tested with MARS.1):
+* From the "meta-adaptation-manager" Github project
+  * "meta-adaptation-manager"
 * From the "uncertain-architectures" Github project
   * "uncertain-architectures"
 * From "JDEECo" Github project
